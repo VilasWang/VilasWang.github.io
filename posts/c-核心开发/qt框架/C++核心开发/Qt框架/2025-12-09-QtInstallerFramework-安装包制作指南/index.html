@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍QtInstallerFramework 安装包制作指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QtInstallerFramework 安装包制作指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-QtInstallerFramework-%E5%AE%89%E8%A3%85%E5%8C%85%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍QtInstallerFramework 安装包制作指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.169Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Qt">
+<meta property="article:tag" content="Redis">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-QtInstallerFramework-%E5%AE%89%E8%A3%85%E5%8C%85%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-QtInstallerFramework-%E5%AE%89%E8%A3%85%E5%8C%85%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/","path":"posts/c-核心开发/qt框架/C++核心开发/Qt框架/2025-12-09-QtInstallerFramework-安装包制作指南/","title":"QtInstallerFramework 安装包制作指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>QtInstallerFramework 安装包制作指南 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-QtInstallerFramework-%E5%AE%89%E8%A3%85%E5%8C%85%E5%88%B6%E4%BD%9C-%E9%83%A8%E7%BD%B2%E5%B7%A5%E5%85%B7-Qt-title-%E2%80%9CQtInstallerFramework-%E5%AE%89%E8%A3%85%E5%8C%85%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97%E2%80%9Dcategories-%E2%80%98C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91%E2%80%99-%E2%80%98Qt%E6%A1%86%E6%9E%B6%E2%80%99-date-2025-12-04-22-50-20description-%E2%80%9C%E8%AF%A6%E7%BB%86%E7%9A%84%E6%8A%80%E6%9C%AF%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97%EF%BC%8C%E6%8F%90%E4%BE%9B%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E5%AE%8C%E6%95%B4%E9%83%A8%E7%BD%B2%E6%B5%81%E7%A8%8B%EF%BC%8C%E5%8C%85%E5%90%AB%E7%8E%AF%E5%A2%83%E6%A3%80%E6%9F%A5%E3%80%81%E4%BE%9D%E8%B5%96%E5%AE%89%E8%A3%85%E3%80%81%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E3%80%81%E6%B5%8B%E8%AF%95%E9%AA%8C%E8%AF%81%E7%AD%89%E5%85%B3%E9%94%AE%E6%AD%A5%E9%AA%A4%E3%80%82%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">tags: [QtInstallerFramework, 安装包制作, 部署工具, Qt]title: “QtInstallerFramework 安装包制作指南”categories: [‘C++核心开发’, ‘Qt框架’]date: 2025-12-04 22:50:20description: “详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QtInstallerFramework-%E5%AE%89%E8%A3%85%E5%8C%85%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">QtInstallerFramework 安装包制作指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B7%A5%E5%85%B7%E6%A6%82%E8%BF%B0"><span class="nav-number">2.2.</span> <span class="nav-text">工具概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E7%82%B9"><span class="nav-number">2.2.1.</span> <span class="nav-text">特点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E5%87%86%E5%A4%87"><span class="nav-number">2.3.</span> <span class="nav-text">安装准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E8%8E%B7%E5%8F%96-QtInstallerFramework"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 获取 QtInstallerFramework</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 环境变量配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.4.</span> <span class="nav-text">项目结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3"><span class="nav-number">2.5.</span> <span class="nav-text">配置文件详解</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%B8%BB%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-config-config-xml"><span class="nav-number">2.5.1.</span> <span class="nav-text">1. 主配置文件 (config&#x2F;config.xml)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%8C%85%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6-packages-%E2%80%A6-meta-package-xml"><span class="nav-number">2.5.2.</span> <span class="nav-text">2. 包配置文件 (packages&#x2F;…&#x2F;meta&#x2F;package.xml)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E8%AF%A6%E8%A7%A3-meta-installscript-qs"><span class="nav-number">2.6.</span> <span class="nav-text">安装脚本详解 (meta&#x2F;installscript.qs)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-number">2.7.</span> <span class="nav-text">生成安装包</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%94%9F%E6%88%90%E5%9C%A8%E7%BA%BF%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-number">2.7.1.</span> <span class="nav-text">1. 生成在线安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%94%9F%E6%88%90%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85%E5%8C%85"><span class="nav-number">2.7.2.</span> <span class="nav-text">2. 生成离线安装包</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD"><span class="nav-number">2.8.</span> <span class="nav-text">高级功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%9A%E8%AF%AD%E8%A8%80%E6%94%AF%E6%8C%81"><span class="nav-number">2.8.1.</span> <span class="nav-text">多语言支持</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9D%99%E9%BB%98-%E6%97%A0%E4%BA%BA%E5%80%BC%E5%AE%88%E5%AE%89%E8%A3%85"><span class="nav-number">2.8.2.</span> <span class="nav-text">静默&#x2F;无人值守安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">2.9.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.10.</span> <span class="nav-text">最佳实践</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-QtInstallerFramework-%E5%AE%89%E8%A3%85%E5%8C%85%E5%88%B6%E4%BD%9C%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="QtInstallerFramework 安装包制作指南 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍QtInstallerFramework 安装包制作指南的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          QtInstallerFramework 安装包制作指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">C++核心开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">Qt框架</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍QtInstallerFramework 安装包制作指南的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="tags-QtInstallerFramework-安装包制作-部署工具-Qt-title-“QtInstallerFramework-安装包制作指南”categories-‘C-核心开发’-‘Qt框架’-date-2025-12-04-22-50-20description-“详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”"><a href="#tags-QtInstallerFramework-安装包制作-部署工具-Qt-title-“QtInstallerFramework-安装包制作指南”categories-‘C-核心开发’-‘Qt框架’-date-2025-12-04-22-50-20description-“详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”" class="headerlink" title="tags: [QtInstallerFramework, 安装包制作, 部署工具, Qt]title: “QtInstallerFramework 安装包制作指南”categories: [‘C++核心开发’, ‘Qt框架’]date: 2025-12-04 22:50:20description: “详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”"></a>tags: [QtInstallerFramework, 安装包制作, 部署工具, Qt]<br>title: “QtInstallerFramework 安装包制作指南”<br>categories: [‘C++核心开发’, ‘Qt框架’]<br>date: 2025-12-04 22:50:20<br>description: “详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”</h2><h1 id="QtInstallerFramework-安装包制作指南"><a href="#QtInstallerFramework-安装包制作指南" class="headerlink" title="QtInstallerFramework 安装包制作指南"></a>QtInstallerFramework 安装包制作指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E5%B7%A5%E5%85%B7%E6%A6%82%E8%BF%B0">工具概述</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E5%87%86%E5%A4%87">安装准备</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84">项目结构</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E8%AF%A6%E8%A7%A3">配置文件详解</a></li>
+<li><a href="#%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC%E8%AF%A6%E8%A7%A3">安装脚本详解</a></li>
+<li><a href="#%E7%94%9F%E6%88%90%E5%AE%89%E8%A3%85%E5%8C%85">生成安装包</a></li>
+<li><a href="#%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD">高级功能</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+<li><a href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">最佳实践</a></li>
+</ul>
+<h2 id="工具概述"><a href="#工具概述" class="headerlink" title="工具概述"></a>工具概述</h2><p>QtInstallerFramework 是 Qt 官方提供的跨平台安装包制作工具，支持 Windows、macOS 和 Linux 平台。</p>
+<h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><ul>
+<li>跨平台支持</li>
+<li>图形化安装向导</li>
+<li>强大的组件和依赖管理</li>
+<li>支持在线和离线安装模式</li>
+<li>可通过脚本（qs）高度自定义安装过程</li>
+<li>支持多语言</li>
+</ul>
+<h2 id="安装准备"><a href="#安装准备" class="headerlink" title="安装准备"></a>安装准备</h2><h3 id="1-获取-QtInstallerFramework"><a href="#1-获取-QtInstallerFramework" class="headerlink" title="1. 获取 QtInstallerFramework"></a>1. 获取 QtInstallerFramework</h3><p>QtInstallerFramework 通常包含在 Qt 的在线安装器中，作为一个可选组件。也可以从 Qt 官网单独下载。</p>
+<p>它的默认安装路径通常在 Qt 的 <code>Tools</code> 目录下，例如：<code>&lt;Qt安装目录&gt;\Tools\QtInstallerFramework\4.8\bin</code>。</p>
+<h3 id="2-环境变量配置"><a href="#2-环境变量配置" class="headerlink" title="2. 环境变量配置"></a>2. 环境变量配置</h3><p>为了方便在任何路径下使用命令行工具，建议将 QtInstallerFramework 的 <code>bin</code> 目录添加到系统的 <code>PATH</code> 环境变量中。</p>
+<p><strong>Windows 示例:</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 将 &lt;Your-Qt-InstallerFramework-Path&gt; 替换为你的实际路径</span><br><span class="line">set PATH=%PATH%;&lt;Your-Qt-InstallerFramework-Path&gt;\bin</span><br></pre></td></tr></table></figure>
+
+<h2 id="项目结构"><a href="#项目结构" class="headerlink" title="项目结构"></a>项目结构</h2><p>一个典型的安装包项目结构如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">YourAppInstaller/</span><br><span class="line">├── config/</span><br><span class="line">│   └── config.xml          # 1. 主配置文件</span><br><span class="line">└── packages/</span><br><span class="line">    └── com.yourcompany.yourapp/</span><br><span class="line">        ├── meta/</span><br><span class="line">        │   ├── package.xml         # 2. 包（组件）配置文件</span><br><span class="line">        │   └── installscript.qs     # 3. 安装脚本 (可选)</span><br><span class="line">        └── data/                    # 4. 要安装的实际文件</span><br><span class="line">            ├── YourApp.exe</span><br><span class="line">            ├── Qt6Core.dll</span><br><span class="line">            └── ...</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置文件详解"><a href="#配置文件详解" class="headerlink" title="配置文件详解"></a>配置文件详解</h2><h3 id="1-主配置文件-config-config-xml"><a href="#1-主配置文件-config-config-xml" class="headerlink" title="1. 主配置文件 (config&#x2F;config.xml)"></a>1. 主配置文件 (config&#x2F;config.xml)</h3><p>该文件定义了安装器的整体行为和外观。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Installer</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 应用名称 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Name</span>&gt;</span>YourApp<span class="tag">&lt;/<span class="name">Name</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 应用版本 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">Version</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 安装器标题 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Title</span>&gt;</span>YourApp Installer<span class="tag">&lt;/<span class="name">Title</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 发行商 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Publisher</span>&gt;</span>YourCompany<span class="tag">&lt;/<span class="name">Publisher</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 开始菜单目录 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">StartMenuDir</span>&gt;</span>YourApp<span class="tag">&lt;/<span class="name">StartMenuDir</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 默认安装路径, @ApplicationsDir@ 是预定义变量 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">TargetDir</span>&gt;</span>@ApplicationsDir@/YourApp<span class="tag">&lt;/<span class="name">TargetDir</span>&gt;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&lt;!-- (可选) 安装程序图标 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">InstallerWindowIcon</span>&gt;</span>installer_icon.ico<span class="tag">&lt;/<span class="name">InstallerWindowIcon</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- (可选) 应用图标 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">InstallerApplicationIcon</span>&gt;</span>app_icon.ico<span class="tag">&lt;/<span class="name">InstallerApplicationIcon</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- (可选) Logo图片 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Logo</span>&gt;</span>logo.png<span class="tag">&lt;/<span class="name">Logo</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Installer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-包配置文件-packages-…-meta-package-xml"><a href="#2-包配置文件-packages-…-meta-package-xml" class="headerlink" title="2. 包配置文件 (packages&#x2F;…&#x2F;meta&#x2F;package.xml)"></a>2. 包配置文件 (packages&#x2F;…&#x2F;meta&#x2F;package.xml)</h3><p>每个组件（包）都有一个 <code>package.xml</code>，用于描述该组件。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=<span class="string">&quot;1.0&quot;</span> encoding=<span class="string">&quot;UTF-8&quot;</span>?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">Package</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 显示名称 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">DisplayName</span>&gt;</span>Main Application<span class="tag">&lt;/<span class="name">DisplayName</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 组件描述 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Description</span>&gt;</span>The main application files.<span class="tag">&lt;/<span class="name">Description</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 组件版本 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Version</span>&gt;</span>1.0.0<span class="tag">&lt;/<span class="name">Version</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 发布日期 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ReleaseDate</span>&gt;</span>2024-01-01<span class="tag">&lt;/<span class="name">ReleaseDate</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 默认选中 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Default</span>&gt;</span>true<span class="tag">&lt;/<span class="name">Default</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 关联的安装脚本 --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">Script</span>&gt;</span>installscript.qs<span class="tag">&lt;/<span class="name">Script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Package</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="安装脚本详解-meta-installscript-qs"><a href="#安装脚本详解-meta-installscript-qs" class="headerlink" title="安装脚本详解 (meta&#x2F;installscript.qs)"></a>安装脚本详解 (meta&#x2F;installscript.qs)</h2><p>安装脚本使用类 QML 的语法（<code>qs</code>），允许你完全自定义安装和卸载过程。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// installscript.qs</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">Component</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 构造函数，可以在此获取安装器核心对象</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义安装操作</span></span><br><span class="line"><span class="title class_">Component</span>.<span class="property"><span class="keyword">prototype</span></span>.<span class="property">createOperations</span> = <span class="keyword">function</span>(<span class="params"></span>) &#123;</span><br><span class="line">    <span class="comment">// 必须先调用父类的同名方法</span></span><br><span class="line">    component.<span class="title function_">createOperations</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 示例：在Windows上创建桌面快捷方式</span></span><br><span class="line">    <span class="keyword">if</span> (systemInfo.<span class="property">kernelType</span> === <span class="string">&quot;winnt&quot;</span>) &#123;</span><br><span class="line">        component.<span class="title function_">addOperation</span>(</span><br><span class="line">            <span class="string">&quot;CreateShortcut&quot;</span>,                               <span class="comment">// 操作类型</span></span><br><span class="line">            <span class="string">&quot;@TargetDir@/YourApp.exe&quot;</span>,                      <span class="comment">// 目标文件</span></span><br><span class="line">            <span class="string">&quot;@DesktopDir@/YourApp.lnk&quot;</span>,                     <span class="comment">// 快捷方式路径</span></span><br><span class="line">            <span class="string">&quot;workingDirectory=@TargetDir@&quot;</span>,                 <span class="comment">// 工作目录</span></span><br><span class="line">            <span class="string">&quot;iconPath=@TargetDir@/app_icon.ico&quot;</span>,            <span class="comment">// 快捷方式图标</span></span><br><span class="line">            <span class="string">&quot;iconIndex=0&quot;</span>                                   <span class="comment">// 图标索引</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 示例：在Windows上创建开始菜单快捷方式</span></span><br><span class="line">    <span class="keyword">if</span> (systemInfo.<span class="property">kernelType</span> === <span class="string">&quot;winnt&quot;</span>) &#123;</span><br><span class="line">        component.<span class="title function_">addOperation</span>(</span><br><span class="line">            <span class="string">&quot;CreateShortcut&quot;</span>,</span><br><span class="line">            <span class="string">&quot;@TargetDir@/YourApp.exe&quot;</span>,</span><br><span class="line">            <span class="string">&quot;@StartMenuDir@/YourApp.lnk&quot;</span>,</span><br><span class="line">            <span class="string">&quot;workingDirectory=@TargetDir@&quot;</span></span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="生成安装包"><a href="#生成安装包" class="headerlink" title="生成安装包"></a>生成安装包</h2><p>在项目根目录（例如 <code>YourAppInstaller/</code>）打开命令行，执行以下命令：</p>
+<h3 id="1-生成在线安装包"><a href="#1-生成在线安装包" class="headerlink" title="1. 生成在线安装包"></a>1. 生成在线安装包</h3><p>在线安装包体积小，安装时从服务器下载组件数据。需要预先将组件上传到服务器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># binarycreator 是 QtInstallerFramework 的核心工具</span></span><br><span class="line">binarycreator --online-only -c config/config.xml -p packages YourAppInstaller_Online.exe</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-生成离线安装包"><a href="#2-生成离线安装包" class="headerlink" title="2. 生成离线安装包"></a>2. 生成离线安装包</h3><p>离线安装包包含所有文件，体积较大，无需联网即可安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -f 是 --offline-only 的简写</span></span><br><span class="line">binarycreator -f -c config/config.xml -p packages YourAppInstaller_Offline.exe</span><br></pre></td></tr></table></figure>
+
+<h2 id="高级功能"><a href="#高级功能" class="headerlink" title="高级功能"></a>高级功能</h2><h3 id="多语言支持"><a href="#多语言支持" class="headerlink" title="多语言支持"></a>多语言支持</h3><p>在 <code>config.xml</code> 中添加语言包文件（<code>.ts</code> 文件编译后的 <code>.qm</code> 文件）。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">Installer</span>&gt;</span></span><br><span class="line">    ...</span><br><span class="line">    <span class="tag">&lt;<span class="name">Translations</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Translation</span>&gt;</span>zh_CN.qm<span class="tag">&lt;/<span class="name">Translation</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">Translation</span>&gt;</span>en_US.qm<span class="tag">&lt;/<span class="name">Translation</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">Translations</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">Installer</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="静默-无人值守安装"><a href="#静默-无人值守安装" class="headerlink" title="静默&#x2F;无人值守安装"></a>静默&#x2F;无人值守安装</h3><p>使用命令行参数进行自动化安装。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --unattended 是关键参数</span></span><br><span class="line">YourAppInstaller.exe --unattended</span><br><span class="line"></span><br><span class="line"><span class="comment"># 也可以结合脚本实现更复杂的自动安装</span></span><br><span class="line"><span class="comment"># YourAppInstaller.exe --unattended --script your_script.qs</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定安装目录</span></span><br><span class="line">YourAppInstaller.exe --unattended --target <span class="string">&quot;C:\Path\To\Install&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>Q1: 如何打包 VC++ 运行时库?</strong><br><strong>A</strong>: 推荐在 <code>installscript.qs</code> 中添加一个操作来静默安装 VC++ 运行时（<code>vc_redist.x64.exe</code>）。首先将 <code>vc_redist.x64.exe</code> 放入 <code>data</code> 目录，然后添加操作：</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">component.<span class="title function_">addOperation</span>(<span class="string">&quot;Execute&quot;</span>,</span><br><span class="line">    <span class="string">&quot;@TargetDir@/vc_redist.x64.exe&quot;</span>,</span><br><span class="line">    <span class="string">&quot;/quiet&quot;</span>,</span><br><span class="line">    <span class="string">&quot;/norestart&quot;</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<p><strong>Q2: 如何使用 <code>windeployqt</code> 自动收集 Qt 依赖?</strong><br><strong>A</strong>: <code>windeployqt</code> 是一个非常方便的工具。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 先在一个临时目录生成你的 Release 版本的 exe</span></span><br><span class="line"><span class="comment"># 2. 在该目录运行 windeployqt</span></span><br><span class="line">windeployqt YourApp.exe</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 将所有生成的文件和目录（platforms, styles, translations等）复制到你的组件的 data 目录下</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Q3: 快捷方式无法创建?</strong><br><strong>A</strong>: 检查 <code>installscript.qs</code> 中的路径是否正确，特别是 <code>@TargetDir@/YourApp.exe</code> 是否指向了正确的可执行文件。确保 <code>CreateShortcut</code> 操作在 <code>component.createOperations()</code> 之后调用。</p>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><ol>
+<li><strong>组件化</strong>: 将大型应用拆分为多个组件（packages），例如主程序、文档、快捷方式等。这让用户可以选择性安装，也便于维护。</li>
+<li><strong>环境变量</strong>: 避免在脚本中硬编码路径，多使用预定义变量如 <code>@TargetDir@</code>, <code>@DesktopDir@</code> 等。</li>
+<li><strong>卸载逻辑</strong>: 在 <code>installscript.qs</code> 中为自定义的安装操作（如添加注册表、配置文件）编写对应的卸载逻辑。</li>
+<li><strong>测试</strong>: 在干净的虚拟机中（特别是 Windows）测试你的安装、卸载和更新流程。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/qt/" rel="tag"># Qt</a>
+              <a href="/tags/windows/" rel="tag"># Windows</a>
+              <a href="/tags/redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt%E5%BA%94%E7%94%A8%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97/" rel="prev" title="Qt应用性能优化完整指南">
+                  <i class="fa fa-angle-left"></i> Qt应用性能优化完整指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E6%A0%B7%E5%BC%8F%E8%A1%A8-QSS-%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97/" rel="next" title="Qt 样式表 (QSS) 完整指南">
+                  Qt 样式表 (QSS) 完整指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

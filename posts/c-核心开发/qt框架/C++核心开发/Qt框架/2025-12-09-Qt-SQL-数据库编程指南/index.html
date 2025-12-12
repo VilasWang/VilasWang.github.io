@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Qt SQL 数据库编程指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Qt SQL 数据库编程指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-SQL-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Qt SQL 数据库编程指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.166Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-SQL-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-SQL-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/","path":"posts/c-核心开发/qt框架/C++核心开发/Qt框架/2025-12-09-Qt-SQL-数据库编程指南/","title":"Qt SQL 数据库编程指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Qt SQL 数据库编程指南 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-Qt-QSqlDatabase-QSqlQuery-QSqlTableModel-%E6%95%B0%E6%8D%AE%E5%BA%93-SQL-C-title-%E2%80%9CQt-SQL-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%E2%80%9Dcategories-%E2%80%98C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91%E2%80%99-%E2%80%98Qt%E6%A1%86%E6%9E%B6%E2%80%99-date-2025-12-04-13-13-22description-%E2%80%9C%E4%B8%93%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%EF%BC%8C%E6%B6%B5%E7%9B%96%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E3%80%81%E5%AE%9E%E8%B7%B5%E6%93%8D%E4%BD%9C%E3%80%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%89%E5%85%A8%E6%96%B9%E4%BD%8D%E5%86%85%E5%AE%B9%EF%BC%8C%E5%8A%A9%E5%8A%9B%E6%8A%80%E8%83%BD%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8D%87%E3%80%82%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">tags: [Qt, QSqlDatabase, QSqlQuery, QSqlTableModel, 数据库, SQL, C++]title: “Qt SQL 数据库编程指南”categories: [‘C++核心开发’, ‘Qt框架’]date: 2025-12-04 13:13:22description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Qt-SQL-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">Qt SQL 数据库编程指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0%EF%BC%9AQt-SQL-%E6%A8%A1%E5%9D%97"><span class="nav-number">2.2.</span> <span class="nav-text">概述：Qt SQL 模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%B1%BB"><span class="nav-number">2.2.1.</span> <span class="nav-text">核心类</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E9%85%8D%E7%BD%AE%E4%B8%8E%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.3.</span> <span class="nav-text">第一步：配置与连接数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-pro-%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 项目配置 (.pro 文件)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%A3%80%E6%9F%A5%E9%A9%B1%E5%8A%A8"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 检查驱动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BB%BA%E7%AB%8B%E8%BF%9E%E6%8E%A5-SQLite-%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.3.3.</span> <span class="nav-text">3. 建立连接 (SQLite 示例)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E4%BD%BF%E7%94%A8-QSqlQuery-%E6%89%A7%E8%A1%8C-SQL-%E5%91%BD%E4%BB%A4"><span class="nav-number">2.4.</span> <span class="nav-text">第二步：使用 QSqlQuery 执行 SQL 命令</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%89%A7%E8%A1%8C%E7%AE%80%E5%8D%95%E6%9F%A5%E8%AF%A2-DDL-%E5%92%8C-DML"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. 执行简单查询 (DDL 和 DML)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%BD%BF%E7%94%A8%E9%A2%84%E5%A4%84%E7%90%86%E6%9F%A5%E8%AF%A2-%E9%98%B2%E6%AD%A2-SQL-%E6%B3%A8%E5%85%A5"><span class="nav-number">2.4.2.</span> <span class="nav-text">2. 使用预处理查询 (防止 SQL 注入)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E9%81%8D%E5%8E%86%E6%9F%A5%E8%AF%A2%E7%BB%93%E6%9E%9C"><span class="nav-number">2.4.3.</span> <span class="nav-text">3. 遍历查询结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%A8%A1%E5%9E%8B-%E8%A7%86%E5%9B%BE%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE"><span class="nav-number">2.5.</span> <span class="nav-text">第三步：使用模型&#x2F;视图显示数据</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-QSqlQueryModel-%E5%8F%AA%E8%AF%BB%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.5.1.</span> <span class="nav-text">1. QSqlQueryModel (只读模型)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-QSqlTableModel-%E8%AF%BB%E5%86%99%E6%A8%A1%E5%9E%8B"><span class="nav-number">2.5.2.</span> <span class="nav-text">2. QSqlTableModel (读写模型)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E4%BD%BF%E7%94%A8%E4%BA%8B%E5%8A%A1"><span class="nav-number">2.6.</span> <span class="nav-text">第四步：使用事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">2.7.</span> <span class="nav-text">最佳实践与常见问题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-SQL-%E6%95%B0%E6%8D%AE%E5%BA%93%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Qt SQL 数据库编程指南 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Qt SQL 数据库编程指南的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Qt SQL 数据库编程指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">C++核心开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">Qt框架</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Qt SQL 数据库编程指南的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="tags-Qt-QSqlDatabase-QSqlQuery-QSqlTableModel-数据库-SQL-C-title-“Qt-SQL-数据库编程指南”categories-‘C-核心开发’-‘Qt框架’-date-2025-12-04-13-13-22description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"><a href="#tags-Qt-QSqlDatabase-QSqlQuery-QSqlTableModel-数据库-SQL-C-title-“Qt-SQL-数据库编程指南”categories-‘C-核心开发’-‘Qt框架’-date-2025-12-04-13-13-22description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”" class="headerlink" title="tags: [Qt, QSqlDatabase, QSqlQuery, QSqlTableModel, 数据库, SQL, C++]title: “Qt SQL 数据库编程指南”categories: [‘C++核心开发’, ‘Qt框架’]date: 2025-12-04 13:13:22description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"></a>tags: [Qt, QSqlDatabase, QSqlQuery, QSqlTableModel, 数据库, SQL, C++]<br>title: “Qt SQL 数据库编程指南”<br>categories: [‘C++核心开发’, ‘Qt框架’]<br>date: 2025-12-04 13:13:22<br>description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</h2><h1 id="Qt-SQL-数据库编程指南"><a href="#Qt-SQL-数据库编程指南" class="headerlink" title="Qt SQL 数据库编程指南"></a>Qt SQL 数据库编程指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%A6%82%E8%BF%B0qt-sql-%E6%A8%A1%E5%9D%97">概述：Qt SQL 模块</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E9%85%8D%E7%BD%AE%E4%B8%8E%E8%BF%9E%E6%8E%A5%E6%95%B0%E6%8D%AE%E5%BA%93">第一步：配置与连接数据库</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E4%BD%BF%E7%94%A8-qsqlquery-%E6%89%A7%E8%A1%8C-sql-%E5%91%BD%E4%BB%A4">第二步：使用 QSqlQuery 执行 SQL 命令</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E4%BD%BF%E7%94%A8-%E6%A8%A1%E5%9E%8B%E8%A7%86%E5%9B%BE%E6%98%BE%E7%A4%BA%E6%95%B0%E6%8D%AE">第三步：使用模型&#x2F;视图显示数据</a></li>
+<li><a href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E4%BD%BF%E7%94%A8%E4%BA%8B%E5%8A%A1">第四步：使用事务</a></li>
+<li><a href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E4%B8%8E%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">最佳实践与常见问题</a></li>
+</ul>
+<h2 id="概述：Qt-SQL-模块"><a href="#概述：Qt-SQL-模块" class="headerlink" title="概述：Qt SQL 模块"></a>概述：Qt SQL 模块</h2><p>Qt 的 <code>SQL</code> 模块提供了一套与平台和数据库无关的接口，用于访问 SQL 数据库。其核心是驱动程序架构，允许你使用相同的 Qt API 来操作多种不同的数据库，如 SQLite, MySQL, PostgreSQL 等。</p>
+<h3 id="核心类"><a href="#核心类" class="headerlink" title="核心类"></a>核心类</h3><ul>
+<li><strong><code>QSqlDatabase</code></strong>: 代表一个数据库连接。它负责管理连接本身。</li>
+<li><strong><code>QSqlQuery</code></strong>: 用于执行 SQL 语句，并遍历查询结果。</li>
+<li><strong><code>QSqlQueryModel</code></strong>: 一个只读的数据模型，用于将一个 SQL 查询的结果直接展示在视图（如 <code>QTableView</code>）中。</li>
+<li><strong><code>QSqlTableModel</code></strong>: 一个可读写的数据模型，它代表一个单一的数据库表，并允许在视图中直接编辑数据。</li>
+</ul>
+<h2 id="第一步：配置与连接数据库"><a href="#第一步：配置与连接数据库" class="headerlink" title="第一步：配置与连接数据库"></a>第一步：配置与连接数据库</h2><h3 id="1-项目配置-pro-文件"><a href="#1-项目配置-pro-文件" class="headerlink" title="1. 项目配置 (.pro 文件)"></a>1. 项目配置 (<code>.pro</code> 文件)</h3><p>确保你的项目文件包含了 <code>sql</code> 模块。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">QT += core gui sql</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-检查驱动"><a href="#2-检查驱动" class="headerlink" title="2. 检查驱动"></a>2. 检查驱动</h3><p>在使用特定数据库前，应检查 Qt 是否有可用的驱动。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QSqlDatabase&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QDebug&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Available drivers:&quot;</span> &lt;&lt; QSqlDatabase::<span class="built_in">drivers</span>();</span><br><span class="line"><span class="comment">// 输出应包含 &quot;QSQLITE&quot;, &quot;QMYSQL&quot;, &quot;QPSQL&quot; 等</span></span><br></pre></td></tr></table></figure>
+<p>如果缺少驱动，你需要安装它（例如，在 Ubuntu 上 <code>sudo apt-get install libqt5sql5-mysql</code>）。</p>
+<h3 id="3-建立连接-SQLite-示例"><a href="#3-建立连接-SQLite-示例" class="headerlink" title="3. 建立连接 (SQLite 示例)"></a>3. 建立连接 (SQLite 示例)</h3><p>SQLite 是最简单的入门数据库，因为它是一个本地文件，无需服务器。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QSqlDatabase&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QDebug&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QSqlError&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">createConnection</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 添加一个数据库连接，使用默认连接名</span></span><br><span class="line">    QSqlDatabase db = QSqlDatabase::<span class="built_in">addDatabase</span>(<span class="string">&quot;QSQLITE&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 设置数据库文件名</span></span><br><span class="line">    db.<span class="built_in">setDatabaseName</span>(<span class="string">&quot;mydatabase.db&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 打开连接</span></span><br><span class="line">    <span class="keyword">if</span> (!db.<span class="built_in">open</span>()) &#123;</span><br><span class="line">        <span class="built_in">qWarning</span>() &lt;&lt; <span class="string">&quot;Connection failed:&quot;</span> &lt;&lt; db.<span class="built_in">lastError</span>().<span class="built_in">text</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Database connected successfully!&quot;</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>提示</strong>: <code>QSqlDatabase::addDatabase</code> 返回的是一个值，但它实际上创建了一个可被全局访问的静态实例。你可以通过 <code>QSqlDatabase::database()</code> 来随时获取这个连接的引用。</p>
+<h2 id="第二步：使用-QSqlQuery-执行-SQL-命令"><a href="#第二步：使用-QSqlQuery-执行-SQL-命令" class="headerlink" title="第二步：使用 QSqlQuery 执行 SQL 命令"></a>第二步：使用 QSqlQuery 执行 SQL 命令</h2><p><code>QSqlQuery</code> 是执行所有 SQL 操作的核心。</p>
+<h3 id="1-执行简单查询-DDL-和-DML"><a href="#1-执行简单查询-DDL-和-DML" class="headerlink" title="1. 执行简单查询 (DDL 和 DML)"></a>1. 执行简单查询 (DDL 和 DML)</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QSqlQuery&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">setupDatabase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    QSqlQuery query; <span class="comment">// 默认使用主连接</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建表</span></span><br><span class="line">    <span class="type">bool</span> success = query.<span class="built_in">exec</span>(<span class="string">&quot;CREATE TABLE IF NOT EXISTS contacts (&quot;</span></span><br><span class="line">                            <span class="string">&quot;id INTEGER PRIMARY KEY AUTOINCREMENT, &quot;</span></span><br><span class="line">                            <span class="string">&quot;name TEXT NOT NULL, &quot;</span></span><br><span class="line">                            <span class="string">&quot;phone TEXT)&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (!success) &#123;</span><br><span class="line">        <span class="built_in">qWarning</span>() &lt;&lt; <span class="string">&quot;Create table failed:&quot;</span> &lt;&lt; query.<span class="built_in">lastError</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 插入数据</span></span><br><span class="line">    query.<span class="built_in">exec</span>(<span class="string">&quot;INSERT INTO contacts (name, phone) VALUES (&#x27;Alice&#x27;, &#x27;+1-202-555-0173&#x27;)&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-使用预处理查询-防止-SQL-注入"><a href="#2-使用预处理查询-防止-SQL-注入" class="headerlink" title="2. 使用预处理查询 (防止 SQL 注入)"></a>2. 使用预处理查询 (防止 SQL 注入)</h3><p>当你的查询需要包含来自用户输入等外部来源的数据时，<strong>必须</strong>使用预处理查询来防止 SQL 注入攻击。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">addContact</span><span class="params">(<span class="type">const</span> QString &amp;name, <span class="type">const</span> QString &amp;phone)</span> </span>&#123;</span><br><span class="line">    QSqlQuery query;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 1. 准备一个带占位符的查询</span></span><br><span class="line">    query.<span class="built_in">prepare</span>(<span class="string">&quot;INSERT INTO contacts (name, phone) VALUES (:name, :phone)&quot;</span>);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 2. 绑定值到占位符</span></span><br><span class="line">    query.<span class="built_in">bindValue</span>(<span class="string">&quot;:name&quot;</span>, name);</span><br><span class="line">    query.<span class="built_in">bindValue</span>(<span class="string">&quot;:phone&quot;</span>, phone);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 3. 执行查询</span></span><br><span class="line">    <span class="keyword">if</span> (!query.<span class="built_in">exec</span>()) &#123;</span><br><span class="line">        <span class="built_in">qWarning</span>() &lt;&lt; <span class="string">&quot;Add contact failed:&quot;</span> &lt;&lt; query.<span class="built_in">lastError</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-遍历查询结果"><a href="#3-遍历查询结果" class="headerlink" title="3. 遍历查询结果"></a>3. 遍历查询结果</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">printAllContacts</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">QSqlQuery <span class="title">query</span><span class="params">(<span class="string">&quot;SELECT id, name, phone FROM contacts&quot;</span>)</span></span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// query.next() 会将内部指针移动到下一条记录</span></span><br><span class="line">    <span class="keyword">while</span> (query.<span class="built_in">next</span>()) &#123;</span><br><span class="line">        <span class="type">int</span> id = query.<span class="built_in">value</span>(<span class="number">0</span>).<span class="built_in">toInt</span>();</span><br><span class="line">        QString name = query.<span class="built_in">value</span>(<span class="number">1</span>).<span class="built_in">toString</span>();</span><br><span class="line">        QString phone = query.<span class="built_in">value</span>(<span class="string">&quot;phone&quot;</span>).<span class="built_in">toString</span>(); <span class="comment">// 也可以按列名获取</span></span><br><span class="line"></span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;ID:&quot;</span> &lt;&lt; id &lt;&lt; <span class="string">&quot;Name:&quot;</span> &lt;&lt; name &lt;&lt; <span class="string">&quot;Phone:&quot;</span> &lt;&lt; phone;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第三步：使用模型-视图显示数据"><a href="#第三步：使用模型-视图显示数据" class="headerlink" title="第三步：使用模型&#x2F;视图显示数据"></a>第三步：使用模型&#x2F;视图显示数据</h2><p>Qt 的 SQL 模块与模型&#x2F;视图框架无缝集成，可以轻松地将数据库数据显示在 UI 上。</p>
+<h3 id="1-QSqlQueryModel-只读模型"><a href="#1-QSqlQueryModel-只读模型" class="headerlink" title="1. QSqlQueryModel (只读模型)"></a>1. <code>QSqlQueryModel</code> (只读模型)</h3><p>这个模型最适合用于显示复杂查询（如 <code>JOIN</code>）的结果。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 MainWindow 中</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QSqlQueryModel&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::setupQueryView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> *model = <span class="keyword">new</span> <span class="built_in">QSqlQueryModel</span>(<span class="keyword">this</span>);</span><br><span class="line">    model-&gt;<span class="built_in">setQuery</span>(<span class="string">&quot;SELECT name, phone FROM contacts ORDER BY name&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置表头</span></span><br><span class="line">    model-&gt;<span class="built_in">setHeaderData</span>(<span class="number">0</span>, Qt::Horizontal, <span class="built_in">tr</span>(<span class="string">&quot;Name&quot;</span>));</span><br><span class="line">    model-&gt;<span class="built_in">setHeaderData</span>(<span class="number">1</span>, Qt::Horizontal, <span class="built_in">tr</span>(<span class="string">&quot;Phone Number&quot;</span>));</span><br><span class="line"></span><br><span class="line">    ui-&gt;tableView-&gt;<span class="built_in">setModel</span>(model);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-QSqlTableModel-读写模型"><a href="#2-QSqlTableModel-读写模型" class="headerlink" title="2. QSqlTableModel (读写模型)"></a>2. <code>QSqlTableModel</code> (读写模型)</h3><p>这个模型代表一个单一的数据库表，并支持直接在视图中进行编辑。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 MainWindow 中</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QSqlTableModel&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::setupTableView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> *model = <span class="keyword">new</span> <span class="built_in">QSqlTableModel</span>(<span class="keyword">this</span>); <span class="comment">// db 参数默认为主连接</span></span><br><span class="line">    model-&gt;<span class="built_in">setTable</span>(<span class="string">&quot;contacts&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置编辑策略：OnManualSubmit 表示所有修改都将缓存，直到手动提交</span></span><br><span class="line">    model-&gt;<span class="built_in">setEditStrategy</span>(QSqlTableModel::OnManualSubmit);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从数据库加载数据</span></span><br><span class="line">    model-&gt;<span class="built_in">select</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 设置表头</span></span><br><span class="line">    model-&gt;<span class="built_in">setHeaderData</span>(<span class="number">1</span>, Qt::Horizontal, <span class="built_in">tr</span>(<span class="string">&quot;Name&quot;</span>));</span><br><span class="line">    model-&gt;<span class="built_in">setHeaderData</span>(<span class="number">2</span>, Qt::Horizontal, <span class="built_in">tr</span>(<span class="string">&quot;Phone Number&quot;</span>));</span><br><span class="line"></span><br><span class="line">    ui-&gt;tableView-&gt;<span class="built_in">setModel</span>(model);</span><br><span class="line">    ui-&gt;tableView-&gt;<span class="built_in">hideColumn</span>(<span class="number">0</span>); <span class="comment">// 隐藏 ID 列</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// ... 在 UI 上添加 &quot;Submit&quot; 和 &quot;Revert&quot; 按钮</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;submitButton, &amp;QPushButton::clicked, model, &amp;QSqlTableModel::submitAll);</span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;revertButton, &amp;QPushButton::clicked, model, &amp;QSqlTableModel::revertAll);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第四步：使用事务"><a href="#第四步：使用事务" class="headerlink" title="第四步：使用事务"></a>第四步：使用事务</h2><p>当需要执行多个关联的 SQL 语句，并确保它们要么全部成功、要么全部失败时，应使用事务。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">performTransaction</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    QSqlDatabase db = QSqlDatabase::<span class="built_in">database</span>(); <span class="comment">// 获取默认连接</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 开始事务</span></span><br><span class="line">    <span class="keyword">if</span> (!db.<span class="built_in">transaction</span>()) &#123;</span><br><span class="line">        <span class="built_in">qWarning</span>() &lt;&lt; <span class="string">&quot;Failed to start transaction:&quot;</span> &lt;&lt; db.<span class="built_in">lastError</span>();</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">QSqlQuery <span class="title">query</span><span class="params">(db)</span></span>;</span><br><span class="line">    query.<span class="built_in">prepare</span>(<span class="string">&quot;UPDATE accounts SET balance = balance - 100 WHERE id = 1&quot;</span>);</span><br><span class="line">    <span class="type">bool</span> success1 = query.<span class="built_in">exec</span>();</span><br><span class="line"></span><br><span class="line">    query.<span class="built_in">prepare</span>(<span class="string">&quot;UPDATE accounts SET balance = balance + 100 WHERE id = 2&quot;</span>);</span><br><span class="line">    <span class="type">bool</span> success2 = query.<span class="built_in">exec</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 如果所有操作都成功，则提交事务</span></span><br><span class="line">    <span class="keyword">if</span> (success1 &amp;&amp; success2) &#123;</span><br><span class="line">        <span class="keyword">if</span> (db.<span class="built_in">commit</span>()) &#123;</span><br><span class="line">            <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Transaction successful!&quot;</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="built_in">qWarning</span>() &lt;&lt; <span class="string">&quot;Commit failed:&quot;</span> &lt;&lt; db.<span class="built_in">lastError</span>();</span><br><span class="line">            db.<span class="built_in">rollback</span>(); <span class="comment">// 尝试回滚</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 3. 如果有任何操作失败，则回滚事务</span></span><br><span class="line">        <span class="built_in">qWarning</span>() &lt;&lt; <span class="string">&quot;One of the queries failed, rolling back.&quot;</span>;</span><br><span class="line">        db.<span class="built_in">rollback</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最佳实践与常见问题"><a href="#最佳实践与常见问题" class="headerlink" title="最佳实践与常见问题"></a>最佳实践与常见问题</h2><ul>
+<li><strong>防止 SQL 注入</strong>: 永远不要手动拼接 SQL 查询字符串。始终使用 <code>QSqlQuery::prepare()</code> 和 <code>bindValue()</code> 来处理用户输入。</li>
+<li><strong>管理连接</strong>: 对于多线程应用，每个线程都应该有自己独立的数据库连接。可以通过 <code>QSqlDatabase::addDatabase(&quot;QSQLITE&quot;, &quot;connection_name&quot;)</code> 创建命名连接，并在需要时通过 <code>QSqlDatabase::database(&quot;connection_name&quot;)</code> 获取。</li>
+<li><strong>错误处理</strong>: 每次数据库操作后，都应检查 <code>QSqlDatabase::lastError()</code> 或 <code>QSqlQuery::lastError()</code> 来确认操作是否成功。</li>
+<li><strong>模型 vs. 手动查询</strong>: 优先使用 <code>QSqlQueryModel</code> 和 <code>QSqlTableModel</code> 来与 UI 交互，这比手动从查询结果中读取数据并填充 UI 要简单和高效得多。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/qt/" rel="tag"># Qt</a>
+              <a href="/tags/mysql/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-SQLite-%E5%8A%A0%E5%AF%86%E6%8C%87%E5%8D%97-%E4%BD%BF%E7%94%A8-SQLCipher/" rel="prev" title="Qt SQLite 加密指南 (使用 SQLCipher)">
+                  <i class="fa fa-angle-left"></i> Qt SQLite 加密指南 (使用 SQLCipher)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-QMediaPlayer-%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/" rel="next" title="Qt QMediaPlayer 音乐播放器开发教程">
+                  Qt QMediaPlayer 音乐播放器开发教程 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

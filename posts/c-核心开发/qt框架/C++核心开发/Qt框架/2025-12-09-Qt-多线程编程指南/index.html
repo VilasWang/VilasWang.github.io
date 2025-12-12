@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Qt 多线程编程指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Qt 多线程编程指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Qt 多线程编程指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.167Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/","path":"posts/c-核心开发/qt框架/C++核心开发/Qt框架/2025-12-09-Qt-多线程编程指南/","title":"Qt 多线程编程指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Qt 多线程编程指南 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#title-%E2%80%9CQt-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97%E2%80%9Dcategories-%E2%80%98C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91%E2%80%99-%E2%80%98Qt%E6%A1%86%E6%9E%B6%E2%80%99-description-%E2%80%9C%E4%B8%93%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%EF%BC%8C%E6%B6%B5%E7%9B%96%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E3%80%81%E5%AE%9E%E8%B7%B5%E6%93%8D%E4%BD%9C%E3%80%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%89%E5%85%A8%E6%96%B9%E4%BD%8D%E5%86%85%E5%AE%B9%EF%BC%8C%E5%8A%A9%E5%8A%9B%E6%8A%80%E8%83%BD%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8D%87%E3%80%82%E2%80%9Dtags-Qt-C-%E5%A4%9A%E7%BA%BF%E7%A8%8B-%E5%B9%B6%E5%8F%91-QThread-QtConcurrent-%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5-date-2025-12-04-22-09-50"><span class="nav-number">1.</span> <span class="nav-text">title: “Qt 多线程编程指南”categories: [‘C++核心开发’, ‘Qt框架’]description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”tags: [Qt, C++, 多线程, 并发, QThread, QtConcurrent, 线程同步]date: 2025-12-04 22:09:50</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Qt-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">Qt 多线程编程指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%A4%9A%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.2.</span> <span class="nav-text">概述：为什么需要多线程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Qt-%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80%EF%BC%9AQThread"><span class="nav-number">2.3.</span> <span class="nav-text">Qt 线程基础：QThread</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E4%BA%B2%E5%92%8C%E6%80%A7-Thread-Affinity"><span class="nav-number">2.3.1.</span> <span class="nav-text">线程亲和性 (Thread Affinity)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9AWorker-Object-%E6%A8%A1%E5%BC%8F-%E5%AE%98%E6%96%B9%E6%8E%A8%E8%8D%90"><span class="nav-number">2.4.</span> <span class="nav-text">方法一：Worker-Object 模式 (官方推荐)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B%E4%BB%A3%E7%A0%81"><span class="nav-number">2.4.1.</span> <span class="nav-text">示例代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E7%BB%A7%E6%89%BF-QThread-%E7%89%B9%E5%AE%9A%E5%9C%BA%E6%99%AF"><span class="nav-number">2.5.</span> <span class="nav-text">方法二：继承 QThread (特定场景)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5"><span class="nav-number">2.6.</span> <span class="nav-text">线程同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E5%B9%B6%E5%8F%91%EF%BC%9AQThreadPool-%E4%B8%8E-QtConcurrent"><span class="nav-number">2.7.</span> <span class="nav-text">高级并发：QThreadPool 与 QtConcurrent</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%88%99"><span class="nav-number">2.8.</span> <span class="nav-text">最佳实践与核心原则</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Qt 多线程编程指南 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Qt 多线程编程指南的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Qt 多线程编程指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">C++核心开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">Qt框架</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Qt 多线程编程指南的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="title-“Qt-多线程编程指南”categories-‘C-核心开发’-‘Qt框架’-description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”tags-Qt-C-多线程-并发-QThread-QtConcurrent-线程同步-date-2025-12-04-22-09-50"><a href="#title-“Qt-多线程编程指南”categories-‘C-核心开发’-‘Qt框架’-description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”tags-Qt-C-多线程-并发-QThread-QtConcurrent-线程同步-date-2025-12-04-22-09-50" class="headerlink" title="title: “Qt 多线程编程指南”categories: [‘C++核心开发’, ‘Qt框架’]description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”tags: [Qt, C++, 多线程, 并发, QThread, QtConcurrent, 线程同步]date: 2025-12-04 22:09:50"></a>title: “Qt 多线程编程指南”<br>categories: [‘C++核心开发’, ‘Qt框架’]<br>description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”<br>tags: [Qt, C++, 多线程, 并发, QThread, QtConcurrent, 线程同步]<br>date: 2025-12-04 22:09:50</h2><h1 id="Qt-多线程编程指南"><a href="#Qt-多线程编程指南" class="headerlink" title="Qt 多线程编程指南"></a>Qt 多线程编程指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%A6%82%E8%BF%B0%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81%E5%A4%9A%E7%BA%BF%E7%A8%8B">概述：为什么需要多线程</a></li>
+<li><a href="#qt-%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80qthread">Qt 线程基础：QThread</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95%E4%B8%80worker-object-%E6%A8%A1%E5%BC%8F-%E5%AE%98%E6%96%B9%E6%8E%A8%E8%8D%90">方法一：Worker-Object 模式 (官方推荐)</a></li>
+<li><a href="#%E6%96%B9%E6%B3%95%E4%BA%8C%E7%BB%A7%E6%89%BF-qthread-%E7%89%B9%E5%AE%9A%E5%9C%BA%E6%99%AF">方法二：继承 QThread (特定场景)</a></li>
+<li><a href="#%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%AD%A5">线程同步</a></li>
+<li><a href="#%E9%AB%98%E7%BA%A7%E5%B9%B6%E5%8F%91qthreadpool-%E4%B8%8E-qtconcurrent">高级并发：QThreadPool 与 QtConcurrent</a></li>
+<li><a href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E4%B8%8E%E6%A0%B8%E5%BF%83%E5%8E%9F%E5%88%99">最佳实践与核心原则</a></li>
+</ul>
+<h2 id="概述：为什么需要多线程"><a href="#概述：为什么需要多线程" class="headerlink" title="概述：为什么需要多线程"></a>概述：为什么需要多线程</h2><p>在 GUI 应用程序中，主线程（或称 GUI 线程）负责处理用户交互和界面更新。如果在这个线程中执行耗时操作（如复杂的计算、网络请求、文件 I&#x2F;O），界面将会冻结，无法响应用户操作，导致糟糕的用户体验。多线程允许我们将这些耗时操作移到后台线程中执行，从而保持界面的流畅响应。</p>
+<h2 id="Qt-线程基础：QThread"><a href="#Qt-线程基础：QThread" class="headerlink" title="Qt 线程基础：QThread"></a>Qt 线程基础：QThread</h2><p><code>QThread</code> 是 Qt 中管理线程的核心类。一个常见的误解是 <code>QThread</code> 本身就是一个线程。更准确地说，<code>QThread</code> 是一个<strong>线程的控制器</strong>，它可以管理一个在操作系统层面上运行的独立执行流。</p>
+<h3 id="线程亲和性-Thread-Affinity"><a href="#线程亲和性-Thread-Affinity" class="headerlink" title="线程亲和性 (Thread Affinity)"></a>线程亲和性 (Thread Affinity)</h3><p>每个 <code>QObject</code> 对象都有一个“线程亲和性”，意味着它“属于”某个特定的线程。默认情况下，对象属于创建它的那个线程。我们可以使用 <code>object-&gt;moveToThread(thread)</code> 来改变对象的线程亲和性。一旦一个对象被移动到新线程，它的所有槽函数都会在该线程的事件循环中执行。</p>
+<h2 id="方法一：Worker-Object-模式-官方推荐"><a href="#方法一：Worker-Object-模式-官方推荐" class="headerlink" title="方法一：Worker-Object 模式 (官方推荐)"></a>方法一：Worker-Object 模式 (官方推荐)</h2><p>这是使用 <code>QThread</code> 最常见也是最被推荐的方式。它遵循“将工作对象移到线程中，而不是继承 QThread”的原则。</p>
+<ol>
+<li><strong>创建 <code>Worker</code> 类</strong>: 创建一个继承自 <code>QObject</code> 的普通类，将耗时任务封装在一个槽函数中。</li>
+<li><strong>创建 <code>QThread</code> 实例</strong>: <code>QThread</code> 作为一个独立的控制器存在。</li>
+<li><strong>移动 Worker</strong>: 调用 <code>worker-&gt;moveToThread(thread)</code> 将工作对象移到新线程。</li>
+<li><strong>连接信号槽</strong>: 使用信号槽机制来触发任务开始、报告进度和返回结果。</li>
+<li><strong>启动线程</strong>: 调用 <code>thread-&gt;start()</code> 启动线程的事件循环。</li>
+</ol>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><p><code>worker.h</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> WORKER_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> WORKER_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QObject&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QDebug&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QThread&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Worker</span> : <span class="keyword">public</span> QObject &#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">public</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">doWork</span><span class="params">(<span class="type">int</span> parameter)</span> </span>&#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Worker started in thread:&quot;</span> &lt;&lt; QThread::<span class="built_in">currentThread</span>();</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt;= parameter; ++i) &#123;</span><br><span class="line">            <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Working...&quot;</span> &lt;&lt; i;</span><br><span class="line">            QThread::<span class="built_in">msleep</span>(<span class="number">100</span>); <span class="comment">// 模拟耗时操作</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="function">emit <span class="title">resultReady</span><span class="params">(<span class="string">&quot;Work finished!&quot;</span>)</span></span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">resultReady</span><span class="params">(<span class="type">const</span> QString &amp;result)</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// WORKER_H</span></span></span><br></pre></td></tr></table></figure>
+
+<p><code>main.cpp</code> (或你的主控类中):</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QCoreApplication&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QThread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;worker.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span> </span>&#123;</span><br><span class="line">    <span class="function">QCoreApplication <span class="title">a</span><span class="params">(argc, argv)</span></span>;</span><br><span class="line"></span><br><span class="line">    QThread *thread = <span class="keyword">new</span> <span class="built_in">QThread</span>();</span><br><span class="line">    Worker *worker = <span class="keyword">new</span> <span class="built_in">Worker</span>();</span><br><span class="line"></span><br><span class="line">    worker-&gt;<span class="built_in">moveToThread</span>(thread);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 当线程启动时，开始工作</span></span><br><span class="line">    QObject::<span class="built_in">connect</span>(thread, &amp;QThread::started, worker, [=]() &#123; worker-&gt;<span class="built_in">doWork</span>(<span class="number">10</span>); &#125;);</span><br><span class="line">    <span class="comment">// 当工作完成时，打印结果并退出线程</span></span><br><span class="line">    QObject::<span class="built_in">connect</span>(worker, &amp;Worker::resultReady, [&amp;](<span class="type">const</span> QString &amp;result) &#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Result from worker thread:&quot;</span> &lt;&lt; result;</span><br><span class="line">        thread-&gt;<span class="built_in">quit</span>();</span><br><span class="line">    &#125;);</span><br><span class="line">    <span class="comment">// 当线程退出时，清理资源</span></span><br><span class="line">    QObject::<span class="built_in">connect</span>(thread, &amp;QThread::finished, worker, &amp;QObject::deleteLater);</span><br><span class="line">    QObject::<span class="built_in">connect</span>(thread, &amp;QThread::finished, thread, &amp;QObject::deleteLater);</span><br><span class="line"></span><br><span class="line">    thread-&gt;<span class="built_in">start</span>();</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Main thread continues...&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> a.<span class="built_in">exec</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="方法二：继承-QThread-特定场景"><a href="#方法二：继承-QThread-特定场景" class="headerlink" title="方法二：继承 QThread (特定场景)"></a>方法二：继承 QThread (特定场景)</h2><p>只有当你需要一个没有事件循环、只执行一个长期阻塞任务的线程时，才应考虑继承 <code>QThread</code> 并重写 <code>run()</code> 方法。<strong>这种方法无法在线程中使用信号槽</strong>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QThread&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QDebug&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">SimpleThread</span> : <span class="keyword">public</span> QThread &#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Subclassed thread started in thread:&quot;</span> &lt;&lt; <span class="built_in">currentThread</span>();</span><br><span class="line">        <span class="comment">// 执行一个独立的、阻塞的任务</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; ++i) &#123;</span><br><span class="line">            <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Processing in run():&quot;</span> &lt;&lt; i;</span><br><span class="line">            <span class="built_in">msleep</span>(<span class="number">500</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Subclassed thread finished.&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line">SimpleThread *myThread = <span class="keyword">new</span> <span class="built_in">SimpleThread</span>();</span><br><span class="line">myThread-&gt;<span class="built_in">start</span>(); <span class="comment">// run() 方法将在新线程中执行</span></span><br><span class="line">myThread-&gt;<span class="built_in">wait</span>();  <span class="comment">// 等待线程执行完毕</span></span><br><span class="line"><span class="keyword">delete</span> myThread;</span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th>对比</th>
+<th>Worker-Object (<code>moveToThread</code>)</th>
+<th>继承 <code>QThread</code> (<code>run()</code>)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>推荐度</strong></td>
+<td><strong>高 (官方推荐)</strong></td>
+<td>低 (仅限特定场景)</td>
+</tr>
+<tr>
+<td><strong>事件循环</strong></td>
+<td><strong>有</strong></td>
+<td>无</td>
+</tr>
+<tr>
+<td><strong>信号槽</strong></td>
+<td><strong>支持</strong></td>
+<td>不支持 (在 <code>run</code> 内部)</td>
+</tr>
+<tr>
+<td><strong>适用场景</strong></td>
+<td>大部分需要与主线程通信的后台任务</td>
+<td>纯粹的、独立的、阻塞的计算任务</td>
+</tr>
+</tbody></table>
+<h2 id="线程同步"><a href="#线程同步" class="headerlink" title="线程同步"></a>线程同步</h2><p>当多个线程需要访问共享数据时，必须使用同步机制来避免数据竞争和不一致。</p>
+<ul>
+<li><p><strong><code>QMutex</code> (互斥锁)</strong>: 最基本的同步工具。在任何时刻，只有一个线程能锁定互斥锁。使用 <code>QMutexLocker</code> 可以方便地实现 RAII 式的加锁和解锁。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">QMutex mutex;</span><br><span class="line"><span class="type">int</span> shared_counter = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">increment</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">QMutexLocker <span class="title">locker</span><span class="params">(&amp;mutex)</span></span>; <span class="comment">// 构造时加锁，析构时解锁</span></span><br><span class="line">    shared_counter++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><code>QReadWriteLock</code> (读写锁)</strong>:允许多个“读者”同时访问数据，但“写者”是独占的。适用于“读多写少”的场景，可以提高并发性。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">QReadWriteLock lock;</span><br><span class="line"></span><br><span class="line"><span class="function">QString <span class="title">readData</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">QReadLocker <span class="title">locker</span><span class="params">(&amp;lock)</span></span>; <span class="comment">// 多个读者可以同时进入</span></span><br><span class="line">    <span class="keyword">return</span> shared_data;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">writeData</span><span class="params">(<span class="type">const</span> QString &amp;data)</span> </span>&#123;</span><br><span class="line">    <span class="function">QWriteLocker <span class="title">locker</span><span class="params">(&amp;lock)</span></span>; <span class="comment">// 写者是独占的</span></span><br><span class="line">    shared_data = data;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><code>QSemaphore</code> (信号量)</strong>: 用于保护一定数量的相同资源。例如，一个大小为 N 的资源池，可以有 N 个线程同时获取资源。</p>
+</li>
+<li><p><strong><code>QWaitCondition</code> (等待条件)</strong>: 用于实现复杂的线程同步，通常与 <code>QMutex</code> 配合使用。一个线程可以等待 (<code>wait()</code>) 某个条件变为真，而另一个线程在改变条件后可以唤醒 (<code>wakeOne()</code> 或 <code>wakeAll()</code>) 等待的线程。</p>
+</li>
+</ul>
+<h2 id="高级并发：QThreadPool-与-QtConcurrent"><a href="#高级并发：QThreadPool-与-QtConcurrent" class="headerlink" title="高级并发：QThreadPool 与 QtConcurrent"></a>高级并发：QThreadPool 与 QtConcurrent</h2><p>对于许多常见的并发任务，你甚至不需要直接使用 <code>QThread</code>。Qt 提供了更高级的 API。</p>
+<ul>
+<li><p><strong><code>QThreadPool</code></strong>: 一个全局的线程池，用于执行简短的、独立的任务。你需要创建一个继承自 <code>QRunnable</code> 的任务类，然后将其添加到线程池中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">MyTask</span> : <span class="keyword">public</span> QRunnable &#123;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span> <span class="keyword">override</span> </span>&#123; <span class="comment">/* ... 耗时操作 ... */</span> &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">MyTask *task = <span class="keyword">new</span> <span class="built_in">MyTask</span>();</span><br><span class="line">QThreadPool::<span class="built_in">globalInstance</span>()-&gt;<span class="built_in">start</span>(task);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong><code>QtConcurrent</code></strong>: 一个功能强大的框架，用于以并行方式处理数据集合，类似于函数式编程。它自动使用 <code>QThreadPool</code>。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QtConcurrent&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QStringList&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QFuture&gt;</span></span></span><br><span class="line"></span><br><span class="line">QStringList strings = &#123;<span class="string">&quot;a&quot;</span>, <span class="string">&quot;b&quot;</span>, <span class="string">&quot;c&quot;</span>, <span class="string">&quot;d&quot;</span>, <span class="string">&quot;e&quot;</span>&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 并行映射 (map): 对每个元素应用一个函数</span></span><br><span class="line">QFuture&lt;QString&gt; future = QtConcurrent::<span class="built_in">mapped</span>(strings, [](<span class="type">const</span> QString &amp;s) &#123;</span><br><span class="line">    <span class="keyword">return</span> s.<span class="built_in">toUpper</span>();</span><br><span class="line">&#125;);</span><br><span class="line">future.<span class="built_in">waitForFinished</span>();</span><br><span class="line"><span class="built_in">qDebug</span>() &lt;&lt; future.<span class="built_in">results</span>(); <span class="comment">// 输出: (&quot;A&quot;, &quot;B&quot;, &quot;C&quot;, &quot;D&quot;, &quot;E&quot;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. 并行过滤 (filter): 筛选满足条件的元素</span></span><br><span class="line">QFuture&lt;QString&gt; future2 = QtConcurrent::<span class="built_in">filtered</span>(strings, [](<span class="type">const</span> QString &amp;s) &#123;</span><br><span class="line">    <span class="keyword">return</span> s &gt; <span class="string">&quot;b&quot;</span>;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 3. 并行规约 (reduce): 将所有元素合并为一个结果</span></span><br><span class="line">QFuture&lt;<span class="type">int</span>&gt; future3 = QtConcurrent::<span class="built_in">reduced</span>(QList&lt;<span class="type">int</span>&gt;&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;, [](<span class="type">int</span> &amp;sum, <span class="type">int</span> val) &#123;</span><br><span class="line">    sum += val;</span><br><span class="line">&#125;);</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="最佳实践与核心原则"><a href="#最佳实践与核心原则" class="headerlink" title="最佳实践与核心原则"></a>最佳实践与核心原则</h2><ol>
+<li><strong>优先使用高级 API</strong>: 尽可能优先使用 <code>QtConcurrent</code> 或 <code>QThreadPool</code>。只有在需要对线程生命周期进行精细控制时，才直接使用 <code>QThread</code>。</li>
+<li><strong>优先使用 Worker-Object 模式</strong>: 当你必须使用 <code>QThread</code> 时，<code>moveToThread</code> 模式是首选。它能让你在工作线程中安全地使用信号槽，是与 Qt 事件驱动模型结合得最好的方式。</li>
+<li><strong>严禁直接操作 GUI</strong>: <strong>任何时候都不要在主线程以外的线程中直接创建、访问或修改 <code>QWidget</code> 及其子类对象</strong>。所有与 GUI 的交互都必须通过信号槽机制，将任务的执行结果发送到主线程的槽函数中，再由该槽函数更新界面。</li>
+<li><strong>保护共享数据</strong>: 只要有数据可能被多个线程同时访问，就必须使用 <code>QMutex</code> 或其他同步工具来保护它。</li>
+<li><strong>注意对象所有权</strong>: 当使用 <code>moveToThread</code> 时，要确保 <code>Worker</code> 对象和 <code>QThread</code> 对象的生命周期被正确管理。通常的做法是将它们都设置为某个主线程对象的子对象，或者在线程结束后使用 <code>deleteLater()</code> 来安全地删除它们。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/qt/" rel="tag"># Qt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E6%8C%87%E5%8D%97/" rel="prev" title="Qt 网络编程指南">
+                  <i class="fa fa-angle-left"></i> Qt 网络编程指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E5%9B%BD%E9%99%85%E5%8C%96-i18n-%E6%8C%87%E5%8D%97/" rel="next" title="Qt 国际化 (i18n) 指南">
+                  Qt 国际化 (i18n) 指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Linux 命令行速查表的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Linux 命令行速查表">
+<meta property="og:url" content="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/2025-12-09-Linux-Linux-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%80%9F%E6%9F%A5%E8%A1%A8/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Linux 命令行速查表的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.185Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/2025-12-09-Linux-Linux-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%80%9F%E6%9F%A5%E8%A1%A8/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/2025-12-09-Linux-Linux-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%80%9F%E6%9F%A5%E8%A1%A8/","path":"posts/开发工具与流程/构建与部署/开发工具与流程/构建与部署/2025-12-09-Linux-Linux-命令行速查表/","title":"Linux Linux 命令行速查表"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux Linux 命令行速查表 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-Linux-Bash-%E5%91%BD%E4%BB%A4%E8%A1%8C-Shell-%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86-Cheatsheet-title-%E2%80%9CLinux-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%80%9F%E6%9F%A5%E8%A1%A8%E2%80%9Dcategories-%E2%80%98%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86%E2%80%99-%E2%80%98Linux%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86%E2%80%99-date-2025-12-04-22-48-22description-%E2%80%9C%E4%B8%93%E4%B8%9A%E7%9A%84%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3%EF%BC%8C%E6%8F%90%E4%BE%9B%E8%AF%A6%E7%BB%86%E7%9A%84%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97%E3%80%81%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E5%92%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%8C%E5%8A%A9%E5%8A%9B%E5%BC%80%E5%8F%91%E8%80%85%E6%8F%90%E5%8D%87%E6%8A%80%E6%9C%AF%E6%B0%B4%E5%B9%B3%E3%80%82%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">tags: [Linux, Bash, 命令行, Shell, 系统管理, Cheatsheet]title: “Linux 命令行速查表”categories: [‘系统运维管理’, ‘Linux系统管理’]date: 2025-12-04 22:48:22description: “专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">Linux 命令行速查表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C"><span class="nav-number">2.2.</span> <span class="nav-text">文件和目录操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%BC%E8%88%AA%E4%B8%8E%E6%9F%A5%E7%9C%8B"><span class="nav-number">2.2.1.</span> <span class="nav-text">导航与查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E4%B8%8E%E5%88%A0%E9%99%A4"><span class="nav-number">2.2.2.</span> <span class="nav-text">创建与删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%8D%E5%88%B6%E4%B8%8E%E7%A7%BB%E5%8A%A8"><span class="nav-number">2.2.3.</span> <span class="nav-text">复制与移动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E6%89%BE"><span class="nav-number">2.2.4.</span> <span class="nav-text">查找</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86"><span class="nav-number">2.3.</span> <span class="nav-text">文本处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%86%85%E5%AE%B9"><span class="nav-number">2.3.1.</span> <span class="nav-text">查看内容</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E6%9C%AC%E5%B7%A5%E5%85%B7"><span class="nav-number">2.3.2.</span> <span class="nav-text">文本工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sed-%E4%B8%8E-awk"><span class="nav-number">2.3.3.</span> <span class="nav-text">sed 与 awk</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86"><span class="nav-number">2.4.</span> <span class="nav-text">系统管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E4%BF%A1%E6%81%AF"><span class="nav-number">2.4.1.</span> <span class="nav-text">系统信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%B6%E9%97%B4%E4%B8%8E%E6%97%A5%E6%9C%9F"><span class="nav-number">2.4.2.</span> <span class="nav-text">时间与日期</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E6%9C%BA%E4%B8%8E%E9%87%8D%E5%90%AF"><span class="nav-number">2.4.3.</span> <span class="nav-text">关机与重启</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E6%93%8D%E4%BD%9C"><span class="nav-number">2.5.</span> <span class="nav-text">网络操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9D%83%E9%99%90"><span class="nav-number">2.6.</span> <span class="nav-text">用户与权限</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E5%92%8C%E7%BB%84"><span class="nav-number">2.6.1.</span> <span class="nav-text">用户和组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%9D%83%E9%99%90"><span class="nav-number">2.6.2.</span> <span class="nav-text">文件权限</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86"><span class="nav-number">2.7.</span> <span class="nav-text">进程管理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%85%E7%AE%A1%E7%90%86"><span class="nav-number">2.8.</span> <span class="nav-text">包管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Debian-Ubuntu-apt"><span class="nav-number">2.8.1.</span> <span class="nav-text">Debian&#x2F;Ubuntu (apt)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Red-Hat-CentOS-Fedora-dnf-yum"><span class="nav-number">2.8.2.</span> <span class="nav-text">Red Hat&#x2F;CentOS&#x2F;Fedora (dnf&#x2F;yum)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Arch-Linux-pacman"><span class="nav-number">2.8.3.</span> <span class="nav-text">Arch Linux (pacman)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E5%8E%8B%E7%BC%A9%E4%B8%8E%E5%BD%92%E6%A1%A3"><span class="nav-number">2.9.</span> <span class="nav-text">文件压缩与归档</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tar-%E5%BD%92%E6%A1%A3"><span class="nav-number">2.9.1.</span> <span class="nav-text">tar 归档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zip-%E5%8E%8B%E7%BC%A9"><span class="nav-number">2.9.2.</span> <span class="nav-text">zip 压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B6%E4%BB%96%E5%8E%8B%E7%BC%A9%E6%A0%BC%E5%BC%8F"><span class="nav-number">2.9.3.</span> <span class="nav-text">其他压缩格式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-number">2.10.</span> <span class="nav-text">系统监控与性能分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%B4%9F%E8%BD%BD"><span class="nav-number">2.10.1.</span> <span class="nav-text">系统负载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E5%AD%98%E4%BD%BF%E7%94%A8%E5%88%86%E6%9E%90"><span class="nav-number">2.10.2.</span> <span class="nav-text">内存使用分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CPU-%E4%BD%BF%E7%94%A8%E5%88%86%E6%9E%90"><span class="nav-number">2.10.3.</span> <span class="nav-text">CPU 使用分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A3%81%E7%9B%98-I-O-%E7%9B%91%E6%8E%A7"><span class="nav-number">2.10.4.</span> <span class="nav-text">磁盘 I&#x2F;O 监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%BB%9C%E7%9B%91%E6%8E%A7"><span class="nav-number">2.10.5.</span> <span class="nav-text">网络监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%97%A5%E5%BF%97%E6%9F%A5%E7%9C%8B"><span class="nav-number">2.10.6.</span> <span class="nav-text">日志查看</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/2025-12-09-Linux-Linux-%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%80%9F%E6%9F%A5%E8%A1%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux Linux 命令行速查表 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Linux 命令行速查表的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux Linux 命令行速查表
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">开发工具与流程</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/" itemprop="url" rel="index"><span itemprop="name">构建与部署</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Linux 命令行速查表的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="tags-Linux-Bash-命令行-Shell-系统管理-Cheatsheet-title-“Linux-命令行速查表”categories-‘系统运维管理’-‘Linux系统管理’-date-2025-12-04-22-48-22description-“专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”"><a href="#tags-Linux-Bash-命令行-Shell-系统管理-Cheatsheet-title-“Linux-命令行速查表”categories-‘系统运维管理’-‘Linux系统管理’-date-2025-12-04-22-48-22description-“专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”" class="headerlink" title="tags: [Linux, Bash, 命令行, Shell, 系统管理, Cheatsheet]title: “Linux 命令行速查表”categories: [‘系统运维管理’, ‘Linux系统管理’]date: 2025-12-04 22:48:22description: “专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”"></a>tags: [Linux, Bash, 命令行, Shell, 系统管理, Cheatsheet]<br>title: “Linux 命令行速查表”<br>categories: [‘系统运维管理’, ‘Linux系统管理’]<br>date: 2025-12-04 22:48:22<br>description: “专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”</h2><h1 id="Linux-命令行速查表"><a href="#Linux-命令行速查表" class="headerlink" title="Linux 命令行速查表"></a>Linux 命令行速查表</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%96%87%E4%BB%B6%E5%92%8C%E7%9B%AE%E5%BD%95%E6%93%8D%E4%BD%9C">文件和目录操作</a></li>
+<li><a href="#%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86">文本处理</a></li>
+<li><a href="#%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86">系统管理</a></li>
+<li><a href="#%E7%BD%91%E7%BB%9C%E6%93%8D%E4%BD%9C">网络操作</a></li>
+<li><a href="#%E7%94%A8%E6%88%B7%E4%B8%8E%E6%9D%83%E9%99%90">用户与权限</a></li>
+<li><a href="#%E8%BF%9B%E7%A8%8B%E7%AE%A1%E7%90%86">进程管理</a></li>
+<li><a href="#%E5%8C%85%E7%AE%A1%E7%90%86">包管理</a></li>
+<li><a href="#%E6%96%87%E4%BB%B6%E5%8E%8B%E7%BC%A9%E4%B8%8E%E5%BD%92%E6%A1%A3">文件压缩与归档</a></li>
+<li><a href="#%E7%B3%BB%E7%BB%9F%E7%9B%91%E6%8E%A7%E4%B8%8E%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90">系统监控与性能分析</a></li>
+</ul>
+<h2 id="文件和目录操作"><a href="#文件和目录操作" class="headerlink" title="文件和目录操作"></a>文件和目录操作</h2><h3 id="导航与查看"><a href="#导航与查看" class="headerlink" title="导航与查看"></a>导航与查看</h3><ul>
+<li><code>pwd</code>: 显示当前工作目录。</li>
+<li><code>ls -la</code>: 列出所有文件和目录（包括隐藏的），显示详细信息。</li>
+<li><code>ls -lh</code>: 以人类可读的格式显示文件大小 (K, M, G)。</li>
+<li><code>cd /path/to/dir</code>: 切换到指定目录。</li>
+<li><code>cd ..</code>: 切换到上一级目录。</li>
+<li><code>cd ~</code> 或 <code>cd</code>: 切换到当前用户的主目录。</li>
+<li><code>cd -</code>: 切换到上一个工作目录。</li>
+</ul>
+<h3 id="创建与删除"><a href="#创建与删除" class="headerlink" title="创建与删除"></a>创建与删除</h3><ul>
+<li><code>touch file.txt</code>: 创建一个空文件或更新文件的时间戳。</li>
+<li><code>mkdir new_dir</code>: 创建一个新目录。</li>
+<li><code>mkdir -p path/to/new_dir</code>: 递归创建多级目录。</li>
+<li><code>rm file.txt</code>: 删除一个文件（会提示）。</li>
+<li><code>rm -f file.txt</code>: 强制删除一个文件。</li>
+<li><code>rm -r my_dir</code>: 递归删除一个目录及其所有内容。</li>
+<li><code>rm -rf my_dir</code>: 强制递归删除一个目录（<strong>危险命令，请谨慎使用</strong>）。</li>
+</ul>
+<h3 id="复制与移动"><a href="#复制与移动" class="headerlink" title="复制与移动"></a>复制与移动</h3><ul>
+<li><code>cp source.txt destination.txt</code>: 复制文件。</li>
+<li><code>cp -r source_dir/ destination_dir/</code>: 递归复制目录。</li>
+<li><code>mv old_name.txt new_name.txt</code>: 重命名文件或目录。</li>
+<li><code>mv source.txt /path/to/destination/</code>: 移动文件或目录。</li>
+</ul>
+<h3 id="查找"><a href="#查找" class="headerlink" title="查找"></a>查找</h3><ul>
+<li><code>find /path -name &quot;*.log&quot;</code>: 在指定路径下按名称查找文件。</li>
+<li><code>find /path -type f -size +100M</code>: 查找大于 100MB 的文件。</li>
+<li><code>find /path -name &quot;*.log&quot; -mtime +7</code>: 查找7天前修改的日志文件。</li>
+<li><code>grep &quot;pattern&quot; file.txt</code>: 在文件中搜索包含特定模式的行。</li>
+<li><code>grep -r &quot;pattern&quot; /path/to/dir</code>: 在目录中递归搜索。</li>
+<li><code>grep -i &quot;pattern&quot; file.txt</code>: 忽略大小写搜索。</li>
+<li><code>grep -n &quot;pattern&quot; file.txt</code>: 显示匹配行的行号。</li>
+<li><code>grep -v &quot;pattern&quot; file.txt</code>: 显示不包含匹配模式的行。</li>
+</ul>
+<h2 id="文本处理"><a href="#文本处理" class="headerlink" title="文本处理"></a>文本处理</h2><h3 id="查看内容"><a href="#查看内容" class="headerlink" title="查看内容"></a>查看内容</h3><ul>
+<li><code>cat file.txt</code>: 一次性显示整个文件的内容。</li>
+<li><code>less file.txt</code>: 分页查看文件内容（功能比 <code>more</code> 更强大）。</li>
+<li><code>head -n 20 file.txt</code>: 显示文件的前 20 行。</li>
+<li><code>tail -n 20 file.txt</code>: 显示文件的后 20 行。</li>
+<li><code>tail -f /var/log/syslog</code>: 实时跟踪文件的新增内容，常用于看日志。</li>
+<li><code>tail -F /var/log/syslog</code>: 跟踪文件，如果文件被轮转会自动跟踪新文件。</li>
+<li><code>less +F file.txt</code>: 在 less 中打开文件并进入跟踪模式（按 Ctrl+C 退出跟踪，按 F 重新进入）。</li>
+</ul>
+<h3 id="文本工具"><a href="#文本工具" class="headerlink" title="文本工具"></a>文本工具</h3><ul>
+<li><code>wc -l file.txt</code>: 统计文件的行数。</li>
+<li><code>wc -w file.txt</code>: 统计文件的单词数。</li>
+<li><code>sort file.txt</code>: 对文件的行进行排序。</li>
+<li><code>uniq file.txt</code>: 移除文件中的连续重复行（通常与 <code>sort</code> 配合使用：<code>sort file.txt | uniq</code>）。</li>
+<li><code>cut -d&#39;,&#39; -f1 data.csv</code>: 以逗号为分隔符，提取第一列。</li>
+<li><code>tr &#39;a-z&#39; &#39;A-Z&#39; &lt; file.txt</code>: 将文本转换为大写。</li>
+<li><code>tr -d &#39;\n&#39; &lt; file.txt</code>: 删除所有换行符。</li>
+</ul>
+<h3 id="sed-与-awk"><a href="#sed-与-awk" class="headerlink" title="sed 与 awk"></a><code>sed</code> 与 <code>awk</code></h3><ul>
+<li><code>sed &#39;s/old/new/g&#39; file.txt</code>: 使用 <code>sed</code> 替换文件中的文本。</li>
+<li><code>sed -i &#39;s/old/new/g&#39; file.txt</code>: 直接修改文件内容（注意备份）。</li>
+<li><code>awk &#39;{print $1}&#39; file.txt</code>: 使用 <code>awk</code> 打印每一行的第一列（默认以空格分隔）。</li>
+<li><code>awk -F&#39;,&#39; &#39;{print $2}&#39; data.csv</code>: 以逗号为分隔符，打印第二列。</li>
+<li><code>awk &#39;{sum+=$1} END {print sum}&#39; numbers.txt</code>: 计算第一列的总和。</li>
+</ul>
+<h2 id="系统管理"><a href="#系统管理" class="headerlink" title="系统管理"></a>系统管理</h2><h3 id="系统信息"><a href="#系统信息" class="headerlink" title="系统信息"></a>系统信息</h3><ul>
+<li><code>uname -a</code>: 显示详细的内核和系统信息。</li>
+<li><code>lsb_release -a</code> 或 <code>cat /etc/os-release</code>: 查看 Linux 发行版信息。</li>
+<li><code>lscpu</code>: 显示 CPU 信息。</li>
+<li><code>free -h</code>: 以人类可读格式显示内存使用情况。</li>
+<li><code>df -h</code>: 以人类可读格式显示磁盘空间使用情况。</li>
+<li><code>du -sh /path/to/dir</code>: 估算目录的总大小。</li>
+<li><code>du -h --max-depth=1 /path/to/dir</code>: 显示目录下各子目录的大小。</li>
+<li><code>df -i</code>: 显示磁盘 inode 使用情况。</li>
+</ul>
+<h3 id="时间与日期"><a href="#时间与日期" class="headerlink" title="时间与日期"></a>时间与日期</h3><ul>
+<li><code>date</code>: 显示当前日期和时间。</li>
+<li><code>timedatectl</code>: 查看和设置系统时间与时区。</li>
+<li><code>sudo timedatectl set-timezone Asia/Shanghai</code>: 设置时区为上海。</li>
+<li><code>sudo timedatectl set-ntp true</code>: <strong>(推荐)</strong> 启用网络时间同步。</li>
+</ul>
+<h3 id="关机与重启"><a href="#关机与重启" class="headerlink" title="关机与重启"></a>关机与重启</h3><ul>
+<li><code>sudo shutdown -h now</code> 或 <code>sudo poweroff</code>: 立即关机。</li>
+<li><code>sudo shutdown -r now</code> 或 <code>sudo reboot</code>: 立即重启。</li>
+<li><code>sudo shutdown -c</code>: 取消一个已计划的关机或重启。</li>
+<li><code>sudo shutdown -h +60 &quot;System will shutdown in 60 minutes&quot;</code>: 60分钟后关机并提示消息。</li>
+<li><code>sudo init 0</code>: 关机（另一种方式）。</li>
+<li><code>sudo init 6</code>: 重启（另一种方式）。</li>
+</ul>
+<h2 id="网络操作"><a href="#网络操作" class="headerlink" title="网络操作"></a>网络操作</h2><ul>
+<li><code>ip addr show</code> 或 <code>ip a</code>: 显示所有网络接口的 IP 地址。</li>
+<li><code>ping -c 4 google.com</code>: 发送4个ICMP包测试网络连通性。</li>
+<li><code>netstat -tlnp</code>: 显示所有正在监听的 TCP 端口（注意：netstat 已被 ss 替代）。</li>
+<li><code>ss -tuln</code>: 显示所有正在监听的 TCP 和 UDP 端口（netstat 的现代替代品）。</li>
+<li><code>ss -tulpn</code>: 显示监听端口及对应的进程。</li>
+<li><code>wget https://example.com/file.zip</code>: 下载文件。</li>
+<li><code>wget -c https://example.com/largefile.zip</code>: 断点续传下载。</li>
+<li><code>curl -I http://example.com</code>: 获取一个 URL 的 HTTP 头部信息。</li>
+<li><code>curl -X POST -H &quot;Content-Type: application/json&quot; -d &#39;{&quot;key&quot;:&quot;value&quot;}&#39; https://api.example.com</code>: 发送 POST 请求。</li>
+<li><code>dig example.com</code>: DNS 查询工具，显示域名解析信息。</li>
+<li><code>nslookup example.com</code>: 另一个 DNS 查询工具。</li>
+</ul>
+<h2 id="用户与权限"><a href="#用户与权限" class="headerlink" title="用户与权限"></a>用户与权限</h2><h3 id="用户和组"><a href="#用户和组" class="headerlink" title="用户和组"></a>用户和组</h3><ul>
+<li><code>whoami</code>: 显示当前登录的用户名。</li>
+<li><code>sudo adduser newuser</code>: 创建一个新用户（交互式）。</li>
+<li><code>sudo userdel -r olduser</code>: 删除一个用户及其主目录。</li>
+<li><code>sudo usermod -aG sudo myuser</code>: 将用户 <code>myuser</code> 添加到 <code>sudo</code> 组。</li>
+<li><code>sudo usermod -aG docker username</code>: 将用户添加到 docker 组。</li>
+<li><code>groups username</code>: 查看用户所属的所有组。</li>
+<li><code>passwd</code>: 修改当前用户的密码。</li>
+<li><code>sudo passwd username</code>: 修改其他用户的密码（需要 root 权限）。</li>
+</ul>
+<h3 id="文件权限"><a href="#文件权限" class="headerlink" title="文件权限"></a>文件权限</h3><ul>
+<li><code>chmod 755 script.sh</code>: 设置文件权限为 <code>rwxr-xr-x</code>。</li>
+<li><code>chmod +x script.sh</code>: 为文件添加可执行权限。</li>
+<li><code>chmod -R 755 /path/to/dir</code>: 递归设置目录权限。</li>
+<li><code>chown user:group file.txt</code>: 更改文件的所有者和所属组。</li>
+<li><code>chown -R user:group /path/to/dir</code>: 递归更改目录的所有权。</li>
+<li><code>chmod u=rwx,g=rx,o=r file.txt</code>: 使用符号模式设置权限。</li>
+<li><code>umask 022</code>: 设置新创建文件的默认权限掩码。</li>
+</ul>
+<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><ul>
+<li><code>ps aux</code>: 显示当前所有进程的快照。</li>
+<li><code>ps -ef</code>: 显示所有进程的完整格式列表。</li>
+<li><code>top</code> 或 <code>htop</code>: 实时、交互式地显示进程和系统资源。</li>
+<li><code>kill &lt;PID&gt;</code>: 终止一个指定 PID 的进程。</li>
+<li><code>kill -9 &lt;PID&gt;</code>: 强制终止一个进程（最后的手段）。</li>
+<li><code>kill -15 &lt;PID&gt;</code>: 发送 SIGTERM 信号，优雅地终止进程。</li>
+<li><code>pkill process_name</code>: 按名称终止进程。</li>
+<li><code>pgrep process_name</code>: 查找进程的 PID。</li>
+<li><code>command &amp;</code>: 在后台运行一个命令。</li>
+<li><code>nohup command &amp;</code>: 后台运行命令，即使退出终端也继续运行。</li>
+<li><code>jobs</code>: 显示在后台运行的作业。</li>
+<li><code>bg %1</code>: 将作业1放到后台运行。</li>
+<li><code>fg %1</code>: 将作业1调到前台运行。</li>
+</ul>
+<h2 id="包管理"><a href="#包管理" class="headerlink" title="包管理"></a>包管理</h2><h3 id="Debian-Ubuntu-apt"><a href="#Debian-Ubuntu-apt" class="headerlink" title="Debian&#x2F;Ubuntu (apt)"></a>Debian&#x2F;Ubuntu (<code>apt</code>)</h3><ul>
+<li><code>sudo apt update</code>: 刷新可用的软件包列表。</li>
+<li><code>sudo apt upgrade</code>: 升级所有已安装的软件包。</li>
+<li><code>sudo apt full-upgrade</code>: 升级所有软件包（可能删除软件包）。</li>
+<li><code>sudo apt install &lt;package_name&gt;</code>: 安装一个软件包。</li>
+<li><code>sudo apt install --no-install-recommends &lt;package_name&gt;</code>: 只安装必要的依赖。</li>
+<li><code>sudo apt remove &lt;package_name&gt;</code>: 卸载一个软件包（保留配置文件）。</li>
+<li><code>sudo apt purge &lt;package_name&gt;</code>: 完全卸载软件包（包括配置文件）。</li>
+<li><code>sudo apt autoremove</code>: 自动移除不需要的依赖包。</li>
+<li><code>apt search &lt;keyword&gt;</code>: 搜索软件包。</li>
+<li><code>apt show &lt;package_name&gt;</code>: 显示软件包的详细信息。</li>
+</ul>
+<h3 id="Red-Hat-CentOS-Fedora-dnf-yum"><a href="#Red-Hat-CentOS-Fedora-dnf-yum" class="headerlink" title="Red Hat&#x2F;CentOS&#x2F;Fedora (dnf&#x2F;yum)"></a>Red Hat&#x2F;CentOS&#x2F;Fedora (<code>dnf</code>&#x2F;<code>yum</code>)</h3><ul>
+<li><code>sudo dnf update</code>: 升级所有已安装的软件包。</li>
+<li><code>sudo dnf upgrade</code>: 升级软件包（不更新内核）。</li>
+<li><code>sudo dnf install &lt;package_name&gt;</code>: 安装一个软件包。</li>
+<li><code>sudo dnf remove &lt;package_name&gt;</code>: 卸载一个软件包。</li>
+<li><code>sudo dnf autoremove</code>: 自动移除不需要的依赖包。</li>
+<li><code>dnf search &lt;keyword&gt;</code>: 搜索软件包。</li>
+<li><code>dnf info &lt;package_name&gt;</code>: 显示软件包信息。</li>
+</ul>
+<h3 id="Arch-Linux-pacman"><a href="#Arch-Linux-pacman" class="headerlink" title="Arch Linux (pacman)"></a>Arch Linux (<code>pacman</code>)</h3><ul>
+<li><code>sudo pacman -Syu</code>: 同步仓库并升级系统。</li>
+<li><code>sudo pacman -S &lt;package_name&gt;</code>: 安装软件包。</li>
+<li><code>sudo pacman -R &lt;package_name&gt;</code>: 删除软件包。</li>
+<li><code>sudo pacman -Rs &lt;package_name&gt;</code>: 删除软件包及其不需要的依赖。</li>
+<li><code>pacman -Ss &lt;keyword&gt;</code>: 搜索软件包。</li>
+<li><code>pacman -Qi &lt;package_name&gt;</code>: 查看软件包信息。</li>
+</ul>
+<h2 id="文件压缩与归档"><a href="#文件压缩与归档" class="headerlink" title="文件压缩与归档"></a>文件压缩与归档</h2><h3 id="tar-归档"><a href="#tar-归档" class="headerlink" title="tar 归档"></a>tar 归档</h3><ul>
+<li><code>tar -czf archive.tar.gz files/</code>: 创建 gzip 压缩的 tar 归档。</li>
+<li><code>tar -xzf archive.tar.gz</code>: 解压 gzip 压缩的 tar 归档。</li>
+<li><code>tar -cjf archive.tar.bz2 files/</code>: 创建 bzip2 压缩的 tar 归档。</li>
+<li><code>tar -xjf archive.tar.bz2</code>: 解压 bzip2 压缩的 tar 归档。</li>
+<li><code>tar -czf archive.tar.gz --exclude=&#39;*.log&#39; directory/</code>: 创建归档但排除日志文件。</li>
+<li><code>tar -tzf archive.tar.gz</code>: 查看归档内容但不解压。</li>
+</ul>
+<h3 id="zip-压缩"><a href="#zip-压缩" class="headerlink" title="zip 压缩"></a>zip 压缩</h3><ul>
+<li><code>zip -r archive.zip files/</code>: 创建 zip 压缩包。</li>
+<li><code>unzip archive.zip</code>: 解压 zip 文件。</li>
+<li><code>unzip -l archive.zip</code>: 查看 zip 文件内容。</li>
+<li><code>zip -r archive.zip files/ -x &quot;*.log&quot;</code>: 创建 zip 压缩包但排除日志文件。</li>
+</ul>
+<h3 id="其他压缩格式"><a href="#其他压缩格式" class="headerlink" title="其他压缩格式"></a>其他压缩格式</h3><ul>
+<li><code>gzip file.txt</code>: 压缩文件（原文件会被替换为 .gz）。</li>
+<li><code>gzip -d file.txt.gz</code>: 解压 gzip 文件。</li>
+<li><code>bzip2 file.txt</code>: 使用 bzip2 压缩（更高的压缩率）。</li>
+<li><code>bzip2 -d file.txt.bz2</code>: 解压 bzip2 文件。</li>
+<li><code>xz file.txt</code>: 使用 xz 压缩（现代高效率压缩）。</li>
+<li><code>xz -d file.txt.xz</code>: 解压 xz 文件。</li>
+</ul>
+<h2 id="系统监控与性能分析"><a href="#系统监控与性能分析" class="headerlink" title="系统监控与性能分析"></a>系统监控与性能分析</h2><h3 id="系统负载"><a href="#系统负载" class="headerlink" title="系统负载"></a>系统负载</h3><ul>
+<li><code>uptime</code>: 显示系统运行时间、用户数和平均负载。</li>
+<li><code>w</code>: 显示当前登录用户和系统负载。</li>
+<li><code>load average</code>: 通过 <code>uptime</code> 或 <code>top</code> 查看 1、5、15分钟的平均负载。</li>
+</ul>
+<h3 id="内存使用分析"><a href="#内存使用分析" class="headerlink" title="内存使用分析"></a>内存使用分析</h3><ul>
+<li><code>free -h</code>: 以人类可读格式显示内存使用情况。</li>
+<li><code>free -m</code>: 以 MB 为单位显示内存使用。</li>
+<li><code>vmstat 5</code>: 每5秒显示一次虚拟内存统计信息。</li>
+</ul>
+<h3 id="CPU-使用分析"><a href="#CPU-使用分析" class="headerlink" title="CPU 使用分析"></a>CPU 使用分析</h3><ul>
+<li><code>top</code>: 实时显示进程和 CPU 使用情况。</li>
+<li><code>htop</code>: 更友好的交互式进程查看器（需要安装）。</li>
+<li><code>mpstat 1</code>: 每秒显示一次 CPU 统计信息。</li>
+</ul>
+<h3 id="磁盘-I-O-监控"><a href="#磁盘-I-O-监控" class="headerlink" title="磁盘 I&#x2F;O 监控"></a>磁盘 I&#x2F;O 监控</h3><ul>
+<li><code>iostat</code>: 显示 CPU 和 I&#x2F;O 统计信息。</li>
+<li><code>iotop</code>: 显示进程的 I&#x2F;O 使用情况（需要安装）。</li>
+<li><code>df -h</code>: 查看磁盘空间使用情况。</li>
+</ul>
+<h3 id="网络监控"><a href="#网络监控" class="headerlink" title="网络监控"></a>网络监控</h3><ul>
+<li><code>iftop</code>: 实时显示网络带宽使用（需要安装）。</li>
+<li><code>nethogs</code>: 按进程显示网络使用（需要安装）。</li>
+<li><code>tcpdump -i eth0</code>: 捕获网络包（需要 root 权限）。</li>
+</ul>
+<h3 id="日志查看"><a href="#日志查看" class="headerlink" title="日志查看"></a>日志查看</h3><ul>
+<li><code>journalctl -xe</code>: 查看系统日志（systemd 系统）。</li>
+<li><code>journalctl -u nginx</code>: 查看特定服务的日志。</li>
+<li><code>tail -f /var/log/syslog</code>: 实时查看系统日志。</li>
+<li><code>tail -100f /var/log/nginx/access.log</code>: 查看最后100行并实时跟踪。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/docker/" rel="tag"># Docker</a>
+              <a href="/tags/nginx/" rel="tag"># Nginx</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/Windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/2025-12-09-Windows-Windows-PostgreSQL-C-Development-Environment-Setup/" rel="prev" title="Windows 🐘 Windows PostgreSQL C Development Environment Setup">
+                  <i class="fa fa-angle-left"></i> Windows 🐘 Windows PostgreSQL C Development Environment Setup
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/2025-12-09-Linux-OpenSSL-%E5%8F%8C%E5%90%91%E8%AE%A4%E8%AF%81-mTLS-%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90%E6%8C%87%E5%8D%97/" rel="next" title="Linux OpenSSL 双向认证 (mTLS) 证书生成指南">
+                  Linux OpenSSL 双向认证 (mTLS) 证书生成指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Boost b2 (bjam) 构建参数参考手册的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Boost b2 (bjam) 构建参数参考手册">
+<meta property="og:url" content="https://vilaswang.github.io/posts/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/Windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/2025-12-09-Boost-b2-bjam-%E6%9E%84%E5%BB%BA%E5%8F%82%E6%95%B0%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Boost b2 (bjam) 构建参数参考手册的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.191Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/Windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/2025-12-09-Boost-b2-bjam-%E6%9E%84%E5%BB%BA%E5%8F%82%E6%95%B0%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/Windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/2025-12-09-Boost-b2-bjam-%E6%9E%84%E5%BB%BA%E5%8F%82%E6%95%B0%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/","path":"posts/系统运维管理/windows服务管理/系统运维管理/Windows服务管理/2025-12-09-Boost-b2-bjam-构建参数参考手册/","title":"Boost b2 (bjam) 构建参数参考手册"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Boost b2 (bjam) 构建参数参考手册 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-Boost-b2-bjam-%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7-%E7%BC%96%E8%AF%91%E5%8F%82%E6%95%B0-title-%E2%80%9CBoost-b2-%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7%E5%AE%8C%E5%85%A8%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C%EF%BC%9A%E7%B2%BE%E9%80%9A-C-%E9%A1%B9%E7%9B%AE%E7%BC%96%E8%AF%91%E4%BC%98%E5%8C%96%E2%80%9Dcategories-%E2%80%98C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91%E2%80%99-%E2%80%98C-%E5%9F%BA%E7%A1%80%E4%B8%8E%E8%BF%9B%E9%98%B6%E2%80%99-date-2025-12-04-13-13-20description-%E2%80%9C%E4%B8%93%E4%B8%9A%E7%9A%84%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3%EF%BC%8C%E6%8F%90%E4%BE%9B%E8%AF%A6%E7%BB%86%E7%9A%84%E6%93%8D%E4%BD%9C%E6%8C%87%E5%8D%97%E3%80%81%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E5%92%8C%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%8C%E5%8A%A9%E5%8A%9B%E5%BC%80%E5%8F%91%E8%80%85%E6%8F%90%E5%8D%87%E6%8A%80%E6%9C%AF%E6%B0%B4%E5%B9%B3%E3%80%82%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">tags: [Boost, b2, bjam, 构建工具, 编译参数]title: “Boost b2 构建工具完全参考手册：精通 C++ 项目编译优化”categories: [‘C++核心开发’, ‘C++基础与进阶’]date: 2025-12-04 13:13:20description: “专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Boost-b2-bjam-%E6%9E%84%E5%BB%BA%E5%8F%82%E6%95%B0%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C"><span class="nav-number">2.</span> <span class="nav-text">Boost b2 (bjam) 构建参数参考手册</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">2.2.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9F%BA%E6%9C%AC%E8%AF%AD%E6%B3%95"><span class="nav-number">2.2.1.</span> <span class="nav-text">基本语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%B8%AE%E5%8A%A9"><span class="nav-number">2.2.2.</span> <span class="nav-text">获取帮助</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E5%8F%82%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">核心参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%93%E9%80%89%E6%8B%A9%E5%8F%82%E6%95%B0"><span class="nav-number">2.4.</span> <span class="nav-text">库选择参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9E%84%E5%BB%BA%E5%B1%9E%E6%80%A7%E5%8F%82%E6%95%B0"><span class="nav-number">2.5.</span> <span class="nav-text">构建属性参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#toolset"><span class="nav-number">2.5.1.</span> <span class="nav-text">toolset&#x3D;&lt;compiler&gt;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#variant-debug-release"><span class="nav-number">2.5.2.</span> <span class="nav-text">variant&#x3D;debug|release</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#link-static-shared"><span class="nav-number">2.5.3.</span> <span class="nav-text">link&#x3D;static|shared</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#runtime-link-static-shared"><span class="nav-number">2.5.4.</span> <span class="nav-text">runtime-link&#x3D;static|shared</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#threading-single-multi"><span class="nav-number">2.5.5.</span> <span class="nav-text">threading&#x3D;single|multi</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%B7%AF%E5%BE%84%E4%B8%8E%E8%BE%93%E5%87%BA%E5%8F%82%E6%95%B0"><span class="nav-number">2.6.</span> <span class="nav-text">路径与输出参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B9%B3%E5%8F%B0%E4%B8%8E%E6%9E%B6%E6%9E%84%E5%8F%82%E6%95%B0"><span class="nav-number">2.7.</span> <span class="nav-text">平台与架构参数</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#address-model-32-64"><span class="nav-number">2.7.1.</span> <span class="nav-text">address-model&#x3D;32|64</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#architecture-x86-arm"><span class="nav-number">2.7.2.</span> <span class="nav-text">architecture&#x3D;x86|arm|...</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#cxxflags-%E5%92%8C-linkflags"><span class="nav-number">2.7.3.</span> <span class="nav-text">cxxflags&#x3D;&quot;...&quot; 和 linkflags&#x3D;&quot;...&quot;</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%94%A8%E7%BC%96%E8%AF%91%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.8.</span> <span class="nav-text">实用编译示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-1-Linux-GCC"><span class="nav-number">2.8.1.</span> <span class="nav-text">示例 1: Linux GCC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-2-Windows-VS2022"><span class="nav-number">2.8.2.</span> <span class="nav-text">示例 2: Windows VS2022</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B-3-%E4%B8%BA%E7%89%B9%E5%AE%9A%E7%9B%AE%E5%BD%95%E8%BE%93%E5%87%BA"><span class="nav-number">2.8.3.</span> <span class="nav-text">示例 3: 为特定目录输出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%84%9A%E6%9C%AC%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.9.</span> <span class="nav-text">脚本与最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8%E6%9E%84%E5%BB%BA%E8%84%9A%E6%9C%AC"><span class="nav-number">2.9.1.</span> <span class="nav-text">1. 使用构建脚本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.9.2.</span> <span class="nav-text">2. 最佳实践</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/Windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/2025-12-09-Boost-b2-bjam-%E6%9E%84%E5%BB%BA%E5%8F%82%E6%95%B0%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Boost b2 (bjam) 构建参数参考手册 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Boost b2 (bjam) 构建参数参考手册的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Boost b2 (bjam) 构建参数参考手册
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">系统运维管理</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/" itemprop="url" rel="index"><span itemprop="name">Windows服务管理</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Boost b2 (bjam) 构建参数参考手册的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="tags-Boost-b2-bjam-构建工具-编译参数-title-“Boost-b2-构建工具完全参考手册：精通-C-项目编译优化”categories-‘C-核心开发’-‘C-基础与进阶’-date-2025-12-04-13-13-20description-“专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”"><a href="#tags-Boost-b2-bjam-构建工具-编译参数-title-“Boost-b2-构建工具完全参考手册：精通-C-项目编译优化”categories-‘C-核心开发’-‘C-基础与进阶’-date-2025-12-04-13-13-20description-“专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”" class="headerlink" title="tags: [Boost, b2, bjam, 构建工具, 编译参数]title: “Boost b2 构建工具完全参考手册：精通 C++ 项目编译优化”categories: [‘C++核心开发’, ‘C++基础与进阶’]date: 2025-12-04 13:13:20description: “专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”"></a>tags: [Boost, b2, bjam, 构建工具, 编译参数]<br>title: “Boost b2 构建工具完全参考手册：精通 C++ 项目编译优化”<br>categories: [‘C++核心开发’, ‘C++基础与进阶’]<br>date: 2025-12-04 13:13:20<br>description: “专业的技术文档，提供详细的操作指南、最佳实践和问题解决方案，助力开发者提升技术水平。”</h2><h1 id="Boost-b2-bjam-构建参数参考手册"><a href="#Boost-b2-bjam-构建参数参考手册" class="headerlink" title="Boost b2 (bjam) 构建参数参考手册"></a>Boost b2 (bjam) 构建参数参考手册</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#%E6%A0%B8%E5%BF%83%E5%8F%82%E6%95%B0">核心参数</a></li>
+<li><a href="#%E5%BA%93%E9%80%89%E6%8B%A9%E5%8F%82%E6%95%B0">库选择参数</a></li>
+<li><a href="#%E6%9E%84%E5%BB%BA%E5%B1%9E%E6%80%A7%E5%8F%82%E6%95%B0">构建属性参数</a></li>
+<li><a href="#%E8%B7%AF%E5%BE%84%E4%B8%8E%E8%BE%93%E5%87%BA%E5%8F%82%E6%95%B0">路径与输出参数</a></li>
+<li><a href="#%E5%B9%B3%E5%8F%B0%E4%B8%8E%E6%9E%B6%E6%9E%84%E5%8F%82%E6%95%B0">平台与架构参数</a></li>
+<li><a href="#%E5%AE%9E%E7%94%A8%E7%BC%96%E8%AF%91%E7%A4%BA%E4%BE%8B">实用编译示例</a></li>
+<li><a href="#%E8%84%9A%E6%9C%AC%E4%B8%8E%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">脚本与最佳实践</a></li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p><code>b2</code>（其前身为 <code>bjam</code>）是 Boost C++ 库的官方构建引擎。它是一个功能强大的命令行工具，允许开发者通过丰富的参数精确控制编译过程。</p>
+<h3 id="基本语法"><a href="#基本语法" class="headerlink" title="基本语法"></a>基本语法</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在 Boost 源码根目录执行</span></span><br><span class="line">./b2 [options] [properties] [target]</span><br></pre></td></tr></table></figure>
+
+<h3 id="获取帮助"><a href="#获取帮助" class="headerlink" title="获取帮助"></a>获取帮助</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 显示所有可用参数</span></span><br><span class="line">./b2 --<span class="built_in">help</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示所有可以被编译的库</span></span><br><span class="line">./b2 --show-libraries</span><br></pre></td></tr></table></figure>
+
+<h2 id="核心参数"><a href="#核心参数" class="headerlink" title="核心参数"></a>核心参数</h2><p>这些参数控制构建的基本行为。</p>
+<ul>
+<li><strong><code>stage</code></strong>: 只编译库文件（例如 <code>.a</code>, <code>.so</code>, <code>.lib</code>, <code>.dll</code>），并将它们放置在 <code>stagedir</code> 指定的目录（默认为 <code>stage/lib</code>）。这是最常用的目标。</li>
+<li><strong><code>install</code></strong>: 除了编译库文件，还会将 Boost 的头文件复制到 <code>prefix</code> 指定的目录。</li>
+<li><strong><code>-j&lt;N&gt;</code></strong>: 设置并行编译的任务数，<code>&lt;N&gt;</code> 通常设为 CPU 的核心数以最大化编译速度。例如 <code>-j8</code> 或 <code>-j$(nproc)</code>。</li>
+<li><strong><code>--clean</code></strong>: 清除上次的构建产物。</li>
+</ul>
+<h2 id="库选择参数"><a href="#库选择参数" class="headerlink" title="库选择参数"></a>库选择参数</h2><ul>
+<li><strong><code>--with-&lt;library&gt;</code></strong>: <strong>白名单模式</strong>。仅编译指定的库。可以多次使用。</li>
+<li><strong><code>--without-&lt;library&gt;</code></strong>: <strong>黑名单模式</strong>。编译所有库，除了指定的这些。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 只编译 thread 和 filesystem 库</span></span><br><span class="line">./b2 --with-thread --with-filesystem</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译所有库，但不编译 python 和 wave</span></span><br><span class="line">./b2 --without-python --without-wave</span><br></pre></td></tr></table></figure>
+
+<h2 id="构建属性参数"><a href="#构建属性参数" class="headerlink" title="构建属性参数"></a>构建属性参数</h2><p>这些属性通过 <code>property=value</code> 的形式指定，可以组合使用。</p>
+<h3 id="toolset"><a href="#toolset" class="headerlink" title="toolset=&lt;compiler&gt;"></a><code>toolset=&lt;compiler&gt;</code></h3><p>指定使用的编译器。</p>
+<ul>
+<li><code>gcc</code>: GNU C++ Compiler</li>
+<li><code>clang</code>: Clang C++ Compiler</li>
+<li><code>msvc-14.3</code>: Visual Studio 2022</li>
+<li><code>msvc-14.2</code>: Visual Studio 2019</li>
+<li><code>msvc-14.1</code>: Visual Studio 2017</li>
+</ul>
+<h3 id="variant-debug-release"><a href="#variant-debug-release" class="headerlink" title="variant=debug|release"></a><code>variant=debug|release</code></h3><p>构建变体。</p>
+<ul>
+<li><code>debug</code>: 包含调试信息，不优化。</li>
+<li><code>release</code>: 开启优化，不含调试信息。</li>
+</ul>
+<h3 id="link-static-shared"><a href="#link-static-shared" class="headerlink" title="link=static|shared"></a><code>link=static|shared</code></h3><p>链接方式。</p>
+<ul>
+<li><code>static</code>: 生成静态库（<code>.a</code>, <code>.lib</code>）。</li>
+<li><code>shared</code>: 生成动态库&#x2F;共享库（<code>.so</code>, <code>.dll</code>）。</li>
+</ul>
+<h3 id="runtime-link-static-shared"><a href="#runtime-link-static-shared" class="headerlink" title="runtime-link=static|shared"></a><code>runtime-link=static|shared</code></h3><p>C&#x2F;C++ 运行时的链接方式。</p>
+<ul>
+<li><code>static</code>: 静态链接 C&#x2F;C++ 运行时库（例如，在 Windows 上使用 <code>/MT</code> 或 <code>/MTd</code>）。</li>
+<li><code>shared</code>: 动态链接 C&#x2F;C++ 运行时库（例如，在 Windows 上使用 <code>/MD</code> 或 <code>/MDd</code>）。</li>
+</ul>
+<h3 id="threading-single-multi"><a href="#threading-single-multi" class="headerlink" title="threading=single|multi"></a><code>threading=single|multi</code></h3><p>线程支持。</p>
+<ul>
+<li><code>single</code>: 编译为单线程版本（不推荐，已很少使用）。</li>
+<li><code>multi</code>: 编译为多线程版本（现代应用的标准）。</li>
+</ul>
+<h2 id="路径与输出参数"><a href="#路径与输出参数" class="headerlink" title="路径与输出参数"></a>路径与输出参数</h2><ul>
+<li><strong><code>--stagedir=&lt;path&gt;</code></strong>: 与 <code>stage</code> 目标配合使用，指定库文件的输出目录。</li>
+<li><strong><code>--prefix=&lt;path&gt;</code></strong>: 与 <code>install</code> 目标配合使用，指定头文件和库文件的安装根目录。</li>
+<li><strong><code>--build-dir=&lt;path&gt;</code></strong>: 指定存放所有中间文件的目录（例如 <code>bin.v2</code>）。对于隔离不同构建环境的产物非常有用。</li>
+</ul>
+<h2 id="平台与架构参数"><a href="#平台与架构参数" class="headerlink" title="平台与架构参数"></a>平台与架构参数</h2><h3 id="address-model-32-64"><a href="#address-model-32-64" class="headerlink" title="address-model=32|64"></a><code>address-model=32|64</code></h3><p>指定编译为 32 位还是 64 位应用。</p>
+<h3 id="architecture-x86-arm"><a href="#architecture-x86-arm" class="headerlink" title="architecture=x86|arm|..."></a><code>architecture=x86|arm|...</code></h3><p>指定目标 CPU 架构。通常 <code>b2</code> 会自动检测，但在交叉编译时需要手动指定。</p>
+<h3 id="cxxflags-和-linkflags"><a href="#cxxflags-和-linkflags" class="headerlink" title="cxxflags=&quot;...&quot; 和 linkflags=&quot;...&quot;"></a><code>cxxflags=&quot;...&quot;</code> 和 <code>linkflags=&quot;...&quot;</code></h3><p>传递自定义标志给编译器或链接器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./b2 cxxflags=<span class="string">&quot;-std=c++17&quot;</span> linkflags=<span class="string">&quot;-s&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="实用编译示例"><a href="#实用编译示例" class="headerlink" title="实用编译示例"></a>实用编译示例</h2><h3 id="示例-1-Linux-GCC"><a href="#示例-1-Linux-GCC" class="headerlink" title="示例 1: Linux GCC"></a>示例 1: Linux GCC</h3><p>编译用于 GCC 的 64 位多线程、动态链接、发布版 <code>thread</code> 和 <code>filesystem</code> 库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./b2 -j8 toolset=gcc address-model=64 threading=multi <span class="built_in">link</span>=shared variant=release --with-thread --with-filesystem stage</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例-2-Windows-VS2022"><a href="#示例-2-Windows-VS2022" class="headerlink" title="示例 2: Windows VS2022"></a>示例 2: Windows VS2022</h3><p>编译用于 Visual Studio 2022 的 32 位、静态链接、调试版、且静态链接运行时的所有库（除了 python）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./b2.exe -j8 toolset=msvc-14.3 address-model=32 <span class="built_in">link</span>=static runtime-link=static variant=debug --without-python stage</span><br></pre></td></tr></table></figure>
+
+<h3 id="示例-3-为特定目录输出"><a href="#示例-3-为特定目录输出" class="headerlink" title="示例 3: 为特定目录输出"></a>示例 3: 为特定目录输出</h3><p>将不同版本的库输出到不同目录，方便管理。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># VS2019, 64位, 静态, Release</span></span><br><span class="line">./b2.exe -j8 toolset=msvc-14.2 address-model=64 <span class="built_in">link</span>=static variant=release --stagedir=<span class="string">&quot;lib/win-x64-msvc14.2-static-release&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># VS2019, 64位, 动态, Debug</span></span><br><span class="line">./b2.exe -j8 toolset=msvc-14.2 address-model=64 <span class="built_in">link</span>=shared variant=debug --stagedir=<span class="string">&quot;lib/win-x64-msvc14.2-shared-debug&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="脚本与最佳实践"><a href="#脚本与最佳实践" class="headerlink" title="脚本与最佳实践"></a>脚本与最佳实践</h2><h3 id="1-使用构建脚本"><a href="#1-使用构建脚本" class="headerlink" title="1. 使用构建脚本"></a>1. 使用构建脚本</h3><p>创建一个脚本来编译所有你需要的版本，可以确保一致性。</p>
+<p><code>build_boost_linux.sh</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">set</span> -e <span class="comment"># 如果任何命令失败则立即退出</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译 64位 静态 Release 版本</span></span><br><span class="line">./b2 -j$(<span class="built_in">nproc</span>) toolset=gcc address-model=64 <span class="built_in">link</span>=static variant=release \</span><br><span class="line">    --stagedir=<span class="string">&quot;linux-x64-static-release&quot;</span> \</span><br><span class="line">    --without-python</span><br><span class="line"></span><br><span class="line"><span class="comment"># 编译 64位 动态 Debug 版本</span></span><br><span class="line">./b2 -j$(<span class="built_in">nproc</span>) toolset=gcc address-model=64 <span class="built_in">link</span>=shared variant=debug \</span><br><span class="line">    --stagedir=<span class="string">&quot;linux-x64-shared-debug&quot;</span> \</span><br><span class="line">    --without-python</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Boost build complete!&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-最佳实践"><a href="#2-最佳实践" class="headerlink" title="2. 最佳实践"></a>2. 最佳实践</h3><ul>
+<li><strong>使用 <code>-j</code></strong>: 永远不要忘记使用 <code>-j</code> 参数，它能极大地缩短编译时间。</li>
+<li><strong>隔离构建目录</strong>: 使用 <code>--build-dir</code> 为不同的构建版本（如 debug&#x2F;release）指定不同的中间目录，避免冲突和不必要的重编。</li>
+<li><strong>精确选择库</strong>: 使用 <code>--with-&lt;library&gt;</code> 只编译你项目需要的库，可以节省大量时间和磁盘空间。</li>
+<li><strong>清理</strong>: 在切换差异巨大的编译选项（如编译器版本）之前，可以运行 <code>./b2 --clean</code> 来清理旧的构建产物。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/windows/" rel="tag"># Windows</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/Windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/2025-12-09-Windows-Filezilla-Nat-Traversal-Guide/" rel="prev" title="Windows Filezilla Nat Traversal Guide">
+                  <i class="fa fa-angle-left"></i> Windows Filezilla Nat Traversal Guide
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-gRPC-Protobuf-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97/" rel="next" title="Linux Linux 环境 gRPC &amp; Protobuf 源码编译指南">
+                  Linux Linux 环境 gRPC & Protobuf 源码编译指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

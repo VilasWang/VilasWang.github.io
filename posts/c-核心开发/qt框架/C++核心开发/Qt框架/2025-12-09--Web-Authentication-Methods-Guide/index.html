@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍🌐 Web Authentication Methods Guide的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="🌐 Web Authentication Methods Guide">
+<meta property="og:url" content="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09--Web-Authentication-Methods-Guide/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍🌐 Web Authentication Methods Guide的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.162Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09--Web-Authentication-Methods-Guide/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09--Web-Authentication-Methods-Guide/","path":"posts/c-核心开发/qt框架/C++核心开发/Qt框架/2025-12-09--Web-Authentication-Methods-Guide/","title":"🌐 Web Authentication Methods Guide"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>🌐 Web Authentication Methods Guide | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%8C%90-Web-Authentication-Methods-Guide"><span class="nav-number">1.</span> <span class="nav-text">🌐 Web Authentication Methods Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">📑 目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5"><span class="nav-number">1.2.</span> <span class="nav-text">1. 核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%F0%9F%94%8D-%E8%AE%A4%E8%AF%81-vs-%E6%8E%88%E6%9D%83"><span class="nav-number">1.2.1.</span> <span class="nav-text">1.1 🔍 认证 vs. 授权</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Session-Cookie-%E8%AE%A4%E8%AF%81"><span class="nav-number">1.3.</span> <span class="nav-text">2. Session-Cookie 认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E2%9A%99%EF%B8%8F-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.1 ⚙️ 工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%F0%9F%92%BB-%E5%AE%9E%E7%8E%B0%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.2 💻 实现示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E2%9C%85-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">1.3.3.</span> <span class="nav-text">2.3 ✅ 优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Token-%E8%AE%A4%E8%AF%81%EF%BC%88JWT%EF%BC%89"><span class="nav-number">1.4.</span> <span class="nav-text">3. Token 认证（JWT）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E2%9A%99%EF%B8%8F-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 ⚙️ 工作原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%F0%9F%92%BB-%E5%AE%9E%E7%8E%B0%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.2 💻 实现示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E2%9C%85-%E4%BC%98%E7%BC%BA%E7%82%B9"><span class="nav-number">1.4.3.</span> <span class="nav-text">3.3 ✅ 优缺点</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-OAuth-%E8%AE%A4%E8%AF%81"><span class="nav-number">1.5.</span> <span class="nav-text">4. OAuth 认证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%F0%9F%94%84-%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B"><span class="nav-number">1.5.1.</span> <span class="nav-text">4.1 🔄 认证流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%F0%9F%92%BB-%E5%AE%9E%E7%8E%B0%E7%A4%BA%E4%BE%8B"><span class="nav-number">1.5.2.</span> <span class="nav-text">4.2 💻 实现示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94%E4%B8%8E%E9%80%89%E6%8B%A9"><span class="nav-number">1.6.</span> <span class="nav-text">5. 方案对比与选择</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%F0%9F%93%8A-%E5%AF%B9%E6%AF%94%E8%A1%A8"><span class="nav-number">1.6.1.</span> <span class="nav-text">5.1 📊 对比表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%F0%9F%8E%AF-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="nav-number">1.6.2.</span> <span class="nav-text">5.2 🎯 使用场景</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%8C%90-Web-%E5%BA%94%E7%94%A8"><span class="nav-number">1.6.2.1.</span> <span class="nav-text">🌐 Web 应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%93%B1-%E7%A7%BB%E5%8A%A8%E7%AB%AF%E5%BA%94%E7%94%A8"><span class="nav-number">1.6.2.2.</span> <span class="nav-text">📱 移动端应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%94%97-API-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.6.2.3.</span> <span class="nav-text">🔗 API 服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%A4%9D-%E5%8D%95%E7%82%B9%E7%99%BB%E5%BD%95-SSO"><span class="nav-number">1.6.2.4.</span> <span class="nav-text">🤝 单点登录 (SSO)</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%F0%9F%94%84-%E5%B8%B8%E8%A7%81%E7%BB%84%E5%90%88"><span class="nav-number">1.6.3.</span> <span class="nav-text">5.3 🔄 常见组合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%9A%A0%EF%B8%8F-%E5%AE%89%E5%85%A8%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.7.</span> <span class="nav-text">⚠️ 安全最佳实践</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%9A-%E5%8F%82%E8%80%83%E8%B5%84%E6%BA%90"><span class="nav-number">1.8.</span> <span class="nav-text">📚 参考资源</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09--Web-Authentication-Methods-Guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="🌐 Web Authentication Methods Guide | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍🌐 Web Authentication Methods Guide的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          🌐 Web Authentication Methods Guide
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">C++核心开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">Qt框架</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍🌐 Web Authentication Methods Guide的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="🌐-Web-Authentication-Methods-Guide"><a href="#🌐-Web-Authentication-Methods-Guide" class="headerlink" title="🌐 Web Authentication Methods Guide"></a>🌐 Web Authentication Methods Guide</h1><blockquote>
+<p><strong>文档创建时间</strong>: 2025-11-14<br><strong>最后更新</strong>: 2025-11-14<br><strong>标签</strong>: <code>web</code>, <code>authentication</code>, <code>authorization</code>, <code>security</code>, <code>session</code>, <code>jwt</code>, <code>oauth</code></p>
+</blockquote>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#1-%E6%A0%B8%E5%BF%83%E6%A6%82%E5%BF%B5">1. 核心概念</a><ul>
+<li><a href="#11-%E8%AE%A4%E8%AF%81-vs-%E6%8E%88%E6%9D%83">1.1 认证 vs. 授权</a></li>
+</ul>
+</li>
+<li><a href="#2-session-cookie-%E8%AE%A4%E8%AF%81">2. Session-Cookie 认证</a><ul>
+<li><a href="#21-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86">2.1 工作原理</a></li>
+<li><a href="#22-%E5%AE%9E%E7%8E%B0%E7%A4%BA%E4%BE%8B">2.2 实现示例</a></li>
+<li><a href="#23-%E4%BC%98%E7%BC%BA%E7%82%B9">2.3 优缺点</a></li>
+</ul>
+</li>
+<li><a href="#3-token-%E8%AE%A4%E8%AF%81jwt">3. Token 认证（JWT）</a><ul>
+<li><a href="#31-%E5%B7%A5%E4%BD%9C%E5%8E%9F%E7%90%86">3.1 工作原理</a></li>
+<li><a href="#32-%E5%AE%9E%E7%8E%B0%E7%A4%BA%E4%BE%8B">3.2 实现示例</a></li>
+<li><a href="#33-%E4%BC%98%E7%BC%BA%E7%82%B9">3.3 优缺点</a></li>
+</ul>
+</li>
+<li><a href="#4-oauth-%E8%AE%A4%E8%AF%81">4. OAuth 认证</a><ul>
+<li><a href="#41-%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B">4.1 认证流程</a></li>
+<li><a href="#42-%E5%AE%9E%E7%8E%B0%E7%A4%BA%E4%BE%8B">4.2 实现示例</a></li>
+</ul>
+</li>
+<li><a href="#5-%E6%96%B9%E6%A1%88%E5%AF%B9%E6%AF%94%E4%B8%8E%E9%80%89%E6%8B%A9">5. 方案对比与选择</a><ul>
+<li><a href="#51-%E5%AF%B9%E6%AF%94%E8%A1%A8">5.1 对比表</a></li>
+<li><a href="#52-%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF">5.2 使用场景</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2 id="1-核心概念"><a href="#1-核心概念" class="headerlink" title="1. 核心概念"></a>1. 核心概念</h2><h3 id="1-1-🔍-认证-vs-授权"><a href="#1-1-🔍-认证-vs-授权" class="headerlink" title="1.1 🔍 认证 vs. 授权"></a>1.1 🔍 认证 vs. 授权</h3><table>
+<thead>
+<tr>
+<th>概念</th>
+<th>问题</th>
+<th>解决方案</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>认证</strong></td>
+<td>“你是谁？”</td>
+<td>验证用户身份</td>
+<td>用户名密码登录</td>
+</tr>
+<tr>
+<td><strong>授权</strong></td>
+<td>“你能做什么？”</td>
+<td>验证用户权限</td>
+<td>是否允许删除文章</td>
+</tr>
+</tbody></table>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[用户] --&gt; B[认证 Authentication]</span><br><span class="line">    B --&gt; C[你是谁？]</span><br><span class="line">    B --&gt; D[身份验证]</span><br><span class="line">    D --&gt; E[授权 Authorization]</span><br><span class="line">    E --&gt; F[你能做什么？]</span><br><span class="line">    E --&gt; G[权限检查]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-Session-Cookie-认证"><a href="#2-Session-Cookie-认证" class="headerlink" title="2. Session-Cookie 认证"></a>2. Session-Cookie 认证</h2><p>这是最传统、最易于理解的认证方式。它依赖于服务器端的 Session 存储和客户端的 Cookie。</p>
+<h3 id="2-1-⚙️-工作原理"><a href="#2-1-⚙️-工作原理" class="headerlink" title="2.1 ⚙️ 工作原理"></a>2.1 ⚙️ 工作原理</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant U as User</span><br><span class="line">    participant B as Browser</span><br><span class="line">    participant S as Server</span><br><span class="line">    participant DB as Session Store</span><br><span class="line"></span><br><span class="line">    U-&gt;&gt;B: 输入用户名密码</span><br><span class="line">    B-&gt;&gt;S: POST /login</span><br><span class="line">    S-&gt;&gt;DB: 验证用户凭据</span><br><span class="line">    DB--&gt;&gt;S: 返回用户信息</span><br><span class="line">    S-&gt;&gt;DB: 创建Session</span><br><span class="line">    DB--&gt;&gt;S: 返回Session ID</span><br><span class="line">    S--&gt;&gt;B: Set-Cookie: session_id</span><br><span class="line">    B-&gt;&gt;S: GET /protected (Cookie)</span><br><span class="line">    S-&gt;&gt;DB: 验证Session ID</span><br><span class="line">    DB--&gt;&gt;S: 返回Session数据</span><br><span class="line">    S--&gt;&gt;B: 返回受保护内容</span><br></pre></td></tr></table></figure>
+
+<p><strong>工作流程</strong>：</p>
+<ol>
+<li>用户登录，服务器验证用户名和密码</li>
+<li>验证通过后，服务器在内存或数据库中创建唯一的 <code>Session</code> 记录</li>
+<li>服务器通过 <code>Set-Cookie</code> 将 <code>Session ID</code> 返回给浏览器</li>
+<li>浏览器后续请求自动通过 <code>Cookie</code> 携带 <code>Session ID</code></li>
+<li>服务器验证 <code>Session ID</code> 确认用户身份</li>
+</ol>
+<h3 id="2-2-💻-实现示例"><a href="#2-2-💻-实现示例" class="headerlink" title="2.2 💻 实现示例"></a>2.2 💻 实现示例</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> session = <span class="built_in">require</span>(<span class="string">&#x27;express-session&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">express</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 配置 session 中间件</span></span><br><span class="line">app.<span class="title function_">use</span>(<span class="title function_">session</span>(&#123;</span><br><span class="line">  <span class="attr">secret</span>: <span class="string">&#x27;your_secret_key&#x27;</span>, <span class="comment">// 用于加密 session ID 的密钥，非常重要</span></span><br><span class="line">  <span class="attr">resave</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">saveUninitialized</span>: <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">cookie</span>: &#123;</span><br><span class="line">    <span class="attr">secure</span>: <span class="literal">false</span>, <span class="comment">// 生产环境应设为 true (仅 HTTPS)</span></span><br><span class="line">    <span class="attr">maxAge</span>: <span class="number">60000</span>, <span class="comment">// 1分钟</span></span><br><span class="line">    <span class="attr">httpOnly</span>: <span class="literal">true</span> <span class="comment">// 防止 XSS 攻击</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;));</span><br><span class="line"></span><br><span class="line"><span class="comment">// 登录路由</span></span><br><span class="line">app.<span class="title function_">post</span>(<span class="string">&#x27;/login&#x27;</span>, express.<span class="title function_">json</span>(), <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; username, password &#125; = req.<span class="property">body</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 1. 验证用户名和密码 (这里应为数据库查询和密码比对)</span></span><br><span class="line">  <span class="keyword">if</span> (username === <span class="string">&#x27;admin&#x27;</span> &amp;&amp; password === <span class="string">&#x27;123456&#x27;</span>) &#123;</span><br><span class="line">    <span class="comment">// 2. 认证成功，将用户信息存入 session</span></span><br><span class="line">    req.<span class="property">session</span>.<span class="property">isLoggedIn</span> = <span class="literal">true</span>;</span><br><span class="line">    req.<span class="property">session</span>.<span class="property">user</span> = &#123;</span><br><span class="line">      <span class="attr">username</span>: username,</span><br><span class="line">      <span class="attr">loginTime</span>: <span class="keyword">new</span> <span class="title class_">Date</span>()</span><br><span class="line">    &#125;;</span><br><span class="line">    res.<span class="title function_">json</span>(&#123; <span class="attr">message</span>: <span class="string">&#x27;登录成功！&#x27;</span> &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">401</span>).<span class="title function_">json</span>(&#123; <span class="attr">error</span>: <span class="string">&#x27;用户名或密码错误&#x27;</span> &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 受保护的路由，需要登录才能访问</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/profile&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 3. 检查 session 中是否存在用户信息</span></span><br><span class="line">  <span class="keyword">if</span> (req.<span class="property">session</span>.<span class="property">isLoggedIn</span>) &#123;</span><br><span class="line">    res.<span class="title function_">json</span>(&#123;</span><br><span class="line">      <span class="attr">message</span>: <span class="string">`欢迎回来, <span class="subst">$&#123;req.session.user.username&#125;</span>`</span>,</span><br><span class="line">      <span class="attr">loginTime</span>: req.<span class="property">session</span>.<span class="property">user</span>.<span class="property">loginTime</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">401</span>).<span class="title function_">json</span>(&#123; <span class="attr">error</span>: <span class="string">&#x27;请先登录！&#x27;</span> &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 登出路由</span></span><br><span class="line">app.<span class="title function_">post</span>(<span class="string">&#x27;/logout&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="comment">// 4. 销毁 session</span></span><br><span class="line">  req.<span class="property">session</span>.<span class="title function_">destroy</span>(<span class="function">(<span class="params">err</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">if</span> (err) &#123;</span><br><span class="line">      <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">500</span>).<span class="title function_">json</span>(&#123; <span class="attr">error</span>: <span class="string">&#x27;登出失败&#x27;</span> &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">    res.<span class="title function_">clearCookie</span>(<span class="string">&#x27;connect.sid&#x27;</span>); <span class="comment">// 清除 Cookie</span></span><br><span class="line">    res.<span class="title function_">json</span>(&#123; <span class="attr">message</span>: <span class="string">&#x27;已登出&#x27;</span> &#125;);</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-✅-优缺点"><a href="#2-3-✅-优缺点" class="headerlink" title="2.3 ✅ 优缺点"></a>2.3 ✅ 优缺点</h3><table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>✅ 技术成熟，易于理解</td>
+<td>❌ 在分布式环境中需要共享 Session 存储</td>
+</tr>
+<tr>
+<td>✅ 易于控制（服务端可强制失效）</td>
+<td>❌ 依赖 Cookie，跨域场景复杂</td>
+</tr>
+<tr>
+<td>✅ 安全性较高（httpOnly Cookie）</td>
+<td>❌ 占用服务器存储资源</td>
+</tr>
+<tr>
+<td>✅ 适合传统的服务器端渲染应用</td>
+<td>❌ CSRF 攻击风险</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-Token-认证（JWT）"><a href="#3-Token-认证（JWT）" class="headerlink" title="3. Token 认证（JWT）"></a>3. Token 认证（JWT）</h2><p>这是一种<strong>无状态</strong>的认证方式。服务器不再存储会话信息，而是将所有认证信息加密后形成一个令牌（Token）。</p>
+<h3 id="3-1-⚙️-工作原理"><a href="#3-1-⚙️-工作原理" class="headerlink" title="3.1 ⚙️ 工作原理"></a>3.1 ⚙️ 工作原理</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant U as User</span><br><span class="line">    participant C as Client</span><br><span class="line">    participant S as Server</span><br><span class="line"></span><br><span class="line">    U-&gt;&gt;C: 输入用户名密码</span><br><span class="line">    C-&gt;&gt;S: POST /login</span><br><span class="line">    S-&gt;&gt;S: 验证用户凭据</span><br><span class="line">    S-&gt;&gt;S: 生成JWT Token</span><br><span class="line">    S--&gt;&gt;C: 返回JWT Token</span><br><span class="line">    C-&gt;&gt;C: 存储 Token (localStorage)</span><br><span class="line"></span><br><span class="line">    Note over C,S: 后续请求</span><br><span class="line">    C-&gt;&gt;S: GET /api/data&lt;br/&gt;Authorization: Bearer &lt;token&gt;</span><br><span class="line">    S-&gt;&gt;S: 验证 Token 签名</span><br><span class="line">    S--&gt;&gt;C: 返回数据</span><br></pre></td></tr></table></figure>
+
+<p><strong>JWT 结构</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Header.Payload.Signature</span><br><span class="line"></span><br><span class="line">例如：</span><br><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwicm9sZSI6InVzZXIiLCJpYXQiOjE2MzU2Nzg5MDJ9.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-💻-实现示例"><a href="#3-2-💻-实现示例" class="headerlink" title="3.2 💻 实现示例"></a>3.2 💻 实现示例</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> jwt = <span class="built_in">require</span>(<span class="string">&#x27;jsonwebtoken&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">express</span>();</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">SECRET_KEY</span> = <span class="string">&#x27;your_super_secret_jwt_key&#x27;</span>; <span class="comment">// 必须非常复杂，且妥善保管</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 登录路由，颁发 Token</span></span><br><span class="line">app.<span class="title function_">post</span>(<span class="string">&#x27;/login&#x27;</span>, express.<span class="title function_">json</span>(), <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; username, password &#125; = req.<span class="property">body</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 1. 验证用户名和密码</span></span><br><span class="line">  <span class="keyword">if</span> (username === <span class="string">&#x27;admin&#x27;</span> &amp;&amp; password === <span class="string">&#x27;123456&#x27;</span>) &#123;</span><br><span class="line">    <span class="comment">// 2. 认证成功，生成 JWT</span></span><br><span class="line">    <span class="keyword">const</span> token = jwt.<span class="title function_">sign</span>(</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">username</span>: username,</span><br><span class="line">        <span class="attr">role</span>: <span class="string">&#x27;user&#x27;</span>,</span><br><span class="line">        <span class="attr">iat</span>: <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Date</span>.<span class="title function_">now</span>() / <span class="number">1000</span>) <span class="comment">// 签发时间</span></span><br><span class="line">      &#125;, <span class="comment">// Payload (有效载荷)，存放用户信息</span></span><br><span class="line">      <span class="variable constant_">SECRET_KEY</span>,</span><br><span class="line">      &#123; <span class="attr">expiresIn</span>: <span class="string">&#x27;1h&#x27;</span> &#125; <span class="comment">// Token 有效期 1 小时</span></span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    res.<span class="title function_">json</span>(&#123;</span><br><span class="line">      <span class="attr">message</span>: <span class="string">&#x27;登录成功！&#x27;</span>,</span><br><span class="line">      <span class="attr">token</span>: token,</span><br><span class="line">      <span class="attr">expiresIn</span>: <span class="string">&#x27;1h&#x27;</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">401</span>).<span class="title function_">json</span>(&#123; <span class="attr">error</span>: <span class="string">&#x27;用户名或密码错误&#x27;</span> &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 中间件：验证 Token</span></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">authenticateJWT</span> = (<span class="params">req, res, next</span>) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> authHeader = req.<span class="property">headers</span>.<span class="property">authorization</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (authHeader) &#123;</span><br><span class="line">    <span class="keyword">const</span> token = authHeader.<span class="title function_">split</span>(<span class="string">&#x27; &#x27;</span>)[<span class="number">1</span>]; <span class="comment">// 格式：Bearer &lt;token&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 验证 Token</span></span><br><span class="line">    jwt.<span class="title function_">verify</span>(token, <span class="variable constant_">SECRET_KEY</span>, <span class="function">(<span class="params">err, decoded</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">403</span>).<span class="title function_">json</span>(&#123;</span><br><span class="line">          <span class="attr">error</span>: <span class="string">&#x27;Token 无效或过期&#x27;</span>,</span><br><span class="line">          <span class="attr">details</span>: err.<span class="property">message</span></span><br><span class="line">        &#125;);</span><br><span class="line">      &#125;</span><br><span class="line">      req.<span class="property">user</span> = decoded; <span class="comment">// 将解码出的用户信息挂载到 req 对象上</span></span><br><span class="line">      <span class="title function_">next</span>(); <span class="comment">// 验证通过，继续后续处理</span></span><br><span class="line">    &#125;);</span><br><span class="line">  &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">401</span>).<span class="title function_">json</span>(&#123; <span class="attr">error</span>: <span class="string">&#x27;请求头中没有 Token&#x27;</span> &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 受保护的路由，需要有效的 Token 才能访问</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/profile&#x27;</span>, authenticateJWT, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  res.<span class="title function_">json</span>(&#123;</span><br><span class="line">    <span class="attr">message</span>: <span class="string">`欢迎回来, <span class="subst">$&#123;req.user.username&#125;</span>`</span>,</span><br><span class="line">    <span class="attr">role</span>: req.<span class="property">user</span>.<span class="property">role</span>,</span><br><span class="line">    <span class="attr">tokenInfo</span>: &#123;</span><br><span class="line">      <span class="attr">issuedAt</span>: <span class="keyword">new</span> <span class="title class_">Date</span>(req.<span class="property">user</span>.<span class="property">iat</span> * <span class="number">1000</span>),</span><br><span class="line">      <span class="comment">// 注意：实际应用中应该从其他地方获取过期时间</span></span><br><span class="line">    &#125;</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// Token 刷新路由</span></span><br><span class="line">app.<span class="title function_">post</span>(<span class="string">&#x27;/refresh&#x27;</span>, express.<span class="title function_">json</span>(), <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; token &#125; = req.<span class="property">body</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">if</span> (!token) &#123;</span><br><span class="line">    <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">401</span>).<span class="title function_">json</span>(&#123; <span class="attr">error</span>: <span class="string">&#x27;需要提供 Token&#x27;</span> &#125;);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">const</span> decoded = jwt.<span class="title function_">verify</span>(token, <span class="variable constant_">SECRET_KEY</span>, &#123; <span class="attr">ignoreExpiration</span>: <span class="literal">true</span> &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查是否在刷新窗口期内（例如：过期后15分钟内）</span></span><br><span class="line">    <span class="keyword">const</span> now = <span class="title class_">Math</span>.<span class="title function_">floor</span>(<span class="title class_">Date</span>.<span class="title function_">now</span>() / <span class="number">1000</span>);</span><br><span class="line">    <span class="keyword">const</span> isWithinRefreshWindow = (now - decoded.<span class="property">exp</span>) &lt; <span class="number">900</span>; <span class="comment">// 15分钟</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!isWithinRefreshWindow) &#123;</span><br><span class="line">      <span class="keyword">return</span> res.<span class="title function_">status</span>(<span class="number">403</span>).<span class="title function_">json</span>(&#123; <span class="attr">error</span>: <span class="string">&#x27;Token 过期太久，请重新登录&#x27;</span> &#125;);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 生成新的 Token</span></span><br><span class="line">    <span class="keyword">const</span> newToken = jwt.<span class="title function_">sign</span>(</span><br><span class="line">      &#123; <span class="attr">username</span>: decoded.<span class="property">username</span>, <span class="attr">role</span>: decoded.<span class="property">role</span> &#125;,</span><br><span class="line">      <span class="variable constant_">SECRET_KEY</span>,</span><br><span class="line">      &#123; <span class="attr">expiresIn</span>: <span class="string">&#x27;1h&#x27;</span> &#125;</span><br><span class="line">    );</span><br><span class="line"></span><br><span class="line">    res.<span class="title function_">json</span>(&#123; <span class="attr">token</span>: newToken &#125;);</span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">403</span>).<span class="title function_">json</span>(&#123; <span class="attr">error</span>: <span class="string">&#x27;无效的 Token&#x27;</span> &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-✅-优缺点"><a href="#3-3-✅-优缺点" class="headerlink" title="3.3 ✅ 优缺点"></a>3.3 ✅ 优缺点</h3><table>
+<thead>
+<tr>
+<th>优点</th>
+<th>缺点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>✅ 无状态，易于扩展</td>
+<td>❌ Token 一旦签发，在有效期内无法强制失效</td>
+</tr>
+<tr>
+<td>✅ 天然支持跨域</td>
+<td>❌ Token 管理更复杂（如失效问题）</td>
+</tr>
+<tr>
+<td>✅ 适合分布式&#x2F;API 服务</td>
+<td>❌ 存储 Token 的安全性问题</td>
+</tr>
+<tr>
+<td>✅ 减少服务器存储压力</td>
+<td>❌ 需要处理 Token 刷新机制</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="4-OAuth-认证"><a href="#4-OAuth-认证" class="headerlink" title="4. OAuth 认证"></a>4. OAuth 认证</h2><p>OAuth 2.0 是一个<strong>授权框架</strong>，它允许用户授权第三方应用访问他们存储在另一台服务提供商上的信息，而无需将用户名和密码提供给第三方应用。</p>
+<h3 id="4-1-🔄-认证流程"><a href="#4-1-🔄-认证流程" class="headerlink" title="4.1 🔄 认证流程"></a>4.1 🔄 认证流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant U as User</span><br><span class="line">    participant C as Client App</span><br><span class="line">    participant A as Auth Server</span><br><span class="line">    participant R as Resource Server</span><br><span class="line"></span><br><span class="line">    U-&gt;&gt;C: 点击&quot;使用GitHub登录&quot;</span><br><span class="line">    C-&gt;&gt;A: 重定向到授权页面</span><br><span class="line">    U-&gt;&gt;A: 登录并授权</span><br><span class="line">    A-&gt;&gt;C: 重定向回调 + 授权码</span><br><span class="line">    C-&gt;&gt;A: 用授权码交换访问令牌</span><br><span class="line">    A-&gt;&gt;C: 返回访问令牌</span><br><span class="line">    C-&gt;&gt;R: 用访问令牌请求用户资源</span><br><span class="line">    R-&gt;&gt;A: 验证访问令牌</span><br><span class="line">    A--&gt;&gt;R: 令牌有效</span><br><span class="line">    R--&gt;&gt;C: 返回用户资源</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-💻-实现示例"><a href="#4-2-💻-实现示例" class="headerlink" title="4.2 💻 实现示例"></a>4.2 💻 实现示例</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> express = <span class="built_in">require</span>(<span class="string">&#x27;express&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> axios = <span class="built_in">require</span>(<span class="string">&#x27;axios&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> querystring = <span class="built_in">require</span>(<span class="string">&#x27;querystring&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> app = <span class="title function_">express</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// GitHub OAuth 配置</span></span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">GITHUB_CLIENT_ID</span> = <span class="string">&#x27;your_github_client_id&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">GITHUB_CLIENT_SECRET</span> = <span class="string">&#x27;your_github_client_secret&#x27;</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="variable constant_">REDIRECT_URI</span> = <span class="string">&#x27;http://localhost:3000/auth/github/callback&#x27;</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 1. 重定向用户到 GitHub</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/auth/github&#x27;</span>, <span class="function">(<span class="params">req, res</span>) =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">const</span> params = querystring.<span class="title function_">stringify</span>(&#123;</span><br><span class="line">    <span class="attr">client_id</span>: <span class="variable constant_">GITHUB_CLIENT_ID</span>,</span><br><span class="line">    <span class="attr">redirect_uri</span>: <span class="variable constant_">REDIRECT_URI</span>,</span><br><span class="line">    <span class="attr">scope</span>: <span class="string">&#x27;user:email&#x27;</span>, <span class="comment">// 请求的权限范围</span></span><br><span class="line">    <span class="attr">state</span>: <span class="title class_">Math</span>.<span class="title function_">random</span>().<span class="title function_">toString</span>(<span class="number">36</span>).<span class="title function_">substring</span>(<span class="number">7</span>) <span class="comment">// CSRF 保护</span></span><br><span class="line">  &#125;);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">const</span> githubAuthUrl = <span class="string">`https://github.com/login/oauth/authorize?<span class="subst">$&#123;params&#125;</span>`</span>;</span><br><span class="line">  res.<span class="title function_">redirect</span>(githubAuthUrl);</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 2. GitHub 回调地址</span></span><br><span class="line">app.<span class="title function_">get</span>(<span class="string">&#x27;/auth/github/callback&#x27;</span>, <span class="title function_">async</span> (req, res) =&gt; &#123;</span><br><span class="line">  <span class="keyword">const</span> &#123; code, state &#125; = req.<span class="property">query</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="comment">// 3. 用 code 换取 access_token</span></span><br><span class="line">    <span class="keyword">const</span> tokenResponse = <span class="keyword">await</span> axios.<span class="title function_">post</span>(<span class="string">&#x27;https://github.com/login/oauth/access_token&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">client_id</span>: <span class="variable constant_">GITHUB_CLIENT_ID</span>,</span><br><span class="line">      <span class="attr">client_secret</span>: <span class="variable constant_">GITHUB_CLIENT_SECRET</span>,</span><br><span class="line">      <span class="attr">code</span>: code,</span><br><span class="line">      <span class="attr">state</span>: state <span class="comment">// 验证 state 防止 CSRF</span></span><br><span class="line">    &#125;, &#123;</span><br><span class="line">      <span class="attr">headers</span>: &#123; <span class="string">&#x27;Accept&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span> &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> tokenData = tokenResponse.<span class="property">data</span>;</span><br><span class="line">    <span class="keyword">const</span> accessToken = tokenData.<span class="property">access_token</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 使用 access_token 获取用户信息</span></span><br><span class="line">    <span class="keyword">const</span> userResponse = <span class="keyword">await</span> axios.<span class="title function_">get</span>(<span class="string">&#x27;https://api.github.com/user&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">headers</span>: &#123; <span class="string">&#x27;Authorization&#x27;</span>: <span class="string">`token <span class="subst">$&#123;accessToken&#125;</span>`</span> &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 获取用户邮箱（如果设置了邮箱为私有）</span></span><br><span class="line">    <span class="keyword">const</span> emailResponse = <span class="keyword">await</span> axios.<span class="title function_">get</span>(<span class="string">&#x27;https://api.github.com/user/emails&#x27;</span>, &#123;</span><br><span class="line">      <span class="attr">headers</span>: &#123; <span class="string">&#x27;Authorization&#x27;</span>: <span class="string">`token <span class="subst">$&#123;accessToken&#125;</span>`</span> &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">const</span> userData = userResponse.<span class="property">data</span>;</span><br><span class="line">    <span class="keyword">const</span> emails = emailResponse.<span class="property">data</span>;</span><br><span class="line">    <span class="keyword">const</span> primaryEmail = emails.<span class="title function_">find</span>(<span class="function"><span class="params">email</span> =&gt;</span> email.<span class="property">primary</span>)?.<span class="property">email</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6. 根据 userData 处理本地用户登录和 session/jwt 创建</span></span><br><span class="line">    <span class="keyword">const</span> user = <span class="keyword">await</span> <span class="title function_">findOrCreateUser</span>(&#123;</span><br><span class="line">      <span class="attr">githubId</span>: userData.<span class="property">id</span>,</span><br><span class="line">      <span class="attr">username</span>: userData.<span class="property">login</span>,</span><br><span class="line">      <span class="attr">email</span>: primaryEmail,</span><br><span class="line">      <span class="attr">avatar</span>: userData.<span class="property">avatar_url</span></span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 这里可以创建 session 或 JWT</span></span><br><span class="line">    <span class="keyword">const</span> sessionToken = <span class="title function_">createSessionForUser</span>(user);</span><br><span class="line"></span><br><span class="line">    res.<span class="title function_">redirect</span>(<span class="string">`/dashboard?token=<span class="subst">$&#123;sessionToken&#125;</span>`</span>);</span><br><span class="line"></span><br><span class="line">  &#125; <span class="keyword">catch</span> (error) &#123;</span><br><span class="line">    <span class="variable language_">console</span>.<span class="title function_">error</span>(<span class="string">&#x27;GitHub OAuth error:&#x27;</span>, error);</span><br><span class="line">    res.<span class="title function_">status</span>(<span class="number">500</span>).<span class="title function_">json</span>(&#123; <span class="attr">error</span>: <span class="string">&#x27;OAuth 授权失败&#x27;</span> &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 辅助函数：查找或创建用户</span></span><br><span class="line"><span class="keyword">async</span> <span class="keyword">function</span> <span class="title function_">findOrCreateUser</span>(<span class="params">githubData</span>) &#123;</span><br><span class="line">  <span class="comment">// 这里应该连接数据库查找或创建用户</span></span><br><span class="line">  <span class="comment">// 返回用户对象</span></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="attr">id</span>: githubData.<span class="property">githubId</span>,</span><br><span class="line">    <span class="attr">username</span>: githubData.<span class="property">username</span>,</span><br><span class="line">    <span class="attr">email</span>: githubData.<span class="property">email</span>,</span><br><span class="line">    <span class="attr">avatar</span>: githubData.<span class="property">avatar</span></span><br><span class="line">  &#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 辅助函数：为用户创建会话</span></span><br><span class="line"><span class="keyword">function</span> <span class="title function_">createSessionForUser</span>(<span class="params">user</span>) &#123;</span><br><span class="line">  <span class="comment">// 这里可以创建 JWT 或 session</span></span><br><span class="line">  <span class="keyword">return</span> <span class="string">&#x27;generated_session_token&#x27;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">app.<span class="title function_">listen</span>(<span class="number">3000</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-方案对比与选择"><a href="#5-方案对比与选择" class="headerlink" title="5. 方案对比与选择"></a>5. 方案对比与选择</h2><h3 id="5-1-📊-对比表"><a href="#5-1-📊-对比表" class="headerlink" title="5.1 📊 对比表"></a>5.1 📊 对比表</h3><table>
+<thead>
+<tr>
+<th>认证方式</th>
+<th>适用场景</th>
+<th>状态管理</th>
+<th>跨域支持</th>
+<th>扩展性</th>
+<th>安全性</th>
+<th>实现复杂度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Session-Cookie</strong></td>
+<td>传统的服务器端渲染 Web 应用</td>
+<td>有状态</td>
+<td>⚠️ 需要配置</td>
+<td>⚠️ 需要共享存储</td>
+<td>✅ 高</td>
+<td>🟢 简单</td>
+</tr>
+<tr>
+<td><strong>Token (JWT)</strong></td>
+<td>前后端分离 SPA、移动端 APP、API 接口</td>
+<td>无状态</td>
+<td>✅ 原生支持</td>
+<td>✅ 极好</td>
+<td>✅ 中高</td>
+<td>🟡 中等</td>
+</tr>
+<tr>
+<td><strong>OAuth</strong></td>
+<td>需要第三方登录功能的任何应用</td>
+<td>混合</td>
+<td>✅ 原生支持</td>
+<td>✅ 极好</td>
+<td>✅ 高</td>
+<td>🔴 复杂</td>
+</tr>
+</tbody></table>
+<h3 id="5-2-🎯-使用场景"><a href="#5-2-🎯-使用场景" class="headerlink" title="5.2 🎯 使用场景"></a>5.2 🎯 使用场景</h3><h4 id="🌐-Web-应用"><a href="#🌐-Web-应用" class="headerlink" title="🌐 Web 应用"></a>🌐 Web 应用</h4><ul>
+<li><strong>传统 Web 应用</strong>：Session-Cookie</li>
+<li><strong>现代 SPA</strong>：JWT Token</li>
+<li><strong>混合模式</strong>：JWT + 可选 Session</li>
+</ul>
+<h4 id="📱-移动端应用"><a href="#📱-移动端应用" class="headerlink" title="📱 移动端应用"></a>📱 移动端应用</h4><ul>
+<li><strong>Native App</strong>：JWT Token</li>
+<li><strong>Hybrid App</strong>：JWT Token</li>
+<li><strong>小程序</strong>：Session-Cookie 或 JWT</li>
+</ul>
+<h4 id="🔗-API-服务"><a href="#🔗-API-服务" class="headerlink" title="🔗 API 服务"></a>🔗 API 服务</h4><ul>
+<li><strong>RESTful API</strong>：JWT Token</li>
+<li><strong>GraphQL API</strong>：JWT Token</li>
+<li><strong>微服务架构</strong>：JWT Token</li>
+</ul>
+<h4 id="🤝-单点登录-SSO"><a href="#🤝-单点登录-SSO" class="headerlink" title="🤝 单点登录 (SSO)"></a>🤝 单点登录 (SSO)</h4><ul>
+<li><strong>企业内应用</strong>：OAuth 2.0 &#x2F; SAML</li>
+<li><strong>跨平台应用</strong>：OAuth 2.0</li>
+<li><strong>第三方登录</strong>：OAuth 2.0</li>
+</ul>
+<h3 id="5-3-🔄-常见组合"><a href="#5-3-🔄-常见组合" class="headerlink" title="5.3 🔄 常见组合"></a>5.3 🔄 常见组合</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[Web应用] --&gt; B[主认证方式]</span><br><span class="line">    A --&gt; C[辅助认证方式]</span><br><span class="line"></span><br><span class="line">    B --&gt; D[Session-Cookie&lt;br/&gt;传统Web应用]</span><br><span class="line">    B --&gt; E[JWT Token&lt;br/&gt;SPA/移动端]</span><br><span class="line">    B --&gt; F[OAuth&lt;br/&gt;第三方登录]</span><br><span class="line"></span><br><span class="line">    C --&gt; G[CSRF保护]</span><br><span class="line">    C --&gt; H[HTTPS强制]</span><br><span class="line">    C --&gt; I[Rate Limiting]</span><br><span class="line">    C --&gt; J[输入验证]</span><br></pre></td></tr></table></figure>
+
+<p><strong>现代常见组合</strong>：</p>
+<ul>
+<li><strong>Web App</strong>：<strong>Session</strong> 或 <strong>JWT</strong> + HTTPS + CSRF Protection</li>
+<li><strong>Mobile&#x2F;Native App</strong>：<strong>JWT</strong> + HTTPS + Device Fingerprinting</li>
+<li><strong>单点登录</strong>：<strong>OAuth</strong> 或 <strong>JWT</strong> + Centralized Auth Server</li>
+<li><strong>第三方登录</strong>：<strong>OAuth</strong> + Local Account Binding</li>
+</ul>
+<hr>
+<h2 id="⚠️-安全最佳实践"><a href="#⚠️-安全最佳实践" class="headerlink" title="⚠️ 安全最佳实践"></a>⚠️ 安全最佳实践</h2><p>无论选择哪种认证方式，都务必遵循以下安全原则：</p>
+<ol>
+<li><strong>🔒 使用 HTTPS</strong> - 保证传输过程的安全</li>
+<li><strong>🕐 设置合理的过期时间</strong> - Token 和 Session 都不应长期有效</li>
+<li><strong>🛡️ 防范常见攻击</strong>：<ul>
+<li>XSS (Cross-Site Scripting)</li>
+<li>CSRF (Cross-Site Request Forgery)</li>
+<li>点击劫持 (Clickjacking)</li>
+</ul>
+</li>
+<li><strong>📝 记录安全日志</strong> - 监控异常登录行为</li>
+<li><strong>🔄 定期轮换密钥</strong> - 定期更换 JWT 密钥和会话密钥</li>
+<li><strong>✅ 实施最小权限原则</strong> - 只授予必要的权限</li>
+</ol>
+<hr>
+<h2 id="📚-参考资源"><a href="#📚-参考资源" class="headerlink" title="📚 参考资源"></a>📚 参考资源</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc6749">RFC 6749 - OAuth 2.0</a></li>
+<li><a target="_blank" rel="noopener" href="https://jwt.io/">JWT.io - JWT 在线工具</a></li>
+<li><a target="_blank" rel="noopener" href="https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html">OWASP Authentication Cheat Sheet</a></li>
+<li><a target="_blank" rel="noopener" href="https://expressjs.com/">Express.js 官方文档</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>💡 提示</strong>: 在选择认证方案时，请综合考虑：</p>
+<ul>
+<li>应用架构和部署环境</li>
+<li>用户体验需求</li>
+<li>安全性要求</li>
+<li>开发和维护成本</li>
+<li>团队技术栈熟悉度</li>
+</ul>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/qt/" rel="tag"># Qt</a>
+              <a href="/tags/git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09--VS-Code-Qt-Development-Setup-with-MSVC-on-Windows/" rel="prev" title="🖥️ VS Code Qt Development Setup with MSVC on Windows">
+                  <i class="fa fa-angle-left"></i> 🖥️ VS Code Qt Development Setup with MSVC on Windows
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09--Qt-%E4%B8%8B%E8%BD%BD%E5%99%A8%E4%BA%A7%E5%93%81%E9%9C%80%E6%B1%82%E6%96%87%E6%A1%A3-PRD/" rel="next" title="📥 Qt 下载器产品需求文档 (PRD)">
+                  📥 Qt 下载器产品需求文档 (PRD) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

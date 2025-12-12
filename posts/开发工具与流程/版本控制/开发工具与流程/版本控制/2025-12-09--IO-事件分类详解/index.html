@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍📡 I&#x2F;O 事件分类详解的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="📡 I&#x2F;O 事件分类详解">
+<meta property="og:url" content="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09--IO-%E4%BA%8B%E4%BB%B6%E5%88%86%E7%B1%BB%E8%AF%A6%E8%A7%A3/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍📡 I&#x2F;O 事件分类详解的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.186Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09--IO-%E4%BA%8B%E4%BB%B6%E5%88%86%E7%B1%BB%E8%AF%A6%E8%A7%A3/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09--IO-%E4%BA%8B%E4%BB%B6%E5%88%86%E7%B1%BB%E8%AF%A6%E8%A7%A3/","path":"posts/开发工具与流程/版本控制/开发工具与流程/版本控制/2025-12-09--IO-事件分类详解/","title":"📡 I/O 事件分类详解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>📡 I/O 事件分类详解 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%93%A1-I-O-%E4%BA%8B%E4%BB%B6%E5%88%86%E7%B1%BB%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.</span> <span class="nav-text">📡 I&#x2F;O 事件分类详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">📑 目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%F0%9F%93%96-%E6%A6%82%E8%BF%B0"><span class="nav-number">1.2.</span> <span class="nav-text">1. 📖 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%F0%9F%94%A7-I-O-%E4%BA%8B%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="nav-number">1.3.</span> <span class="nav-text">2. 🔧 I&#x2F;O 事件类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%F0%9F%8C%90-%E7%BD%91%E7%BB%9CI-O%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.1 🌐 网络I&#x2F;O事件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E8%AF%BB%E4%BA%8B%E4%BB%B6%EF%BC%88Read-Event%EF%BC%89"><span class="nav-number">1.3.1.1.</span> <span class="nav-text">可读事件（Read Event）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%8F%AF%E5%86%99%E4%BA%8B%E4%BB%B6%EF%BC%88Write-Event%EF%BC%89"><span class="nav-number">1.3.1.2.</span> <span class="nav-text">可写事件（Write Event）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%94%99%E8%AF%AF%E4%BA%8B%E4%BB%B6%EF%BC%88Error-Event%EF%BC%89"><span class="nav-number">1.3.1.3.</span> <span class="nav-text">错误事件（Error Event）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%8C%82%E8%B5%B7%E4%BA%8B%E4%BB%B6%EF%BC%88Hangup-Event%EF%BC%89"><span class="nav-number">1.3.1.4.</span> <span class="nav-text">挂起事件（Hangup Event）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%F0%9F%93%81-%E6%96%87%E4%BB%B6I-O%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.2 📁 文件I&#x2F;O事件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AF%BB%E5%86%99%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">读写事件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E7%8A%B6%E6%80%81%E5%8F%98%E5%8C%96%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">状态变化事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%F0%9F%94%8C-%E8%AE%BE%E5%A4%87I-O%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.3.3.</span> <span class="nav-text">2.3 🔌 设备I&#x2F;O事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E2%8F%B0-%E5%AE%9A%E6%97%B6%E5%99%A8%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.3.4.</span> <span class="nav-text">2.4 ⏰ 定时器事件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-%F0%9F%93%A2-%E4%BF%A1%E5%8F%B7%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.3.5.</span> <span class="nav-text">2.5 📢 信号事件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%F0%9F%8C%90-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84I-O%E4%BA%8B%E4%BB%B6"><span class="nav-number">1.4.</span> <span class="nav-text">3. 🌐 网络编程中的I&#x2F;O事件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%F0%9F%93%8B-%E4%BA%8B%E4%BB%B6%E7%B1%BB%E5%9E%8B%E8%AF%A6%E8%A7%A3"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 📋 事件类型详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-%E5%8F%AF%E8%AF%BB%E4%BA%8B%E4%BB%B6%EF%BC%88POLLIN-POLLPRI%EF%BC%89"><span class="nav-number">1.4.1.1.</span> <span class="nav-text">1. 可读事件（POLLIN&#x2F;POLLPRI）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-%E5%8F%AF%E5%86%99%E4%BA%8B%E4%BB%B6%EF%BC%88POLLOUT%EF%BC%89"><span class="nav-number">1.4.1.2.</span> <span class="nav-text">2. 可写事件（POLLOUT）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-%E9%94%99%E8%AF%AF%E4%BA%8B%E4%BB%B6%EF%BC%88POLLERR%EF%BC%89"><span class="nav-number">1.4.1.3.</span> <span class="nav-text">3. 错误事件（POLLERR）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-%E6%8C%82%E8%B5%B7%E4%BA%8B%E4%BB%B6%EF%BC%88POLLHUP%EF%BC%89"><span class="nav-number">1.4.1.4.</span> <span class="nav-text">4. 挂起事件（POLLHUP）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-%E6%97%A0%E6%95%88%E4%BA%8B%E4%BB%B6%EF%BC%88POLLNVAL%EF%BC%89"><span class="nav-number">1.4.1.5.</span> <span class="nav-text">5. 无效事件（POLLNVAL）</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%F0%9F%94%84-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.2 🔄 事件处理流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%F0%9F%92%A1-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.5.</span> <span class="nav-text">4. 💡 事件处理最佳实践</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%F0%9F%8E%AF-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E7%AD%96%E7%95%A5"><span class="nav-number">1.5.1.</span> <span class="nav-text">4.1 🎯 事件处理策略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E2%9A%A0%EF%B8%8F-%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-number">1.5.2.</span> <span class="nav-text">4.2 ⚠️ 注意事项</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%F0%9F%94%A7-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="nav-number">1.5.3.</span> <span class="nav-text">4.3 🔧 常见问题解决</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8A-%E6%80%BB%E7%BB%93"><span class="nav-number">1.6.</span> <span class="nav-text">📊 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%E6%A0%B8%E5%BF%83%E8%A6%81%E7%82%B9"><span class="nav-number">1.6.1.</span> <span class="nav-text">✅ 核心要点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%E5%AE%9E%E9%99%85%E5%BA%94%E7%94%A8"><span class="nav-number">1.6.2.</span> <span class="nav-text">🎯 实际应用</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9A-%E6%89%A9%E5%B1%95%E5%AD%A6%E4%B9%A0"><span class="nav-number">1.6.3.</span> <span class="nav-text">📚 扩展学习</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09--IO-%E4%BA%8B%E4%BB%B6%E5%88%86%E7%B1%BB%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="📡 I&#x2F;O 事件分类详解 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍📡 I&#x2F;O 事件分类详解的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          📡 I/O 事件分类详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">开发工具与流程</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">版本控制</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍📡 I/O 事件分类详解的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="📡-I-O-事件分类详解"><a href="#📡-I-O-事件分类详解" class="headerlink" title="📡 I&#x2F;O 事件分类详解"></a>📡 I&#x2F;O 事件分类详解</h1><blockquote>
+<p><strong>文档创建时间</strong>: 2025-11-14<br><strong>最后更新</strong>: 2025-11-14<br><strong>标签</strong>: <code>io</code>, <code>events</code>, <code>networking</code>, <code>system-programming</code>, <code>poll</code>, <code>epoll</code></p>
+</blockquote>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#1-%E6%A6%82%E8%BF%B0">1. 概述</a></li>
+<li><a href="#2-io-%E4%BA%8B%E4%BB%B6%E7%B1%BB%E5%9E%8B">2. I&#x2F;O 事件类型</a><ul>
+<li><a href="#21-%E7%BD%91%E7%BB%9Cio%E4%BA%8B%E4%BB%B6">2.1 网络I&#x2F;O事件</a></li>
+<li><a href="#22-%E6%96%87%E4%BB%B6io%E4%BA%8B%E4%BB%B6">2.2 文件I&#x2F;O事件</a></li>
+<li><a href="#23-%E8%AE%BE%E5%A4%87io%E4%BA%8B%E4%BB%B6">2.3 设备I&#x2F;O事件</a></li>
+<li><a href="#24-%E5%AE%9A%E6%97%B6%E5%99%A8%E4%BA%8B%E4%BB%B6">2.4 定时器事件</a></li>
+<li><a href="#25-%E4%BF%A1%E5%8F%B7%E4%BA%8B%E4%BB%B6">2.5 信号事件</a></li>
+</ul>
+</li>
+<li><a href="#3-%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%AD%E7%9A%84io%E4%BA%8B%E4%BB%B6">3. 网络编程中的I&#x2F;O事件</a></li>
+<li><a href="#4-%E4%BA%8B%E4%BB%B6%E5%A4%84%E7%90%86%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">4. 事件处理最佳实践</a></li>
+</ul>
+<hr>
+<h2 id="1-📖-概述"><a href="#1-📖-概述" class="headerlink" title="1. 📖 概述"></a>1. 📖 概述</h2><p>在计算机系统中，I&#x2F;O（输入&#x2F;输出）事件是系统通知程序某个 I&#x2F;O 操作状态变化的机制。正确理解和分类这些事件对于高效的网络编程至关重要。</p>
+<hr>
+<h2 id="2-🔧-I-O-事件类型"><a href="#2-🔧-I-O-事件类型" class="headerlink" title="2. 🔧 I&#x2F;O 事件类型"></a>2. 🔧 I&#x2F;O 事件类型</h2><h3 id="2-1-🌐-网络I-O事件"><a href="#2-1-🌐-网络I-O事件" class="headerlink" title="2.1 🌐 网络I&#x2F;O事件"></a>2.1 🌐 网络I&#x2F;O事件</h3><p>网络编程中最常见的 I&#x2F;O 事件类型：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[网络I/O事件] --&gt; B[可读事件]</span><br><span class="line">    A --&gt; C[可写事件]</span><br><span class="line">    A --&gt; D[错误事件]</span><br><span class="line">    A --&gt; E[挂起事件]</span><br><span class="line"></span><br><span class="line">    B --&gt; B1[数据到达]</span><br><span class="line">    B --&gt; B2[新连接请求]</span><br><span class="line">    B --&gt; B3[对端关闭]</span><br><span class="line"></span><br><span class="line">    C --&gt; C1[缓冲区有空间]</span><br><span class="line">    C --&gt; C2[连接建立完成]</span><br><span class="line"></span><br><span class="line">    D --&gt; D1[连接异常]</span><br><span class="line">    D --&gt; D2[协议错误]</span><br><span class="line"></span><br><span class="line">    E --&gt; E1[对端主动关闭]</span><br><span class="line">    E --&gt; E2[连接断开]</span><br></pre></td></tr></table></figure>
+
+<h4 id="可读事件（Read-Event）"><a href="#可读事件（Read-Event）" class="headerlink" title="可读事件（Read Event）"></a>可读事件（Read Event）</h4><ul>
+<li><strong>定义</strong>: 数据到达，可以读取</li>
+<li><strong>场景</strong>:<ul>
+<li>接收到网络数据</li>
+<li>新的连接请求（监听套接字）</li>
+<li>对端关闭连接（读取返回0）</li>
+</ul>
+</li>
+</ul>
+<h4 id="可写事件（Write-Event）"><a href="#可写事件（Write-Event）" class="headerlink" title="可写事件（Write Event）"></a>可写事件（Write Event）</h4><ul>
+<li><strong>定义</strong>: 缓冲区有空间，可以写入数据</li>
+<li><strong>场景</strong>:<ul>
+<li>发送缓冲区有空间</li>
+<li>非阻塞连接建立完成</li>
+</ul>
+</li>
+</ul>
+<h4 id="错误事件（Error-Event）"><a href="#错误事件（Error-Event）" class="headerlink" title="错误事件（Error Event）"></a>错误事件（Error Event）</h4><ul>
+<li><strong>定义</strong>: 连接出现错误</li>
+<li><strong>场景</strong>:<ul>
+<li>网络连接异常</li>
+<li>协议错误</li>
+<li>资源不足</li>
+</ul>
+</li>
+</ul>
+<h4 id="挂起事件（Hangup-Event）"><a href="#挂起事件（Hangup-Event）" class="headerlink" title="挂起事件（Hangup Event）"></a>挂起事件（Hangup Event）</h4><ul>
+<li><strong>定义</strong>: 连接被对端关闭</li>
+<li><strong>场景</strong>:<ul>
+<li>对端主动关闭连接</li>
+<li>连接断开</li>
+</ul>
+</li>
+</ul>
+<h3 id="2-2-📁-文件I-O事件"><a href="#2-2-📁-文件I-O事件" class="headerlink" title="2.2 📁 文件I&#x2F;O事件"></a>2.2 📁 文件I&#x2F;O事件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[文件I/O事件] --&gt; B[读写事件]</span><br><span class="line">    A --&gt; C[状态变化]</span><br><span class="line"></span><br><span class="line">    B --&gt; B1[文件可读]</span><br><span class="line">    B --&gt; B2[文件可写]</span><br><span class="line"></span><br><span class="line">    C --&gt; C1[文件修改]</span><br><span class="line">    C --&gt; C2[文件删除]</span><br><span class="line">    C --&gt; C3[权限变化]</span><br></pre></td></tr></table></figure>
+
+<h4 id="读写事件"><a href="#读写事件" class="headerlink" title="读写事件"></a>读写事件</h4><ul>
+<li><strong>文件可读</strong>: 文件描述符可以进行读操作</li>
+<li><strong>文件可写</strong>: 文件描述符可以进行写操作</li>
+</ul>
+<h4 id="状态变化事件"><a href="#状态变化事件" class="headerlink" title="状态变化事件"></a>状态变化事件</h4><ul>
+<li><strong>文件修改</strong>: 文件内容被修改</li>
+<li><strong>文件删除</strong>: 文件被删除</li>
+<li><strong>权限变化</strong>: 文件权限或所有者改变</li>
+</ul>
+<h3 id="2-3-🔌-设备I-O事件"><a href="#2-3-🔌-设备I-O事件" class="headerlink" title="2.3 🔌 设备I&#x2F;O事件"></a>2.3 🔌 设备I&#x2F;O事件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[设备I/O事件] --&gt; B[终端事件]</span><br><span class="line">    A --&gt; C[串口事件]</span><br><span class="line">    A --&gt; D[硬件设备事件]</span><br><span class="line"></span><br><span class="line">    B --&gt; B1[键盘输入]</span><br><span class="line">    B --&gt; B2[鼠标事件]</span><br><span class="line"></span><br><span class="line">    C --&gt; C1[串口数据到达]</span><br><span class="line">    C --&gt; C2[串口可发送]</span><br><span class="line"></span><br><span class="line">    D --&gt; D1[USB设备插拔]</span><br><span class="line">    D --&gt; D2[硬件状态变化]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-⏰-定时器事件"><a href="#2-4-⏰-定时器事件" class="headerlink" title="2.4 ⏰ 定时器事件"></a>2.4 ⏰ 定时器事件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[定时器事件] --&gt; B[超时事件]</span><br><span class="line"></span><br><span class="line">    B --&gt; B1[单次定时器]</span><br><span class="line">    B --&gt; B2[周期性定时器]</span><br><span class="line">    B --&gt; B3[相对定时器]</span><br><span class="line">    B --&gt; B4[绝对定时器]</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-5-📢-信号事件"><a href="#2-5-📢-信号事件" class="headerlink" title="2.5 📢 信号事件"></a>2.5 📢 信号事件</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[信号事件] --&gt; B[系统信号]</span><br><span class="line">    A --&gt; C[用户自定义信号]</span><br><span class="line"></span><br><span class="line">    B --&gt; B1[SIGTERM]</span><br><span class="line">    B --&gt; B2[SIGINT]</span><br><span class="line">    B --&gt; B3[SIGKILL]</span><br><span class="line">    B --&gt; B4[SIGUSR1]</span><br><span class="line">    B --&gt; B5[SIGUSR2]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-🌐-网络编程中的I-O事件"><a href="#3-🌐-网络编程中的I-O事件" class="headerlink" title="3. 🌐 网络编程中的I&#x2F;O事件"></a>3. 🌐 网络编程中的I&#x2F;O事件</h2><h3 id="3-1-📋-事件类型详解"><a href="#3-1-📋-事件类型详解" class="headerlink" title="3.1 📋 事件类型详解"></a>3.1 📋 事件类型详解</h3><h4 id="1-可读事件（POLLIN-POLLPRI）"><a href="#1-可读事件（POLLIN-POLLPRI）" class="headerlink" title="1. 可读事件（POLLIN&#x2F;POLLPRI）"></a>1. 可读事件（POLLIN&#x2F;POLLPRI）</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 使用 poll 监听可读事件</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> <span class="title">fds</span>[1];</span></span><br><span class="line">fds[<span class="number">0</span>].fd = sockfd;</span><br><span class="line">fds[<span class="number">0</span>].events = POLLIN;  <span class="comment">// 监听可读事件</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> ret = poll(fds, <span class="number">1</span>, timeout);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (fds[<span class="number">0</span>].revents &amp; POLLIN) &#123;</span><br><span class="line">    <span class="comment">// 处理可读事件</span></span><br><span class="line">    handle_read_event(sockfd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>表示的情况</strong>:</p>
+<ul>
+<li>✅ 有新数据到达，可以读取</li>
+<li>✅ 新的连接请求到达（对于监听套接字）</li>
+<li>✅ 对端关闭连接（读取时会返回0）</li>
+</ul>
+<h4 id="2-可写事件（POLLOUT）"><a href="#2-可写事件（POLLOUT）" class="headerlink" title="2. 可写事件（POLLOUT）"></a>2. 可写事件（POLLOUT）</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 监听可写事件</span></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">pollfd</span> <span class="title">fds</span>[1];</span></span><br><span class="line">fds[<span class="number">0</span>].fd = sockfd;</span><br><span class="line">fds[<span class="number">0</span>].events = POLLOUT;  <span class="comment">// 监听可写事件</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> ret = poll(fds, <span class="number">1</span>, timeout);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (fds[<span class="number">0</span>].revents &amp; POLLOUT) &#123;</span><br><span class="line">    <span class="comment">// 处理可写事件</span></span><br><span class="line">    handle_write_event(sockfd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>表示的情况</strong>:</p>
+<ul>
+<li>✅ 发送缓冲区有空间</li>
+<li>✅ 连接建立完成（对于非阻塞连接）</li>
+</ul>
+<h4 id="3-错误事件（POLLERR）"><a href="#3-错误事件（POLLERR）" class="headerlink" title="3. 错误事件（POLLERR）"></a>3. 错误事件（POLLERR）</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 检查错误事件</span></span><br><span class="line"><span class="keyword">if</span> (fds[<span class="number">0</span>].revents &amp; POLLERR) &#123;</span><br><span class="line">    <span class="comment">// 处理错误事件</span></span><br><span class="line">    handle_error_event(sockfd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>表示的情况</strong>:</p>
+<ul>
+<li>❌ 连接异常</li>
+<li>❌ 协议错误</li>
+<li>❌ 网络不可达</li>
+</ul>
+<h4 id="4-挂起事件（POLLHUP）"><a href="#4-挂起事件（POLLHUP）" class="headerlink" title="4. 挂起事件（POLLHUP）"></a>4. 挂起事件（POLLHUP）</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 检查挂起事件</span></span><br><span class="line"><span class="keyword">if</span> (fds[<span class="number">0</span>].revents &amp; POLLHUP) &#123;</span><br><span class="line">    <span class="comment">// 处理连接关闭</span></span><br><span class="line">    handle_hangup_event(sockfd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>表示的情况</strong>:</p>
+<ul>
+<li>⚠️ 对端主动关闭连接</li>
+<li>⚠️ 连接断开</li>
+</ul>
+<h4 id="5-无效事件（POLLNVAL）"><a href="#5-无效事件（POLLNVAL）" class="headerlink" title="5. 无效事件（POLLNVAL）"></a>5. 无效事件（POLLNVAL）</h4><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 检查无效事件</span></span><br><span class="line"><span class="keyword">if</span> (fds[<span class="number">0</span>].revents &amp; POLLNVAL) &#123;</span><br><span class="line">    <span class="comment">// 处理无效文件描述符</span></span><br><span class="line">    handle_invalid_event(sockfd);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>表示的情况</strong>:</p>
+<ul>
+<li>❌ 文件描述符未打开或已关闭</li>
+</ul>
+<h3 id="3-2-🔄-事件处理流程"><a href="#3-2-🔄-事件处理流程" class="headerlink" title="3.2 🔄 事件处理流程"></a>3.2 🔄 事件处理流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant App as 应用程序</span><br><span class="line">    participant Kernel as 内核</span><br><span class="line">    participant Network as 网络</span><br><span class="line"></span><br><span class="line">    App-&gt;&gt;Kernel: poll/epoll_wait</span><br><span class="line">    Kernel-&gt;&gt;Network: 监听事件</span><br><span class="line">    Network-&gt;&gt;Kernel: 事件发生</span><br><span class="line">    Kernel-&gt;&gt;App: 返回就绪事件</span><br><span class="line">    App-&gt;&gt;App: 处理事件</span><br><span class="line">    App-&gt;&gt;Kernel: 继续监听</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-💡-事件处理最佳实践"><a href="#4-💡-事件处理最佳实践" class="headerlink" title="4. 💡 事件处理最佳实践"></a>4. 💡 事件处理最佳实践</h2><h3 id="4-1-🎯-事件处理策略"><a href="#4-1-🎯-事件处理策略" class="headerlink" title="4.1 🎯 事件处理策略"></a>4.1 🎯 事件处理策略</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 事件处理的最佳实践示例</span></span><br><span class="line"><span class="type">void</span> <span class="title function_">handle_events</span><span class="params">(<span class="keyword">struct</span> pollfd *fds, <span class="type">int</span> nfds)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nfds; i++) &#123;</span><br><span class="line">        <span class="type">int</span> fd = fds[i].fd;</span><br><span class="line">        <span class="type">short</span> revents = fds[i].revents;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (revents == <span class="number">0</span>) <span class="keyword">continue</span>;  <span class="comment">// 无事件</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 优先处理错误和挂起事件</span></span><br><span class="line">        <span class="keyword">if</span> (revents &amp; POLLNVAL) &#123;</span><br><span class="line">            close(fd);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (revents &amp; POLLERR) &#123;</span><br><span class="line">            handle_socket_error(fd);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (revents &amp; POLLHUP) &#123;</span><br><span class="line">            handle_socket_hangup(fd);</span><br><span class="line">            <span class="keyword">continue</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 处理可读事件</span></span><br><span class="line">        <span class="keyword">if</span> (revents &amp; POLLIN) &#123;</span><br><span class="line">            handle_read_event(fd);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 处理可写事件</span></span><br><span class="line">        <span class="keyword">if</span> (revents &amp; POLLOUT) &#123;</span><br><span class="line">            handle_write_event(fd);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 处理紧急数据</span></span><br><span class="line">        <span class="keyword">if</span> (revents &amp; POLLPRI) &#123;</span><br><span class="line">            handle_urgent_data(fd);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-⚠️-注意事项"><a href="#4-2-⚠️-注意事项" class="headerlink" title="4.2 ⚠️ 注意事项"></a>4.2 ⚠️ 注意事项</h3><ol>
+<li><strong>事件优先级</strong>: 错误事件 &gt; 挂起事件 &gt; 读写事件</li>
+<li><strong>边缘触发</strong>: 使用 ET 模式时要确保处理完所有数据</li>
+<li><strong>资源管理</strong>: 及时关闭无效的文件描述符</li>
+<li><strong>性能优化</strong>: 避免不必要的事件监听</li>
+</ol>
+<h3 id="4-3-🔧-常见问题解决"><a href="#4-3-🔧-常见问题解决" class="headerlink" title="4.3 🔧 常见问题解决"></a>4.3 🔧 常见问题解决</h3><table>
+<thead>
+<tr>
+<th>问题</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CPU占用过高</strong></td>
+<td>忙等待或事件处理不当</td>
+<td>使用阻塞I&#x2F;O或优化事件循环</td>
+</tr>
+<tr>
+<td><strong>事件丢失</strong></td>
+<td>边缘触发模式处理不完整</td>
+<td>使用水平触发或确保数据读完</td>
+</tr>
+<tr>
+<td><strong>连接泄漏</strong></td>
+<td>错误事件处理不当</td>
+<td>及时清理和关闭连接</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="📊-总结"><a href="#📊-总结" class="headerlink" title="📊 总结"></a>📊 总结</h2><h3 id="✅-核心要点"><a href="#✅-核心要点" class="headerlink" title="✅ 核心要点"></a>✅ 核心要点</h3><ul>
+<li><strong>I&#x2F;O事件分类</strong>: 网络、文件、设备、定时器、信号</li>
+<li><strong>网络事件处理</strong>: 可读、可写、错误、挂起、无效</li>
+<li><strong>最佳实践</strong>: 事件优先级、资源管理、性能优化</li>
+</ul>
+<h3 id="🎯-实际应用"><a href="#🎯-实际应用" class="headerlink" title="🎯 实际应用"></a>🎯 实际应用</h3><ul>
+<li><strong>Web服务器</strong>: 处理HTTP请求和响应</li>
+<li><strong>代理服务器</strong>: 转发客户端和服务器数据</li>
+<li><strong>聊天应用</strong>: 实时消息传输</li>
+<li><strong>文件监控</strong>: 监控文件系统变化</li>
+</ul>
+<h3 id="📚-扩展学习"><a href="#📚-扩展学习" class="headerlink" title="📚 扩展学习"></a>📚 扩展学习</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://man7.org/linux/man-pages/man2/poll.2.html">Linux I&#x2F;O 多路复用</a></li>
+<li><a target="_blank" rel="noopener" href="https://man7.org/linux/man-pages/man7/epoll.7.html">epoll 编程指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/ideawu/immerse">高性能网络编程</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>💡 提示</strong>: 在实际开发中，建议使用成熟的网络库（如 libevent、libuv）来处理复杂的事件管理，这些库已经处理了大部分边界情况和优化。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Windows%E4%B8%8B%E4%B8%BAQt%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90libcurl%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97-vcpkg-VS2022/" rel="prev" title="Windows下为Qt项目集成libcurl完全指南 (vcpkg + VS2022)">
+                  <i class="fa fa-angle-left"></i> Windows下为Qt项目集成libcurl完全指南 (vcpkg + VS2022)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09--Claude-Code-MCP-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" rel="next" title="🔧 Claude Code MCP 配置指南">
+                  🔧 Claude Code MCP 配置指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

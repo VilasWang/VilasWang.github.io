@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Linux 环境 Redis C++ 开发指南 (hiredis)的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Linux 环境 Redis C++ 开发指南 (hiredis)">
+<meta property="og:url" content="https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-Redis-C-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-hiredis/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Linux 环境 Redis C++ 开发指南 (hiredis)的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.180Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Redis">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-Redis-C-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-hiredis/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-Redis-C-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-hiredis/","path":"posts/后端服务架构/数据库与缓存/后端服务架构/数据库与缓存/2025-12-09-Linux-Linux-环境-Redis-C-开发指南-hiredis/","title":"Linux Linux 环境 Redis C++ 开发指南 (hiredis)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux Linux 环境 Redis C++ 开发指南 (hiredis) | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-Redis-C-hiredis-Linux-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83-title-Linux-%E7%8E%AF%E5%A2%83-Redis-C-%E5%AE%A2%E6%88%B7%E7%AB%AF-hiredis-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97categories-%E2%80%98%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E2%80%99-%E2%80%98%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98%E2%80%99-date-2025-12-04-13-13-24description-%E2%80%9C%E4%B8%93%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%EF%BC%8C%E6%B6%B5%E7%9B%96%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E3%80%81%E5%AE%9E%E8%B7%B5%E6%93%8D%E4%BD%9C%E3%80%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%89%E5%85%A8%E6%96%B9%E4%BD%8D%E5%86%85%E5%AE%B9%EF%BC%8C%E5%8A%A9%E5%8A%9B%E6%8A%80%E8%83%BD%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8D%87%E3%80%82%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">tags: [Redis, C++, hiredis, Linux, 开发环境]title: Linux 环境 Redis C++ 客户端 hiredis 配置指南categories: [‘后端服务架构’, ‘数据库与缓存’]date: 2025-12-04 13:13:24description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-%E7%8E%AF%E5%A2%83-Redis-C-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-hiredis"><span class="nav-number">2.</span> <span class="nav-text">Linux 环境 Redis C++ 开发指南 (hiredis)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">2.2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE-Redis-%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.3.</span> <span class="nav-text">第一步：安装和配置 Redis 服务</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85-Redis-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 安装 Redis 服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE-Redis"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 配置 Redis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%AE%A1%E7%90%86-Redis-%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.3.3.</span> <span class="nav-text">3. 管理 Redis 服务</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85-hiredis-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BA%93"><span class="nav-number">2.4.</span> <span class="nav-text">第二步：安装 hiredis 客户端库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E6%90%AD%E5%BB%BA-C-%E9%A1%B9%E7%9B%AE-CMake"><span class="nav-number">2.5.</span> <span class="nav-text">第三步：搭建 C++ 项目 (CMake)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%88%9B%E5%BB%BA%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84"><span class="nav-number">2.5.1.</span> <span class="nav-text">1. 创建项目结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%BC%96%E5%86%99-CMakeLists-txt"><span class="nav-number">2.5.2.</span> <span class="nav-text">2. 编写 CMakeLists.txt</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E7%BC%96%E5%86%99-RedisClient-%E5%B0%81%E8%A3%85%E7%B1%BB"><span class="nav-number">2.6.</span> <span class="nav-text">第四步：编写 RedisClient 封装类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9A%E7%BC%96%E5%86%99%E4%B8%BB%E7%A8%8B%E5%BA%8F%E5%B9%B6%E6%B5%8B%E8%AF%95"><span class="nav-number">2.7.</span> <span class="nav-text">第五步：编写主程序并测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">2.8.</span> <span class="nav-text">常见问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">2.9.</span> <span class="nav-text">最佳实践</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-Redis-C-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-hiredis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux Linux 环境 Redis C++ 开发指南 (hiredis) | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Linux 环境 Redis C++ 开发指南 (hiredis)的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux Linux 环境 Redis C++ 开发指南 (hiredis)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">后端服务架构</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/" itemprop="url" rel="index"><span itemprop="name">数据库与缓存</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Linux 环境 Redis C++ 开发指南 (hiredis)的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="tags-Redis-C-hiredis-Linux-开发环境-title-Linux-环境-Redis-C-客户端-hiredis-配置指南categories-‘后端服务架构’-‘数据库与缓存’-date-2025-12-04-13-13-24description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"><a href="#tags-Redis-C-hiredis-Linux-开发环境-title-Linux-环境-Redis-C-客户端-hiredis-配置指南categories-‘后端服务架构’-‘数据库与缓存’-date-2025-12-04-13-13-24description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”" class="headerlink" title="tags: [Redis, C++, hiredis, Linux, 开发环境]title: Linux 环境 Redis C++ 客户端 hiredis 配置指南categories: [‘后端服务架构’, ‘数据库与缓存’]date: 2025-12-04 13:13:24description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"></a>tags: [Redis, C++, hiredis, Linux, 开发环境]<br>title: Linux 环境 Redis C++ 客户端 hiredis 配置指南<br>categories: [‘后端服务架构’, ‘数据库与缓存’]<br>date: 2025-12-04 13:13:24<br>description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</h2><h1 id="Linux-环境-Redis-C-开发指南-hiredis"><a href="#Linux-环境-Redis-C-开发指南-hiredis" class="headerlink" title="Linux 环境 Redis C++ 开发指南 (hiredis)"></a>Linux 环境 Redis C++ 开发指南 (hiredis)</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE-redis-%E6%9C%8D%E5%8A%A1">第一步：安装和配置 Redis 服务</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%AE%89%E8%A3%85-hiredis-%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BA%93">第二步：安装 hiredis 客户端库</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E6%90%AD%E5%BB%BA-c-%E9%A1%B9%E7%9B%AE-cmake">第三步：搭建 C++ 项目 (CMake)</a></li>
+<li><a href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E7%BC%96%E5%86%99-redisclient-%E5%B0%81%E8%A3%85%E7%B1%BB">第四步：编写 RedisClient 封装类</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%E7%BC%96%E5%86%99%E4%B8%BB%E7%A8%8B%E5%BA%8F%E5%B9%B6%E6%B5%8B%E8%AF%95">第五步：编写主程序并测试</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+<li><a href="#%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5">最佳实践</a></li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本指南将介绍如何在 Linux (Ubuntu&#x2F;Debian) 环境下，为 C++ 项目配置 Redis 开发环境。我们将使用 <code>hiredis</code> 这个官方推荐的、轻量级的 C 语言客户端库。</p>
+<h2 id="第一步：安装和配置-Redis-服务"><a href="#第一步：安装和配置-Redis-服务" class="headerlink" title="第一步：安装和配置 Redis 服务"></a>第一步：安装和配置 Redis 服务</h2><h3 id="1-安装-Redis-服务器"><a href="#1-安装-Redis-服务器" class="headerlink" title="1. 安装 Redis 服务器"></a>1. 安装 Redis 服务器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用包管理器安装（推荐）</span></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y redis-server</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-配置-Redis"><a href="#2-配置-Redis" class="headerlink" title="2. 配置 Redis"></a>2. 配置 Redis</h3><p>为了安全和远程访问，建议修改配置文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 编辑配置文件</span></span><br><span class="line"><span class="built_in">sudo</span> nano /etc/redis/redis.conf</span><br></pre></td></tr></table></figure>
+<p>找到并修改以下几行：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># 允许所有 IP 访问，如果只允许本地访问，则保持 127.0.0.1</span><br><span class="line">bind 0.0.0.0</span><br><span class="line"></span><br><span class="line"># 设置一个强密码</span><br><span class="line">requirepass your_strong_password</span><br><span class="line"></span><br><span class="line"># 关闭保护模式以允许远程访问</span><br><span class="line">protected-mode no</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-管理-Redis-服务"><a href="#3-管理-Redis-服务" class="headerlink" title="3. 管理 Redis 服务"></a>3. 管理 Redis 服务</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 重启 Redis 使配置生效</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart redis-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查服务状态</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status redis-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置开机自启</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl <span class="built_in">enable</span> redis-server</span><br></pre></td></tr></table></figure>
+
+<h2 id="第二步：安装-hiredis-客户端库"><a href="#第二步：安装-hiredis-客户端库" class="headerlink" title="第二步：安装 hiredis 客户端库"></a>第二步：安装 hiredis 客户端库</h2><p><code>hiredis</code> 是与 Redis 一同开发的官方 C 客户端库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用包管理器安装开发库（推荐）</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y libhiredis-dev</span><br></pre></td></tr></table></figure>
+<p>这会自动将头文件和库文件安装到系统标准路径中。</p>
+<h2 id="第三步：搭建-C-项目-CMake"><a href="#第三步：搭建-C-项目-CMake" class="headerlink" title="第三步：搭建 C++ 项目 (CMake)"></a>第三步：搭建 C++ 项目 (CMake)</h2><h3 id="1-创建项目结构"><a href="#1-创建项目结构" class="headerlink" title="1. 创建项目结构"></a>1. 创建项目结构</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">mkdir</span> redis_cpp_demo &amp;&amp; <span class="built_in">cd</span> redis_cpp_demo</span><br><span class="line"><span class="built_in">mkdir</span> src include</span><br><span class="line"><span class="built_in">touch</span> CMakeLists.txt src/main.cpp src/redis_client.cpp include/redis_client.h</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-编写-CMakeLists-txt"><a href="#2-编写-CMakeLists-txt" class="headerlink" title="2. 编写 CMakeLists.txt"></a>2. 编写 <code>CMakeLists.txt</code></h3><p>使用 <code>pkg-config</code> 来查找 <code>hiredis</code> 是最简单和最可移植的方式。</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"><span class="keyword">project</span>(RedisCppDemo)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">17</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD_REQUIRED <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找 hiredis 库</span></span><br><span class="line"><span class="keyword">find_package</span>(PkgConfig REQUIRED)</span><br><span class="line">pkg_check_modules(HIREDIS REQUIRED hiredis)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加头文件目录</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;HIREDIS_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加可执行文件</span></span><br><span class="line"><span class="keyword">add_executable</span>(redis_demo src/main.cpp src/redis_client.cpp)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 链接 hiredis 库</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(redis_demo PRIVATE <span class="variable">$&#123;HIREDIS_LIBRARIES&#125;</span>)</span><br></pre></td></tr></table></figure>
+
+<h2 id="第四步：编写-RedisClient-封装类"><a href="#第四步：编写-RedisClient-封装类" class="headerlink" title="第四步：编写 RedisClient 封装类"></a>第四步：编写 RedisClient 封装类</h2><p>创建一个 C++ 类来封装 <code>hiredis</code> 的 C 风格 API，使其更易于使用。</p>
+<p><code>include/redis_client.h</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">ifndef</span> REDIS_CLIENT_H</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> REDIS_CLIENT_H</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;hiredis/hiredis.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">RedisClient</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">RedisClient</span>(<span class="type">const</span> std::string&amp; host = <span class="string">&quot;127.0.0.1&quot;</span>, <span class="type">int</span> port = <span class="number">6379</span>, <span class="type">const</span> std::string&amp; password = <span class="string">&quot;&quot;</span>);</span><br><span class="line">    ~<span class="built_in">RedisClient</span>();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">connect</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">disconnect</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">isConnected</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">getLastError</span><span class="params">()</span> <span class="type">const</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// String commands</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">set</span><span class="params">(<span class="type">const</span> std::string&amp; key, <span class="type">const</span> std::string&amp; value)</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">get</span><span class="params">(<span class="type">const</span> std::string&amp; key)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Hash commands</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">hset</span><span class="params">(<span class="type">const</span> std::string&amp; key, <span class="type">const</span> std::string&amp; field, <span class="type">const</span> std::string&amp; value)</span></span>;</span><br><span class="line">    <span class="function">std::string <span class="title">hget</span><span class="params">(<span class="type">const</span> std::string&amp; key, <span class="type">const</span> std::string&amp; field)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Key commands</span></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">del</span><span class="params">(<span class="type">const</span> std::string&amp; key)</span></span>;</span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">exists</span><span class="params">(<span class="type">const</span> std::string&amp; key)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    redisContext* m_context;</span><br><span class="line">    std::string m_host;</span><br><span class="line">    <span class="type">int</span> m_port;</span><br><span class="line">    std::string m_password;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">bool</span> <span class="title">authenticate</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span> <span class="comment">// REDIS_CLIENT_H</span></span></span><br></pre></td></tr></table></figure>
+
+<p><code>src/redis_client.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;redis_client.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cstring&gt;</span> <span class="comment">// For strcmp</span></span></span><br><span class="line"></span><br><span class="line">RedisClient::<span class="built_in">RedisClient</span>(<span class="type">const</span> std::string&amp; host, <span class="type">int</span> port, <span class="type">const</span> std::string&amp; password)</span><br><span class="line">    : <span class="built_in">m_context</span>(<span class="literal">nullptr</span>), <span class="built_in">m_host</span>(host), <span class="built_in">m_port</span>(port), <span class="built_in">m_password</span>(password) &#123;&#125;</span><br><span class="line"></span><br><span class="line">RedisClient::~<span class="built_in">RedisClient</span>() &#123;</span><br><span class="line">    <span class="built_in">disconnect</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">RedisClient::connect</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">struct</span> <span class="title class_">timeval</span> timeout = &#123;<span class="number">2</span>, <span class="number">0</span>&#125;; <span class="comment">// 2 seconds</span></span><br><span class="line">    m_context = <span class="built_in">redisConnectWithTimeout</span>(m_host.<span class="built_in">c_str</span>(), m_port, timeout);</span><br><span class="line">    <span class="keyword">if</span> (m_context == <span class="literal">nullptr</span> || m_context-&gt;err) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!m_password.<span class="built_in">empty</span>() &amp;&amp; !<span class="built_in">authenticate</span>()) &#123;</span><br><span class="line">        <span class="built_in">disconnect</span>();</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">RedisClient::disconnect</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (m_context) &#123;</span><br><span class="line">        <span class="built_in">redisFree</span>(m_context);</span><br><span class="line">        m_context = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">RedisClient::isConnected</span><span class="params">()</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> m_context != <span class="literal">nullptr</span> &amp;&amp; m_context-&gt;err == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">RedisClient::getLastError</span><span class="params">()</span> <span class="type">const</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (m_context &amp;&amp; m_context-&gt;errstr) ? m_context-&gt;errstr : <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">RedisClient::authenticate</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    redisReply* reply = <span class="built_in">static_cast</span>&lt;redisReply*&gt;(<span class="built_in">redisCommand</span>(m_context, <span class="string">&quot;AUTH %s&quot;</span>, m_password.<span class="built_in">c_str</span>()));</span><br><span class="line">    <span class="keyword">if</span> (!reply) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="type">bool</span> success = (reply-&gt;type == REDIS_REPLY_STATUS &amp;&amp; <span class="built_in">strcmp</span>(reply-&gt;str, <span class="string">&quot;OK&quot;</span>) == <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">freeReplyObject</span>(reply);</span><br><span class="line">    <span class="keyword">return</span> success;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">RedisClient::set</span><span class="params">(<span class="type">const</span> std::string&amp; key, <span class="type">const</span> std::string&amp; value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">isConnected</span>()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    redisReply* reply = <span class="built_in">static_cast</span>&lt;redisReply*&gt;(<span class="built_in">redisCommand</span>(m_context, <span class="string">&quot;SET %s %s&quot;</span>, key.<span class="built_in">c_str</span>(), value.<span class="built_in">c_str</span>()));</span><br><span class="line">    <span class="keyword">if</span> (!reply) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="type">bool</span> success = (reply-&gt;type == REDIS_REPLY_STATUS &amp;&amp; <span class="built_in">strcmp</span>(reply-&gt;str, <span class="string">&quot;OK&quot;</span>) == <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">freeReplyObject</span>(reply);</span><br><span class="line">    <span class="keyword">return</span> success;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">RedisClient::get</span><span class="params">(<span class="type">const</span> std::string&amp; key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">isConnected</span>()) <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    redisReply* reply = <span class="built_in">static_cast</span>&lt;redisReply*&gt;(<span class="built_in">redisCommand</span>(m_context, <span class="string">&quot;GET %s&quot;</span>, key.<span class="built_in">c_str</span>()));</span><br><span class="line">    <span class="keyword">if</span> (!reply || reply-&gt;type != REDIS_REPLY_STRING) &#123;</span><br><span class="line">        <span class="keyword">if</span> (reply) <span class="built_in">freeReplyObject</span>(reply);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    std::string result = reply-&gt;str;</span><br><span class="line">    <span class="built_in">freeReplyObject</span>(reply);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">RedisClient::del</span><span class="params">(<span class="type">const</span> std::string&amp; key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">isConnected</span>()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    redisReply* reply = <span class="built_in">static_cast</span>&lt;redisReply*&gt;(<span class="built_in">redisCommand</span>(m_context, <span class="string">&quot;DEL %s&quot;</span>, key.<span class="built_in">c_str</span>()));</span><br><span class="line">    <span class="keyword">if</span> (!reply) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="type">bool</span> success = (reply-&gt;type == REDIS_REPLY_INTEGER &amp;&amp; reply-&gt;integer &gt; <span class="number">0</span>);</span><br><span class="line">    <span class="built_in">freeReplyObject</span>(reply);</span><br><span class="line">    <span class="keyword">return</span> success;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">RedisClient::hset</span><span class="params">(<span class="type">const</span> std::string&amp; key, <span class="type">const</span> std::string&amp; field, <span class="type">const</span> std::string&amp; value)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">isConnected</span>()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    redisReply* reply = <span class="built_in">static_cast</span>&lt;redisReply*&gt;(<span class="built_in">redisCommand</span>(m_context, <span class="string">&quot;HSET %s %s %s&quot;</span>, key.<span class="built_in">c_str</span>(), field.<span class="built_in">c_str</span>(), value.<span class="built_in">c_str</span>()));</span><br><span class="line">    <span class="keyword">if</span> (!reply) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="type">bool</span> success = (reply-&gt;type == REDIS_REPLY_INTEGER);</span><br><span class="line">    <span class="built_in">freeReplyObject</span>(reply);</span><br><span class="line">    <span class="keyword">return</span> success;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::string <span class="title">RedisClient::hget</span><span class="params">(<span class="type">const</span> std::string&amp; key, <span class="type">const</span> std::string&amp; field)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">isConnected</span>()) <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    redisReply* reply = <span class="built_in">static_cast</span>&lt;redisReply*&gt;(<span class="built_in">redisCommand</span>(m_context, <span class="string">&quot;HGET %s %s&quot;</span>, key.<span class="built_in">c_str</span>(), field.<span class="built_in">c_str</span>()));</span><br><span class="line">    <span class="keyword">if</span> (!reply || reply-&gt;type != REDIS_REPLY_STRING) &#123;</span><br><span class="line">        <span class="keyword">if</span> (reply) <span class="built_in">freeReplyObject</span>(reply);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    std::string result = reply-&gt;str;</span><br><span class="line">    <span class="built_in">freeReplyObject</span>(reply);</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">RedisClient::exists</span><span class="params">(<span class="type">const</span> std::string&amp; key)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!<span class="built_in">isConnected</span>()) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    redisReply* reply = <span class="built_in">static_cast</span>&lt;redisReply*&gt;(<span class="built_in">redisCommand</span>(m_context, <span class="string">&quot;EXISTS %s&quot;</span>, key.<span class="built_in">c_str</span>()));</span><br><span class="line">    <span class="keyword">if</span> (!reply) <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    <span class="type">bool</span> success = (reply-&gt;type == REDIS_REPLY_INTEGER &amp;&amp; reply-&gt;integer == <span class="number">1</span>);</span><br><span class="line">    <span class="built_in">freeReplyObject</span>(reply);</span><br><span class="line">    <span class="keyword">return</span> success;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第五步：编写主程序并测试"><a href="#第五步：编写主程序并测试" class="headerlink" title="第五步：编写主程序并测试"></a>第五步：编写主程序并测试</h2><p><code>src/main.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;redis_client.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="function">RedisClient <span class="title">redis</span><span class="params">(<span class="string">&quot;127.0.0.1&quot;</span>, <span class="number">6379</span>, <span class="string">&quot;your_strong_password&quot;</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!redis.<span class="built_in">connect</span>()) &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;Failed to connect to Redis: &quot;</span> &lt;&lt; redis.<span class="built_in">getLastError</span>() &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;=== Redis C++ Client Test ===\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. String operations</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;\n1. Testing string operations...\n&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (redis.<span class="built_in">set</span>(<span class="string">&quot;test_key&quot;</span>, <span class="string">&quot;Hello from hiredis!&quot;</span>)) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;SET successful.\n&quot;</span>;</span><br><span class="line">        std::string value = redis.<span class="built_in">get</span>(<span class="string">&quot;test_key&quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;GET &#x27;test_key&#x27;: &quot;</span> &lt;&lt; value &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. Hash operations</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;\n2. Testing hash operations...\n&quot;</span>;</span><br><span class="line">    redis.<span class="built_in">hset</span>(<span class="string">&quot;user:1001&quot;</span>, <span class="string">&quot;name&quot;</span>, <span class="string">&quot;Alice&quot;</span>);</span><br><span class="line">    redis.<span class="built_in">hset</span>(<span class="string">&quot;user:1001&quot;</span>, <span class="string">&quot;age&quot;</span>, <span class="string">&quot;30&quot;</span>);</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;User name: &quot;</span> &lt;&lt; redis.<span class="built_in">hget</span>(<span class="string">&quot;user:1001&quot;</span>, <span class="string">&quot;name&quot;</span>) &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. Key operations</span></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;\n3. Cleaning up...\n&quot;</span>;</span><br><span class="line">    <span class="keyword">if</span> (redis.<span class="built_in">del</span>(<span class="string">&quot;test_key&quot;</span>)) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;DEL &#x27;test_key&#x27; successful.\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (redis.<span class="built_in">del</span>(<span class="string">&quot;user:1001&quot;</span>)) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;DEL &#x27;user:1001&#x27; successful.\n&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>Q1: 连接被拒绝 (Connection refused)?</strong><br><strong>A</strong>: 确认 Redis 服务正在运行，并且 <code>redis.conf</code> 中的 <code>bind</code> 指令允许你的 IP 访问。检查防火墙设置。</p>
+<p><strong>Q2: 认证失败 (Authentication failed)?</strong><br><strong>A</strong>: 确认 <code>redis.conf</code> 中的 <code>requirepass</code> 与你客户端代码中使用的密码完全一致。</p>
+<p><strong>Q3: 编译时找不到 <code>hiredis/hiredis.h</code>?</strong><br><strong>A</strong>: 确认 <code>libhiredis-dev</code> 已正确安装。运行 <code>pkg-config --cflags hiredis</code> 检查 <code>pkg-config</code> 是否能找到头文件路径。如果不能，你的 <code>pkg-config</code> 路径可能不完整。</p>
+<h2 id="最佳实践"><a href="#最佳实践" class="headerlink" title="最佳实践"></a>最佳实践</h2><ul>
+<li><strong>连接管理</strong>: 对于需要频繁操作 Redis 的长时运行应用，应使用<strong>连接池</strong>来复用 <code>RedisClient</code> 对象，避免频繁地建立和断开 TCP 连接。</li>
+<li><strong>错误处理</strong>: 在每次 Redis 命令执行后，都应检查 <code>reply</code> 指针是否为 <code>nullptr</code> 以及 <code>m_context-&gt;err</code> 标志，以处理网络断开等问题。</li>
+<li><strong>异步操作</strong>: <code>hiredis</code> 也提供了异步 API (<code>redisAsyncContext</code>)。对于高并发场景，应使用异步客户端以避免阻塞。</li>
+<li><strong>配置外置</strong>: 不要将 Redis 的地址、端口和密码硬编码在代码中。将它们放在配置文件或环境变量中。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/redis/" rel="tag"># Redis</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/2025-12-09-Ubuntu-Ubuntu-Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" rel="prev" title="Ubuntu Ubuntu Nginx 反向代理与 HTTPS 配置指南">
+                  <i class="fa fa-angle-left"></i> Ubuntu Ubuntu Nginx 反向代理与 HTTPS 配置指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/2025-12-09-Web-%E6%9C%8D%E5%8A%A1%E5%99%A8%E6%B5%8B%E8%AF%95%E4%B8%8E%E7%9B%91%E6%8E%A7%E5%B7%A5%E5%85%B7%E6%8C%87%E5%8D%97/" rel="next" title="Web 服务器测试与监控工具指南">
+                  Web 服务器测试与监控工具指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

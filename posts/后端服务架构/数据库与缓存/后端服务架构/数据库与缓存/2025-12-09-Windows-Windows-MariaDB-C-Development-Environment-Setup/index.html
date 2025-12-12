@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍🗄️ Windows MariaDB C++ Development Environment Setup的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows 🗄️ Windows MariaDB C++ Development Environment Setup">
+<meta property="og:url" content="https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Windows-Windows-MariaDB-C-Development-Environment-Setup/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍🗄️ Windows MariaDB C++ Development Environment Setup的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.181Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="MySQL">
+<meta property="article:tag" content="Windows">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Windows-Windows-MariaDB-C-Development-Environment-Setup/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Windows-Windows-MariaDB-C-Development-Environment-Setup/","path":"posts/后端服务架构/数据库与缓存/后端服务架构/数据库与缓存/2025-12-09-Windows-Windows-MariaDB-C-Development-Environment-Setup/","title":"Windows 🗄️ Windows MariaDB C++ Development Environment Setup"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Windows 🗄️ Windows MariaDB C++ Development Environment Setup | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%97%84%EF%B8%8F-Windows-MariaDB-C-Development-Environment-Setup"><span class="nav-number">1.</span> <span class="nav-text">🗄️ Windows MariaDB C++ Development Environment Setup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">📑 目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%F0%9F%93%96-%E6%A6%82%E8%BF%B0"><span class="nav-number">1.2.</span> <span class="nav-text">1. 📖 概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%E7%9B%AE%E6%A0%87"><span class="nav-number">1.2.1.</span> <span class="nav-text">🎯 目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8F%97%EF%B8%8F-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-number">1.2.2.</span> <span class="nav-text">🏗️ 系统架构图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%F0%9F%92%BE-%E5%AE%89%E8%A3%85-MariaDB-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">1.3.</span> <span class="nav-text">2. 💾 安装 MariaDB 服务器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%F0%9F%94%8D-%E8%8E%B7%E5%8F%96%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.1 🔍 获取安装程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E2%9A%99%EF%B8%8F-%E8%BF%90%E8%A1%8C%E5%AE%89%E8%A3%85%E5%90%91%E5%AF%BC"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.2 ⚙️ 运行安装向导</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%F0%9F%93%8B-%E9%87%8D%E8%A6%81%E9%85%8D%E7%BD%AE%E9%A1%B9"><span class="nav-number">1.3.2.1.</span> <span class="nav-text">📋 重要配置项</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%9A%A0%EF%B8%8F-%E6%9D%83%E9%99%90%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="nav-number">1.3.2.2.</span> <span class="nav-text">⚠️ 权限错误处理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E2%9C%85-%E9%AA%8C%E8%AF%81%E5%AE%89%E8%A3%85"><span class="nav-number">1.3.3.</span> <span class="nav-text">2.3 ✅ 验证安装</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%AA%8C%E8%AF%81"><span class="nav-number">1.3.3.1.</span> <span class="nav-text">方法一：命令行验证</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E5%9B%BE%E5%BD%A2%E5%8C%96%E5%B7%A5%E5%85%B7"><span class="nav-number">1.3.3.2.</span> <span class="nav-text">方法二：图形化工具</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%F0%9F%94%8C-%E5%AE%89%E8%A3%85-MariaDB-%E8%BF%9E%E6%8E%A5%E5%99%A8"><span class="nav-number">1.4.</span> <span class="nav-text">3. 🔌 安装 MariaDB 连接器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%F0%9F%93%A6-Connector-C"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 📦 Connector&#x2F;C++</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%F0%9F%94%A7-Connector-C-%E4%BE%9D%E8%B5%96%E9%A1%B9"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.2 🔧 Connector&#x2F;C (依赖项)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%F0%9F%8C%90-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">1.4.3.</span> <span class="nav-text">3.3 🌐 配置环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">自动配置（推荐）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%8B%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="nav-number">1.4.3.2.</span> <span class="nav-text">手动配置</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%F0%9F%9B%A0%EF%B8%8F-%E9%85%8D%E7%BD%AE-Visual-Studio-%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.5.</span> <span class="nav-text">4. 🛠️ 配置 Visual Studio 项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%F0%9F%93%81-%E5%8C%85%E5%90%AB%E5%A4%B4%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95"><span class="nav-number">1.5.1.</span> <span class="nav-text">4.1 📁 包含头文件目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%F0%9F%94%97-%E9%85%8D%E7%BD%AE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95"><span class="nav-number">1.5.2.</span> <span class="nav-text">4.2 🔗 配置库文件目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%F0%9F%93%9A-%E6%8C%87%E5%AE%9A%E4%BE%9D%E8%B5%96%E7%9A%84%E5%BA%93%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.3.</span> <span class="nav-text">4.3 📚 指定依赖的库文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%F0%9F%93%8B-%E6%8B%B7%E8%B4%9D-DLL-%E6%96%87%E4%BB%B6"><span class="nav-number">1.5.4.</span> <span class="nav-text">4.4 📋 拷贝 DLL 文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%F0%9F%92%BB-%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81"><span class="nav-number">1.6.</span> <span class="nav-text">5. 💻 编写测试代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%F0%9F%93%84-%E5%AE%8C%E6%95%B4%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="nav-number">1.6.1.</span> <span class="nav-text">5.1 📄 完整测试程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%F0%9F%8F%83%E2%80%8D%E2%99%82%EF%B8%8F-%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95"><span class="nav-number">1.6.2.</span> <span class="nav-text">5.2 🏃‍♂️ 运行测试</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%F0%9F%94%A7-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-number">1.7.</span> <span class="nav-text">6. 🔧 常见问题和解决方案</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%E2%9D%8C-%E8%BF%9E%E6%8E%A5%E5%A4%B1%E8%B4%A5"><span class="nav-number">1.7.1.</span> <span class="nav-text">6.1 ❌ 连接失败</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%E2%9D%8C-DLL-%E6%89%BE%E4%B8%8D%E5%88%B0"><span class="nav-number">1.7.2.</span> <span class="nav-text">6.2 ❌ DLL 找不到</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%E2%9D%8C-%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF"><span class="nav-number">1.7.3.</span> <span class="nav-text">6.3 ❌ 编译错误</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%F0%9F%9A%80-%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE"><span class="nav-number">1.8.</span> <span class="nav-text">7. 🚀 高级配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%F0%9F%94%90-%E8%BF%9E%E6%8E%A5%E6%B1%A0%E9%85%8D%E7%BD%AE"><span class="nav-number">1.8.1.</span> <span class="nav-text">7.1 🔐 连接池配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%F0%9F%93%9D-%E4%BA%8B%E5%8A%A1%E5%A4%84%E7%90%86"><span class="nav-number">1.8.2.</span> <span class="nav-text">7.2 📝 事务处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-%F0%9F%8C%8D-%E5%9B%BD%E9%99%85%E5%8C%96%E6%94%AF%E6%8C%81"><span class="nav-number">1.8.3.</span> <span class="nav-text">7.3 🌍 国际化支持</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8A-%E6%80%BB%E7%BB%93"><span class="nav-number">1.9.</span> <span class="nav-text">📊 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-%E6%88%90%E5%8A%9F%E6%A0%87%E5%BF%97"><span class="nav-number">1.9.1.</span> <span class="nav-text">✅ 成功标志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%E4%B8%8B%E4%B8%80%E6%AD%A5%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.9.2.</span> <span class="nav-text">🎯 下一步建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9A-%E6%8E%A8%E8%8D%90%E8%B5%84%E6%BA%90"><span class="nav-number">1.9.3.</span> <span class="nav-text">📚 推荐资源</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Windows-Windows-MariaDB-C-Development-Environment-Setup/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Windows 🗄️ Windows MariaDB C++ Development Environment Setup | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍🗄️ Windows MariaDB C++ Development Environment Setup的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Windows 🗄️ Windows MariaDB C++ Development Environment Setup
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">后端服务架构</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/" itemprop="url" rel="index"><span itemprop="name">数据库与缓存</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍🗄️ Windows MariaDB C++ Development Environment Setup的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="🗄️-Windows-MariaDB-C-Development-Environment-Setup"><a href="#🗄️-Windows-MariaDB-C-Development-Environment-Setup" class="headerlink" title="🗄️ Windows MariaDB C++ Development Environment Setup"></a>🗄️ Windows MariaDB C++ Development Environment Setup</h1><blockquote>
+<p><strong>文档创建时间</strong>: 2025-11-14<br><strong>最后更新</strong>: 2025-11-14<br><strong>标签</strong>: <code>mariadb</code>, <code>cpp</code>, <code>windows</code>, <code>development</code>, <code>database</code>, <code>connector</code></p>
+</blockquote>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#1-%E6%A6%82%E8%BF%B0">1. 概述</a></li>
+<li><a href="#2-%E5%AE%89%E8%A3%85-mariadb-%E6%9C%8D%E5%8A%A1%E5%99%A8">2. 安装 MariaDB 服务器</a><ul>
+<li><a href="#21-%E8%8E%B7%E5%8F%96%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F">2.1 获取安装程序</a></li>
+<li><a href="#22-%E8%BF%90%E8%A1%8C%E5%AE%89%E8%A3%85%E5%90%91%E5%AF%BC">2.2 运行安装向导</a></li>
+<li><a href="#23-%E9%AA%8C%E8%AF%81%E5%AE%89%E8%A3%85">2.3 验证安装</a></li>
+</ul>
+</li>
+<li><a href="#3-%E5%AE%89%E8%A3%85-mariadb-%E8%BF%9E%E6%8E%A5%E5%99%A8">3. 安装 MariaDB 连接器</a><ul>
+<li><a href="#31-connectorc">3.1 Connector&#x2F;C++</a></li>
+<li><a href="#32-connectorc">3.2 Connector&#x2F;C</a></li>
+<li><a href="#33-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F">3.3 配置环境变量</a></li>
+</ul>
+</li>
+<li><a href="#4-%E9%85%8D%E7%BD%AE-visual-studio-%E9%A1%B9%E7%9B%AE">4. 配置 Visual Studio 项目</a><ul>
+<li><a href="#41-%E5%8C%85%E5%90%AB%E5%A4%B4%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95">4.1 包含头文件目录</a></li>
+<li><a href="#42-%E9%85%8D%E7%BD%AE%E5%BA%93%E6%96%87%E4%BB%B6%E7%9B%AE%E5%BD%95">4.2 配置库文件目录</a></li>
+<li><a href="#43-%E6%8C%87%E5%AE%9A%E4%BE%9D%E8%B5%96%E7%9A%84%E5%BA%93%E6%96%87%E4%BB%B6">4.3 指定依赖的库文件</a></li>
+<li><a href="#44-%E6%8B%B7%E8%B4%9D-dll-%E6%96%87%E4%BB%B6">4.4 拷贝 DLL 文件</a></li>
+</ul>
+</li>
+<li><a href="#5-%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81">5. 编写测试代码</a></li>
+<li><a href="#6-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%92%8C%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88">6. 常见问题和解决方案</a></li>
+<li><a href="#7-%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE">7. 高级配置</a></li>
+</ul>
+<hr>
+<h2 id="1-📖-概述"><a href="#1-📖-概述" class="headerlink" title="1. 📖 概述"></a>1. 📖 概述</h2><p>在Windows下进行C++开发并使用MariaDB，主要涉及MariaDB服务器端的安装、开发库的配置，以及在你的C++项目中正确连接和使用这些库。</p>
+<h3 id="🎯-目标"><a href="#🎯-目标" class="headerlink" title="🎯 目标"></a>🎯 目标</h3><ul>
+<li>✅ 安装 MariaDB 服务器</li>
+<li>✅ 配置 C++ 开发环境</li>
+<li>✅ 创建可运行的 C++ 数据库程序</li>
+<li>✅ 掌握基本的数据库操作</li>
+</ul>
+<h3 id="🏗️-系统架构图"><a href="#🏗️-系统架构图" class="headerlink" title="🏗️ 系统架构图"></a>🏗️ 系统架构图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[C++ Application] --&gt; B[MariaDB Connector/C++]</span><br><span class="line">    B --&gt; C[MariaDB Connector/C]</span><br><span class="line">    C --&gt; D[MariaDB Server]</span><br><span class="line">    D --&gt; E[Database Files]</span><br><span class="line"></span><br><span class="line">    F[Visual Studio IDE] --&gt; G[Project Configuration]</span><br><span class="line">    G --&gt; H[Include Directories]</span><br><span class="line">    G --&gt; I[Library Directories]</span><br><span class="line">    G --&gt; J[Dependencies]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-💾-安装-MariaDB-服务器"><a href="#2-💾-安装-MariaDB-服务器" class="headerlink" title="2. 💾 安装 MariaDB 服务器"></a>2. 💾 安装 MariaDB 服务器</h2><h3 id="2-1-🔍-获取安装程序"><a href="#2-1-🔍-获取安装程序" class="headerlink" title="2.1 🔍 获取安装程序"></a>2.1 🔍 获取安装程序</h3><p>访问 <a target="_blank" rel="noopener" href="https://mariadb.org/download/">MariaDB官方网站的下载页面</a>，选择适用于Windows的安装程序。</p>
+<p><strong>推荐版本选择</strong>：</p>
+<ul>
+<li><strong>稳定版本</strong>: MariaDB 11.8 LTS (长期支持版本)</li>
+<li><strong>文件格式</strong>: <code>.msi</code> 安装程序</li>
+<li><strong>架构</strong>: 根据你的系统选择 x64 或 x86</li>
+</ul>
+<h3 id="2-2-⚙️-运行安装向导"><a href="#2-2-⚙️-运行安装向导" class="headerlink" title="2.2 ⚙️ 运行安装向导"></a>2.2 ⚙️ 运行安装向导</h3><p>运行下载的 <code>.msi</code> 安装程序，按照向导步骤操作：</p>
+<h4 id="📋-重要配置项"><a href="#📋-重要配置项" class="headerlink" title="📋 重要配置项"></a>📋 重要配置项</h4><table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>推荐设置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>根密码</strong></td>
+<td>强密码</td>
+<td>管理数据库的最高权限账户</td>
+</tr>
+<tr>
+<td><strong>服务名</strong></td>
+<td><code>MariaDB</code> 或 <code>MySQL</code></td>
+<td>保持默认即可</td>
+</tr>
+<tr>
+<td><strong>端口</strong></td>
+<td><code>3306</code></td>
+<td>默认数据库端口</td>
+</tr>
+<tr>
+<td><strong>字符集</strong></td>
+<td><strong>UTF-8</strong></td>
+<td>支持多语言</td>
+</tr>
+<tr>
+<td><strong>启用网络访问</strong></td>
+<td>是</td>
+<td>允许远程连接</td>
+</tr>
+</tbody></table>
+<h4 id="⚠️-权限错误处理"><a href="#⚠️-权限错误处理" class="headerlink" title="⚠️ 权限错误处理"></a>⚠️ 权限错误处理</h4><p>如果在安装过程中遇到服务权限相关的错误：</p>
+<ol>
+<li><strong>不要退出安装程序</strong></li>
+<li>打开 Windows 的”服务”管理界面 (<code>services.msc</code>)</li>
+<li>找到 MariaDB 服务</li>
+<li>右键 → “属性” → “登录”选项卡</li>
+<li>将登录身份修改为”<strong>本地系统账户</strong>“</li>
+<li>返回安装程序点击”<strong>重试</strong>“</li>
+</ol>
+<h3 id="2-3-✅-验证安装"><a href="#2-3-✅-验证安装" class="headerlink" title="2.3 ✅ 验证安装"></a>2.3 ✅ 验证安装</h3><p>安装完成后，通过以下方式验证：</p>
+<h4 id="方法一：命令行验证"><a href="#方法一：命令行验证" class="headerlink" title="方法一：命令行验证"></a>方法一：命令行验证</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用 mysql 客户端连接</span></span><br><span class="line">mysql -u root -p</span><br><span class="line"></span><br><span class="line"><span class="comment"># 输入安装时设置的密码</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="方法二：图形化工具"><a href="#方法二：图形化工具" class="headerlink" title="方法二：图形化工具"></a>方法二：图形化工具</h4><ul>
+<li><strong>HeidiSQL</strong> (可能随安装包提供)</li>
+<li><strong>DBeaver</strong></li>
+<li><strong>Navicat</strong></li>
+<li><strong>phpMyAdmin</strong></li>
+</ul>
+<hr>
+<h2 id="3-🔌-安装-MariaDB-连接器"><a href="#3-🔌-安装-MariaDB-连接器" class="headerlink" title="3. 🔌 安装 MariaDB 连接器"></a>3. 🔌 安装 MariaDB 连接器</h2><h3 id="3-1-📦-Connector-C"><a href="#3-1-📦-Connector-C" class="headerlink" title="3.1 📦 Connector&#x2F;C++"></a>3.1 📦 Connector&#x2F;C++</h3><p>MariaDB Connector&#x2F;C++ 是官方的 C++ 数据库连接器。</p>
+<p><strong>下载地址</strong>：<br><a target="_blank" rel="noopener" href="https://mariadb.com/downloads/connectors/connectors-data-access/cpp-connector">MariaDB Connector&#x2F;C++ 官方下载页面</a></p>
+<p><strong>版本选择指南</strong>：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[Visual Studio版本] --&gt; B[Connector版本]</span><br><span class="line">    B --&gt; C[VS 2019/2022]</span><br><span class="line">    B --&gt; D[VS 2017]</span><br><span class="line">    B --&gt; E[VS 2015]</span><br><span class="line">    C --&gt; F[最新版本]</span><br><span class="line">    D --&gt; G[较新版本]</span><br><span class="line">    E --&gt; H[兼容版本]</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-🔧-Connector-C-依赖项"><a href="#3-2-🔧-Connector-C-依赖项" class="headerlink" title="3.2 🔧 Connector&#x2F;C (依赖项)"></a>3.2 🔧 Connector&#x2F;C (依赖项)</h3><p><strong>重要</strong>：<code>MariaDB Connector/C++</code> 依赖于 <code>MariaDB Connector/C</code></p>
+<p><strong>下载地址</strong>：<br><a target="_blank" rel="noopener" href="https://mariadb.com/downloads/connectors/connectors-data-access/c-connector">MariaDB Connector&#x2F;C 官方下载页面</a></p>
+<h3 id="3-3-🌐-配置环境变量"><a href="#3-3-🌐-配置环境变量" class="headerlink" title="3.3 🌐 配置环境变量"></a>3.3 🌐 配置环境变量</h3><p>为了确保运行时能找到必要的 DLL 文件：</p>
+<h4 id="自动配置（推荐）"><a href="#自动配置（推荐）" class="headerlink" title="自动配置（推荐）"></a>自动配置（推荐）</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 添加到系统 <span class="built_in">PATH</span> 环境变量</span><br><span class="line">setx <span class="built_in">PATH</span> &quot;<span class="variable">%PATH%</span>;C:\mariadb-connector-c\lib&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="手动配置"><a href="#手动配置" class="headerlink" title="手动配置"></a>手动配置</h4><ol>
+<li>右键”此电脑” → “属性” → “高级系统设置”</li>
+<li>点击”环境变量”</li>
+<li>在”系统变量”中找到 <code>Path</code></li>
+<li>点击”编辑” → “新建”</li>
+<li>添加路径：<code>C:\mariadb-connector-c\lib</code></li>
+</ol>
+<hr>
+<h2 id="4-🛠️-配置-Visual-Studio-项目"><a href="#4-🛠️-配置-Visual-Studio-项目" class="headerlink" title="4. 🛠️ 配置 Visual Studio 项目"></a>4. 🛠️ 配置 Visual Studio 项目</h2><h3 id="4-1-📁-包含头文件目录"><a href="#4-1-📁-包含头文件目录" class="headerlink" title="4.1 📁 包含头文件目录"></a>4.1 📁 包含头文件目录</h3><ol>
+<li>在 Visual Studio 中打开项目</li>
+<li>右键点击项目名称，选择 <strong>“属性”</strong></li>
+<li>导航到 <strong>“配置属性” → “C&#x2F;C++” → “常规” → “附加包含目录”</strong></li>
+<li>添加以下路径：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\mariadb-connector-cpp\include</span><br><span class="line">C:\mariadb-connector-c\include</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4-2-🔗-配置库文件目录"><a href="#4-2-🔗-配置库文件目录" class="headerlink" title="4.2 🔗 配置库文件目录"></a>4.2 🔗 配置库文件目录</h3><p>在同一个属性页中：</p>
+<ol>
+<li>导航到 <strong>“配置属性” → “链接器” → “常规” → “附加库目录”</strong></li>
+<li>添加以下路径：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">C:\mariadb-connector-cpp\lib</span><br><span class="line">C:\mariadb-connector-c\lib</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4-3-📚-指定依赖的库文件"><a href="#4-3-📚-指定依赖的库文件" class="headerlink" title="4.3 📚 指定依赖的库文件"></a>4.3 📚 指定依赖的库文件</h3><ol>
+<li>导航到 <strong>“配置属性” → “链接器” → “输入” → “附加依赖项”</strong></li>
+<li>添加以下库文件（根据实际文件名可能略有不同）：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mariadbclient.lib</span><br><span class="line">libmariadb.lib</span><br><span class="line">mariadbcpp.lib</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4-4-📋-拷贝-DLL-文件"><a href="#4-4-📋-拷贝-DLL-文件" class="headerlink" title="4.4 📋 拷贝 DLL 文件"></a>4.4 📋 拷贝 DLL 文件</h3><p>确保程序运行时能找到必要的动态链接库：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[Connector/lib] --&gt; B[项目输出目录]</span><br><span class="line">    A --&gt; C[libmariadb.dll]</span><br><span class="line">    A --&gt; D[mariadbcpp.dll]</span><br><span class="line">    B --&gt; E[Debug/Release文件夹]</span><br></pre></td></tr></table></figure>
+
+<p><strong>需要复制的 DLL 文件</strong>：</p>
+<ul>
+<li><code>libmariadb.dll</code> (来自 Connector&#x2F;C)</li>
+<li><code>mariadbcpp.dll</code> (来自 Connector&#x2F;C++)</li>
+<li>其他依赖的 DLL 文件</li>
+</ul>
+<hr>
+<h2 id="5-💻-编写测试代码"><a href="#5-💻-编写测试代码" class="headerlink" title="5. 💻 编写测试代码"></a>5. 💻 编写测试代码</h2><h3 id="5-1-📄-完整测试程序"><a href="#5-1-📄-完整测试程序" class="headerlink" title="5.1 📄 完整测试程序"></a>5.1 📄 完整测试程序</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mariadb/conncpp.hpp&gt;</span> <span class="comment">// Connector/C++ 的主要头文件</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 数据库配置结构</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">DatabaseConfig</span> &#123;</span><br><span class="line">    std::string host = <span class="string">&quot;localhost&quot;</span>;</span><br><span class="line">    <span class="type">int</span> port = <span class="number">3306</span>;</span><br><span class="line">    std::string database = <span class="string">&quot;test_db&quot;</span>;</span><br><span class="line">    std::string username = <span class="string">&quot;root&quot;</span>;</span><br><span class="line">    std::string password = <span class="string">&quot;your_root_password_here&quot;</span>; <span class="comment">// 替换为实际密码</span></span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    DatabaseConfig config;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;🔌 正在连接到 MariaDB 服务器...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1. 获取驱动实例</span></span><br><span class="line">        sql::mariadb::IMariaDBDriver* driver = sql::mariadb::<span class="built_in">get_driver_instance</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 配置数据库连接属性</span></span><br><span class="line">        sql::SQLString url = <span class="string">&quot;jdbc:mariadb://&quot;</span> + config.host + <span class="string">&quot;:&quot;</span> +</span><br><span class="line">                           std::<span class="built_in">to_string</span>(config.port) + <span class="string">&quot;/&quot;</span> + config.database;</span><br><span class="line"></span><br><span class="line">        sql::Properties properties;</span><br><span class="line">        properties[<span class="string">&quot;user&quot;</span>] = config.username;</span><br><span class="line">        properties[<span class="string">&quot;password&quot;</span>] = config.password;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 建立连接</span></span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::Connection&gt; <span class="title">conn</span><span class="params">(driver-&gt;connect(url, properties))</span></span>;</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;✅ 成功连接到 MariaDB 服务器！&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;📊 数据库: &quot;</span> &lt;&lt; config.database &lt;&lt; std::endl;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;🌐 主机: &quot;</span> &lt;&lt; config.host &lt;&lt; <span class="string">&quot;:&quot;</span> &lt;&lt; config.port &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4. 执行简单查询测试</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;\n🔍 执行测试查询...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::Statement&gt; <span class="title">stmt</span><span class="params">(conn-&gt;createStatement())</span></span>;</span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::ResultSet&gt; <span class="title">res</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">            stmt-&gt;executeQuery(<span class="string">&quot;SELECT VERSION() as version, NOW() as current_time&quot;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">        )</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (res-&gt;<span class="built_in">next</span>()) &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;📦 MariaDB 版本: &quot;</span> &lt;&lt; res-&gt;<span class="built_in">getString</span>(<span class="string">&quot;version&quot;</span>) &lt;&lt; std::endl;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;⏰ 当前时间: &quot;</span> &lt;&lt; res-&gt;<span class="built_in">getString</span>(<span class="string">&quot;current_time&quot;</span>) &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5. 创建测试表</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;\n🏗️  创建测试表...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        stmt-&gt;<span class="built_in">execute</span>(<span class="string">&quot;DROP TABLE IF EXISTS test_users&quot;</span>);</span><br><span class="line">        stmt-&gt;<span class="built_in">execute</span>(<span class="string">R&quot;(</span></span><br><span class="line"><span class="string">            CREATE TABLE test_users (</span></span><br><span class="line"><span class="string">                id INT AUTO_INCREMENT PRIMARY KEY,</span></span><br><span class="line"><span class="string">                username VARCHAR(50) NOT NULL,</span></span><br><span class="line"><span class="string">                email VARCHAR(100),</span></span><br><span class="line"><span class="string">                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span></span><br><span class="line"><span class="string">            )</span></span><br><span class="line"><span class="string">        )&quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;✅ 测试表创建成功&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 6. 插入测试数据</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;\n📝 插入测试数据...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::PreparedStatement&gt; <span class="title">pstmt</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">            conn-&gt;prepareStatement(<span class="string">&quot;INSERT INTO test_users (username, email) VALUES (?, ?)&quot;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">        )</span></span>;</span><br><span class="line"></span><br><span class="line">        pstmt-&gt;<span class="built_in">setString</span>(<span class="number">1</span>, <span class="string">&quot;test_user1&quot;</span>);</span><br><span class="line">        pstmt-&gt;<span class="built_in">setString</span>(<span class="number">2</span>, <span class="string">&quot;user1@example.com&quot;</span>);</span><br><span class="line">        pstmt-&gt;<span class="built_in">executeUpdate</span>();</span><br><span class="line"></span><br><span class="line">        pstmt-&gt;<span class="built_in">setString</span>(<span class="number">1</span>, <span class="string">&quot;test_user2&quot;</span>);</span><br><span class="line">        pstmt-&gt;<span class="built_in">setString</span>(<span class="number">2</span>, <span class="string">&quot;user2@example.com&quot;</span>);</span><br><span class="line">        pstmt-&gt;<span class="built_in">executeUpdate</span>();</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;✅ 测试数据插入成功&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 7. 查询测试数据</span></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;\n📋 查询测试数据...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::ResultSet&gt; <span class="title">selectRes</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">            stmt-&gt;executeQuery(<span class="string">&quot;SELECT * FROM test_users ORDER BY id&quot;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">        )</span></span>;</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;+----+------------+---------------------+---------------------+&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;| ID | Username   | Email               | Created At          |&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;+----+------------+---------------------+---------------------+&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (selectRes-&gt;<span class="built_in">next</span>()) &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;| &quot;</span> &lt;&lt; std::<span class="built_in">setw</span>(<span class="number">2</span>) &lt;&lt; selectRes-&gt;<span class="built_in">getInt</span>(<span class="string">&quot;id&quot;</span>)</span><br><span class="line">                      &lt;&lt; <span class="string">&quot; | &quot;</span> &lt;&lt; std::<span class="built_in">setw</span>(<span class="number">10</span>) &lt;&lt; selectRes-&gt;<span class="built_in">getString</span>(<span class="string">&quot;username&quot;</span>)</span><br><span class="line">                      &lt;&lt; <span class="string">&quot; | &quot;</span> &lt;&lt; std::<span class="built_in">setw</span>(<span class="number">19</span>) &lt;&lt; selectRes-&gt;<span class="built_in">getString</span>(<span class="string">&quot;email&quot;</span>)</span><br><span class="line">                      &lt;&lt; <span class="string">&quot; | &quot;</span> &lt;&lt; std::<span class="built_in">setw</span>(<span class="number">19</span>) &lt;&lt; selectRes-&gt;<span class="built_in">getString</span>(<span class="string">&quot;created_at&quot;</span>)</span><br><span class="line">                      &lt;&lt; <span class="string">&quot; |&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;+----+------------+---------------------+---------------------+&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 8. 统计记录数</span></span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::ResultSet&gt; <span class="title">countRes</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">            stmt-&gt;executeQuery(<span class="string">&quot;SELECT COUNT(*) as total FROM test_users&quot;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">        )</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (countRes-&gt;<span class="built_in">next</span>()) &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;\n📊 总记录数: &quot;</span> &lt;&lt; countRes-&gt;<span class="built_in">getInt</span>(<span class="string">&quot;total&quot;</span>) &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;\n🎉 所有测试通过！MariaDB C++ 连接配置成功！&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="built_in">catch</span> (sql::SQLException&amp; e) &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;❌ 数据库连接或查询错误:&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;   错误信息: &quot;</span> &lt;&lt; e.<span class="built_in">what</span>() &lt;&lt; std::endl;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;   错误代码: &quot;</span> &lt;&lt; e.<span class="built_in">getErrorCode</span>() &lt;&lt; std::endl;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;   SQL状态: &quot;</span> &lt;&lt; e.<span class="built_in">getSQLState</span>() &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="built_in">catch</span> (std::exception&amp; e) &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;❌ 程序错误: &quot;</span> &lt;&lt; e.<span class="built_in">what</span>() &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-🏃‍♂️-运行测试"><a href="#5-2-🏃‍♂️-运行测试" class="headerlink" title="5.2 🏃‍♂️ 运行测试"></a>5.2 🏃‍♂️ 运行测试</h3><ol>
+<li><p><strong>编译项目</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Build → Build Solution (Ctrl+Shift+B)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>运行程序</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Debug → Start Without Debugging (Ctrl+F5)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>预期输出</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">🔌 正在连接到 MariaDB 服务器...</span><br><span class="line">✅ 成功连接到 MariaDB 服务器！</span><br><span class="line">📊 数据库: test_db</span><br><span class="line">🌐 主机: localhost:3306</span><br><span class="line"></span><br><span class="line">🔍 执行测试查询...</span><br><span class="line">📦 MariaDB 版本: 11.8.0</span><br><span class="line">⏰ 当前时间: 2025-11-14 16:30:00</span><br><span class="line"></span><br><span class="line">🏗️  创建测试表...</span><br><span class="line">✅ 测试表创建成功</span><br><span class="line"></span><br><span class="line">📝 插入测试数据...</span><br><span class="line">✅ 测试数据插入成功</span><br><span class="line"></span><br><span class="line">📋 查询测试数据...</span><br><span class="line">+----+------------+---------------------+---------------------+</span><br><span class="line">| ID | Username   | Email               | Created At          |</span><br><span class="line">+----+------------+---------------------+---------------------+</span><br><span class="line">|  1 | test_user1 | user1@example.com   | 2025-11-14 16:30:01 |</span><br><span class="line">|  2 | test_user2 | user2@example.com   | 2025-11-14 16:30:01 |</span><br><span class="line">+----+------------+---------------------+---------------------+</span><br><span class="line"></span><br><span class="line">📊 总记录数: 2</span><br><span class="line"></span><br><span class="line">🎉 所有测试通过！MariaDB C++ 连接配置成功！</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="6-🔧-常见问题和解决方案"><a href="#6-🔧-常见问题和解决方案" class="headerlink" title="6. 🔧 常见问题和解决方案"></a>6. 🔧 常见问题和解决方案</h2><h3 id="6-1-❌-连接失败"><a href="#6-1-❌-连接失败" class="headerlink" title="6.1 ❌ 连接失败"></a>6.1 ❌ 连接失败</h3><p><strong>错误信息</strong>: <code>Can&#39;t connect to MySQL server</code></p>
+<p><strong>解决方案</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[连接失败] --&gt; B&#123;检查项目&#125;</span><br><span class="line">    B --&gt; C[MariaDB服务是否启动]</span><br><span class="line">    B --&gt; D[端口3306是否被占用]</span><br><span class="line">    B --&gt; E[防火墙设置]</span><br><span class="line">    B --&gt; F[用户名密码是否正确]</span><br><span class="line"></span><br><span class="line">    C --&gt; G[启动服务: net start mysql]</span><br><span class="line">    D --&gt; H[更换端口或释放端口]</span><br><span class="line">    E --&gt; I[添加防火墙例外]</span><br><span class="line">    F --&gt; J[重置root密码]</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-❌-DLL-找不到"><a href="#6-2-❌-DLL-找不到" class="headerlink" title="6.2 ❌ DLL 找不到"></a>6.2 ❌ DLL 找不到</h3><p><strong>错误信息</strong>: <code>无法启动此程序，因为计算机中丢失 libmariadb.dll</code></p>
+<p><strong>解决方案</strong>:</p>
+<ol>
+<li>确认 DLL 文件在正确位置</li>
+<li>检查 PATH 环境变量</li>
+<li>将 DLL 复制到项目输出目录</li>
+</ol>
+<h3 id="6-3-❌-编译错误"><a href="#6-3-❌-编译错误" class="headerlink" title="6.3 ❌ 编译错误"></a>6.3 ❌ 编译错误</h3><p><strong>常见编译错误及解决方案</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>错误信息</th>
+<th>原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>无法找到头文件</code></td>
+<td>Include 目录未正确配置</td>
+<td>检查附加包含目录设置</td>
+</tr>
+<tr>
+<td><code>无法解析的外部符号</code></td>
+<td>库文件未正确链接</td>
+<td>检查附加依赖项和库目录</td>
+</tr>
+<tr>
+<td><code>字符集不匹配</code></td>
+<td>Unicode&#x2F;ANSI 编码问题</td>
+<td>在项目设置中统一字符集</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="7-🚀-高级配置"><a href="#7-🚀-高级配置" class="headerlink" title="7. 🚀 高级配置"></a>7. 🚀 高级配置</h2><h3 id="7-1-🔐-连接池配置"><a href="#7-1-🔐-连接池配置" class="headerlink" title="7.1 🔐 连接池配置"></a>7.1 🔐 连接池配置</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;mariadb/conncpp.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MariaDBConnectionPool</span> &#123;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    std::unique_ptr&lt;sql::mariadb::IMariaDBDriver&gt; driver;</span><br><span class="line">    sql::SQLString url;</span><br><span class="line">    sql::Properties properties;</span><br><span class="line">    std::vector&lt;std::unique_ptr&lt;sql::Connection&gt;&gt; connections;</span><br><span class="line">    std::mutex mutex;</span><br><span class="line">    <span class="type">int</span> maxConnections;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">MariaDBConnectionPool</span>(<span class="type">const</span> std::string&amp; host, <span class="type">int</span> port,</span><br><span class="line">                         <span class="type">const</span> std::string&amp; database,</span><br><span class="line">                         <span class="type">const</span> std::string&amp; username,</span><br><span class="line">                         <span class="type">const</span> std::string&amp; password,</span><br><span class="line">                         <span class="type">int</span> maxConn = <span class="number">10</span>)</span><br><span class="line">        : <span class="built_in">maxConnections</span>(maxConn) &#123;</span><br><span class="line"></span><br><span class="line">        driver = std::<span class="built_in">unique_ptr</span>&lt;sql::mariadb::IMariaDBDriver&gt;(</span><br><span class="line">            sql::mariadb::<span class="built_in">get_driver_instance</span>()</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        url = <span class="string">&quot;jdbc:mariadb://&quot;</span> + host + <span class="string">&quot;:&quot;</span> + std::<span class="built_in">to_string</span>(port) + <span class="string">&quot;/&quot;</span> + database;</span><br><span class="line"></span><br><span class="line">        properties[<span class="string">&quot;user&quot;</span>] = username;</span><br><span class="line">        properties[<span class="string">&quot;password&quot;</span>] = password;</span><br><span class="line">        properties[<span class="string">&quot;autoReconnect&quot;</span>] = <span class="string">&quot;true&quot;</span>;</span><br><span class="line">        properties[<span class="string">&quot;useSSL&quot;</span>] = <span class="string">&quot;false&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::unique_ptr&lt;sql::Connection&gt; <span class="title">getConnection</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(mutex)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">auto</span>&amp; conn : connections) &#123;</span><br><span class="line">            <span class="keyword">if</span> (conn &amp;&amp; !conn-&gt;<span class="built_in">isClosed</span>()) &#123;</span><br><span class="line">                <span class="keyword">return</span> std::<span class="built_in">move</span>(conn);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 创建新连接</span></span><br><span class="line">        <span class="keyword">return</span> std::<span class="built_in">unique_ptr</span>&lt;sql::Connection&gt;(</span><br><span class="line">            driver-&gt;<span class="built_in">connect</span>(url, properties)</span><br><span class="line">        );</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">returnConnection</span><span class="params">(std::unique_ptr&lt;sql::Connection&gt; conn)</span> </span>&#123;</span><br><span class="line">        <span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(mutex)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (conn &amp;&amp; connections.<span class="built_in">size</span>() &lt; maxConnections) &#123;</span><br><span class="line">            connections.<span class="built_in">push_back</span>(std::<span class="built_in">move</span>(conn));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-📝-事务处理"><a href="#7-2-📝-事务处理" class="headerlink" title="7.2 📝 事务处理"></a>7.2 📝 事务处理</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">transactionExample</span><span class="params">(std::unique_ptr&lt;sql::Connection&gt;&amp; conn)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 开始事务</span></span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::Statement&gt; <span class="title">stmt</span><span class="params">(conn-&gt;createStatement())</span></span>;</span><br><span class="line">        stmt-&gt;<span class="built_in">execute</span>(<span class="string">&quot;START TRANSACTION&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 执行多个SQL操作</span></span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::PreparedStatement&gt; <span class="title">pstmt</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">            conn-&gt;prepareStatement(<span class="string">&quot;UPDATE accounts SET balance = balance - ? WHERE id = ?&quot;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">        )</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 扣款</span></span><br><span class="line">        pstmt-&gt;<span class="built_in">setDouble</span>(<span class="number">1</span>, <span class="number">100.0</span>);</span><br><span class="line">        pstmt-&gt;<span class="built_in">setInt</span>(<span class="number">2</span>, <span class="number">1</span>);</span><br><span class="line">        pstmt-&gt;<span class="built_in">executeUpdate</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 加款</span></span><br><span class="line">        pstmt-&gt;<span class="built_in">setDouble</span>(<span class="number">1</span>, <span class="number">100.0</span>);</span><br><span class="line">        pstmt-&gt;<span class="built_in">setInt</span>(<span class="number">2</span>, <span class="number">2</span>);</span><br><span class="line">        pstmt-&gt;<span class="built_in">executeUpdate</span>();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 提交事务</span></span><br><span class="line">        conn-&gt;<span class="built_in">commit</span>();</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;✅ 事务执行成功&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="built_in">catch</span> (sql::SQLException&amp; e) &#123;</span><br><span class="line">        <span class="comment">// 回滚事务</span></span><br><span class="line">        conn-&gt;<span class="built_in">rollback</span>();</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;❌ 事务执行失败，已回滚: &quot;</span> &lt;&lt; e.<span class="built_in">what</span>() &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-🌍-国际化支持"><a href="#7-3-🌍-国际化支持" class="headerlink" title="7.3 🌍 国际化支持"></a>7.3 🌍 国际化支持</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">setupUTF8Connection</span><span class="params">(std::unique_ptr&lt;sql::Connection&gt;&amp; conn)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">// 设置连接字符集</span></span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::Statement&gt; <span class="title">stmt</span><span class="params">(conn-&gt;createStatement())</span></span>;</span><br><span class="line">        stmt-&gt;<span class="built_in">execute</span>(<span class="string">&quot;SET NAMES &#x27;utf8mb4&#x27;&quot;</span>);</span><br><span class="line">        stmt-&gt;<span class="built_in">execute</span>(<span class="string">&quot;SET CHARACTER SET utf8mb4&quot;</span>);</span><br><span class="line"></span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;✅ UTF-8 字符集配置完成&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 测试中文支持</span></span><br><span class="line">        <span class="function">std::unique_ptr&lt;sql::PreparedStatement&gt; <span class="title">pstmt</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">            conn-&gt;prepareStatement(<span class="string">&quot;INSERT INTO test_table (name) VALUES (?)&quot;</span>)</span></span></span><br><span class="line"><span class="params"><span class="function">        )</span></span>;</span><br><span class="line">        pstmt-&gt;<span class="built_in">setString</span>(<span class="number">1</span>, <span class="string">&quot;测试中文字符&quot;</span>);</span><br><span class="line">        pstmt-&gt;<span class="built_in">executeUpdate</span>();</span><br><span class="line"></span><br><span class="line">    &#125; <span class="built_in">catch</span> (sql::SQLException&amp; e) &#123;</span><br><span class="line">        std::cerr &lt;&lt; <span class="string">&quot;❌ UTF-8 配置失败: &quot;</span> &lt;&lt; e.<span class="built_in">what</span>() &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📊-总结"><a href="#📊-总结" class="headerlink" title="📊 总结"></a>📊 总结</h2><h3 id="✅-成功标志"><a href="#✅-成功标志" class="headerlink" title="✅ 成功标志"></a>✅ 成功标志</h3><ul>
+<li><input checked="" disabled="" type="checkbox"> MariaDB 服务器安装完成</li>
+<li><input checked="" disabled="" type="checkbox"> Connector&#x2F;C 和 Connector&#x2F;C++ 安装完成</li>
+<li><input checked="" disabled="" type="checkbox"> Visual Studio 项目配置正确</li>
+<li><input checked="" disabled="" type="checkbox"> 测试程序运行成功</li>
+<li><input checked="" disabled="" type="checkbox"> 基本数据库操作正常</li>
+</ul>
+<h3 id="🎯-下一步建议"><a href="#🎯-下一步建议" class="headerlink" title="🎯 下一步建议"></a>🎯 下一步建议</h3><ol>
+<li><strong>学习高级 SQL 操作</strong>：存储过程、触发器、视图</li>
+<li><strong>掌握连接池技术</strong>：提高应用程序性能</li>
+<li><strong>了解事务处理</strong>：确保数据一致性</li>
+<li><strong>实现错误处理</strong>：增强程序健壮性</li>
+<li><strong>安全配置</strong>：防止 SQL 注入攻击</li>
+</ol>
+<h3 id="📚-推荐资源"><a href="#📚-推荐资源" class="headerlink" title="📚 推荐资源"></a>📚 推荐资源</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://mariadb.com/docs/clients/connector-cpp/">MariaDB Connector&#x2F;C++ 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.w3schools.com/sql/">SQL 基础教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://isocpp.org/">C++ 数据库编程最佳实践</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>💡 提示</strong>: 在生产环境中，请务必：</p>
+<ul>
+<li>使用强密码和连接加密</li>
+<li>实施适当的错误处理和日志记录</li>
+<li>定期备份数据库</li>
+<li>监控数据库性能和安全</li>
+</ul>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/windows/" rel="tag"># Windows</a>
+              <a href="/tags/mysql/" rel="tag"># MySQL</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Windows-Windows-%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" rel="prev" title="Windows Windows 服务配置指南">
+                  <i class="fa fa-angle-left"></i> Windows Windows 服务配置指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-%E9%98%BF%E9%87%8C%E4%BA%91%E6%9C%8D%E5%8A%A1%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E7%AD%94-FAQ/" rel="next" title="阿里云服务常见问题解答 (FAQ)">
+                  阿里云服务常见问题解答 (FAQ) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

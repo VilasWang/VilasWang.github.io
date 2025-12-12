@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Qt QAudioInput 音频录制入门指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Qt QAudioInput 音频录制入门指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-QAudioInput-%E9%9F%B3%E9%A2%91%E5%BD%95%E5%88%B6%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Qt QAudioInput 音频录制入门指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.164Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-QAudioInput-%E9%9F%B3%E9%A2%91%E5%BD%95%E5%88%B6%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-QAudioInput-%E9%9F%B3%E9%A2%91%E5%BD%95%E5%88%B6%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/","path":"posts/c-核心开发/qt框架/C++核心开发/Qt框架/2025-12-09-Qt-QAudioInput-音频录制入门指南/","title":"Qt QAudioInput 音频录制入门指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Qt QAudioInput 音频录制入门指南 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-Qt-QAudioInput-%E9%9F%B3%E9%A2%91%E5%BD%95%E5%88%B6-WAV-%E5%A4%9A%E5%AA%92%E4%BD%93-C-title-%E2%80%9CQt-QAudioInput-%E9%9F%B3%E9%A2%91%E5%BD%95%E5%88%B6%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97%E2%80%9Dcategories-%E2%80%98C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91%E2%80%99-%E2%80%98Qt%E6%A1%86%E6%9E%B6%E2%80%99-date-2025-12-04-13-13-22description-%E2%80%9C%E4%B8%93%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%EF%BC%8C%E6%B6%B5%E7%9B%96%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E3%80%81%E5%AE%9E%E8%B7%B5%E6%93%8D%E4%BD%9C%E3%80%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%89%E5%85%A8%E6%96%B9%E4%BD%8D%E5%86%85%E5%AE%B9%EF%BC%8C%E5%8A%A9%E5%8A%9B%E6%8A%80%E8%83%BD%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8D%87%E3%80%82%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">tags: [Qt, QAudioInput, 音频录制, WAV, 多媒体, C++]title: “Qt QAudioInput 音频录制入门指南”categories: [‘C++核心开发’, ‘Qt框架’]date: 2025-12-04 13:13:22description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Qt-QAudioInput-%E9%9F%B3%E9%A2%91%E5%BD%95%E5%88%B6%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">Qt QAudioInput 音频录制入门指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">2.2.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="nav-number">2.2.1.</span> <span class="nav-text">核心组件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E9%A1%B9%E7%9B%AE%E8%AE%BE%E7%BD%AE%E4%B8%8EUI%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.3.</span> <span class="nav-text">第一步：项目设置与UI设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE-pro-%E6%96%87%E4%BB%B6"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 项目配置 (.pro 文件)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-UI-%E8%AE%BE%E8%AE%A1-mainwindow-ui"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. UI 设计 (mainwindow.ui)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E5%AE%9E%E7%8E%B0%E5%BD%95%E9%9F%B3%E9%80%BB%E8%BE%91"><span class="nav-number">2.4.</span> <span class="nav-text">第二步：实现录音逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%B7%BB%E5%8A%A0%E6%88%90%E5%91%98%E5%8F%98%E9%87%8F"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. 添加成员变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%88%9D%E5%A7%8B%E5%8C%96%E8%AE%BE%E5%A4%87%E5%88%97%E8%A1%A8"><span class="nav-number">2.4.2.</span> <span class="nav-text">2. 初始化设备列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%BC%80%E5%A7%8B%E4%B8%8E%E5%81%9C%E6%AD%A2%E5%BD%95%E9%9F%B3"><span class="nav-number">2.4.3.</span> <span class="nav-text">3. 开始与停止录音</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E5%A4%84%E7%90%86WAV%E6%96%87%E4%BB%B6%E5%A4%B4"><span class="nav-number">2.5.</span> <span class="nav-text">第三步：处理WAV文件头</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%BD%95%E5%88%B6%E5%89%8D%E5%86%99%E5%85%A5%E5%8D%A0%E4%BD%8D%E6%96%87%E4%BB%B6%E5%A4%B4"><span class="nav-number">2.5.1.</span> <span class="nav-text">1. 录制前写入占位文件头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%BD%95%E5%88%B6%E5%90%8E%E6%9B%B4%E6%96%B0%E6%96%87%E4%BB%B6%E5%A4%B4"><span class="nav-number">2.5.2.</span> <span class="nav-text">2. 录制后更新文件头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-WAV-%E6%96%87%E4%BB%B6%E5%A4%B4%E8%BE%85%E5%8A%A9%E5%87%BD%E6%95%B0"><span class="nav-number">2.5.3.</span> <span class="nav-text">3. WAV 文件头辅助函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81%E5%8F%82%E8%80%83"><span class="nav-number">2.6.</span> <span class="nav-text">完整代码参考</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD%E5%B1%95%E6%9C%9B-%E6%96%87%E5%AD%97%E8%AF%B4%E6%98%8E"><span class="nav-number">2.7.</span> <span class="nav-text">高级功能展望 (文字说明)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">2.8.</span> <span class="nav-text">常见问题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-QAudioInput-%E9%9F%B3%E9%A2%91%E5%BD%95%E5%88%B6%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Qt QAudioInput 音频录制入门指南 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Qt QAudioInput 音频录制入门指南的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Qt QAudioInput 音频录制入门指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">C++核心开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">Qt框架</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Qt QAudioInput 音频录制入门指南的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="tags-Qt-QAudioInput-音频录制-WAV-多媒体-C-title-“Qt-QAudioInput-音频录制入门指南”categories-‘C-核心开发’-‘Qt框架’-date-2025-12-04-13-13-22description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"><a href="#tags-Qt-QAudioInput-音频录制-WAV-多媒体-C-title-“Qt-QAudioInput-音频录制入门指南”categories-‘C-核心开发’-‘Qt框架’-date-2025-12-04-13-13-22description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”" class="headerlink" title="tags: [Qt, QAudioInput, 音频录制, WAV, 多媒体, C++]title: “Qt QAudioInput 音频录制入门指南”categories: [‘C++核心开发’, ‘Qt框架’]date: 2025-12-04 13:13:22description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"></a>tags: [Qt, QAudioInput, 音频录制, WAV, 多媒体, C++]<br>title: “Qt QAudioInput 音频录制入门指南”<br>categories: [‘C++核心开发’, ‘Qt框架’]<br>date: 2025-12-04 13:13:22<br>description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</h2><h1 id="Qt-QAudioInput-音频录制入门指南"><a href="#Qt-QAudioInput-音频录制入门指南" class="headerlink" title="Qt QAudioInput 音频录制入门指南"></a>Qt QAudioInput 音频录制入门指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E9%A1%B9%E7%9B%AE%E8%AE%BE%E7%BD%AE%E4%B8%8Eui%E8%AE%BE%E8%AE%A1">第一步：项目设置与UI设计</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E5%AE%9E%E7%8E%B0%E5%BD%95%E9%9F%B3%E9%80%BB%E8%BE%91">第二步：实现录音逻辑</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E5%A4%84%E7%90%86wav%E6%96%87%E4%BB%B6%E5%A4%B4">第三步：处理WAV文件头</a></li>
+<li><a href="#%E5%AE%8C%E6%95%B4%E4%BB%A3%E7%A0%81%E5%8F%82%E8%80%83">完整代码参考</a></li>
+<li><a href="#%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD%E5%B1%95%E6%9C%9B-%E6%96%87%E5%AD%97%E8%AF%B4%E6%98%8E">高级功能展望 (文字说明)</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本指南将以一个清晰、循序渐进的方式，介绍如何使用 Qt 的 <code>QAudioInput</code> 类来实现基础的音频录制功能，并将录制的原始音频数据保存为可播放的 <code>.wav</code> 文件。</p>
+<h3 id="核心组件"><a href="#核心组件" class="headerlink" title="核心组件"></a>核心组件</h3><ul>
+<li><strong><code>QAudioDeviceInfo</code></strong>: 用于查询和选择可用的音频输入设备（如麦克风）。</li>
+<li><strong><code>QAudioFormat</code></strong>: 用于定义录音的参数，如采样率、声道数、采样位深等。</li>
+<li><strong><code>QAudioInput</code></strong>: 核心类，用于从指定的设备以指定的格式捕获音频数据。</li>
+<li><strong><code>QFile</code></strong>: 一个继承自 <code>QIODevice</code> 的类，我们可以直接让 <code>QAudioInput</code> 将音频数据写入一个 <code>QFile</code> 对象。</li>
+</ul>
+<h2 id="第一步：项目设置与UI设计"><a href="#第一步：项目设置与UI设计" class="headerlink" title="第一步：项目设置与UI设计"></a>第一步：项目设置与UI设计</h2><h3 id="1-项目配置-pro-文件"><a href="#1-项目配置-pro-文件" class="headerlink" title="1. 项目配置 (.pro 文件)"></a>1. 项目配置 (<code>.pro</code> 文件)</h3><p>创建一个新的 Qt Widgets Application 项目，并确保 <code>.pro</code> 文件中包含了 <code>multimedia</code> 模块。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">QT += core gui multimedia</span><br><span class="line"></span><br><span class="line">GREATER_THAN_QT_5 &#123;</span><br><span class="line">    QT += widgets</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">TARGET = AudioRecorderApp</span><br><span class="line">TEMPLATE = app</span><br><span class="line"></span><br><span class="line">SOURCES += main.cpp mainwindow.cpp</span><br><span class="line">HEADERS += mainwindow.h</span><br><span class="line">FORMS   += mainwindow.ui</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-UI-设计-mainwindow-ui"><a href="#2-UI-设计-mainwindow-ui" class="headerlink" title="2. UI 设计 (mainwindow.ui)"></a>2. UI 设计 (<code>mainwindow.ui</code>)</h3><p>在 Qt Designer 中，设计一个简单的主窗口界面，包含以下控件：</p>
+<ul>
+<li><strong><code>QComboBox</code> (deviceComboBox)</strong>: 用于选择输入设备。</li>
+<li><strong><code>QPushButton</code> (recordButton)</strong>: 用于开始录音。</li>
+<li><strong><code>QPushButton</code> (stopButton)</strong>: 用于停止录音。</li>
+<li><strong><code>QLabel</code> (statusLabel)</strong>: 用于显示当前状态（如“正在录音…”、“已停止”）。</li>
+</ul>
+<h2 id="第二步：实现录音逻辑"><a href="#第二步：实现录音逻辑" class="headerlink" title="第二步：实现录音逻辑"></a>第二步：实现录音逻辑</h2><p>我们将所有录音逻辑都封装在 <code>MainWindow</code> 类中，以保持示例的简洁性。</p>
+<h3 id="1-添加成员变量"><a href="#1-添加成员变量" class="headerlink" title="1. 添加成员变量"></a>1. 添加成员变量</h3><p>在 <code>mainwindow.h</code> 中，添加 <code>QAudioInput</code> 和 <code>QFile</code> 的指针。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mainwindow.h</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QAudioInput&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QFile&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MainWindow</span> : <span class="keyword">public</span> QMainWindow &#123;</span><br><span class="line">    <span class="comment">// ...</span></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    Ui::MainWindow *ui;</span><br><span class="line">    QAudioInput *m_audioInput = <span class="literal">nullptr</span>;</span><br><span class="line">    QFile *m_outputFile = <span class="literal">nullptr</span>;</span><br><span class="line">    QAudioDeviceInfo m_selectedDevice;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-初始化设备列表"><a href="#2-初始化设备列表" class="headerlink" title="2. 初始化设备列表"></a>2. 初始化设备列表</h3><p>在 <code>mainwindow.cpp</code> 的构造函数中，查找可用的音频输入设备并填充到 <code>QComboBox</code> 中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mainwindow.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;mainwindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;ui_mainwindow.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QAudioDeviceInfo&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QMessageBox&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QFileDialog&gt;</span></span></span><br><span class="line"></span><br><span class="line">MainWindow::<span class="built_in">MainWindow</span>(QWidget *parent)</span><br><span class="line">    : <span class="built_in">QMainWindow</span>(parent), <span class="built_in">ui</span>(<span class="keyword">new</span> Ui::MainWindow) &#123;</span><br><span class="line">    ui-&gt;<span class="built_in">setupUi</span>(<span class="keyword">this</span>);</span><br><span class="line">    ui-&gt;stopButton-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 填充设备列表</span></span><br><span class="line">    <span class="type">const</span> <span class="keyword">auto</span> devices = QAudioDeviceInfo::<span class="built_in">availableDevices</span>(QAudio::AudioInput);</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">const</span> QAudioDeviceInfo &amp;deviceInfo : devices) &#123;</span><br><span class="line">        ui-&gt;deviceComboBox-&gt;<span class="built_in">addItem</span>(deviceInfo.<span class="built_in">deviceName</span>(), QVariant::<span class="built_in">fromValue</span>(deviceInfo));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 连接信号槽</span></span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;recordButton, &amp;QPushButton::clicked, <span class="keyword">this</span>, &amp;MainWindow::startRecording);</span><br><span class="line">    <span class="built_in">connect</span>(ui-&gt;stopButton, &amp;QPushButton::clicked, <span class="keyword">this</span>, &amp;MainWindow::stopRecording);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-开始与停止录音"><a href="#3-开始与停止录音" class="headerlink" title="3. 开始与停止录音"></a>3. 开始与停止录音</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mainwindow.cpp</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::startRecording</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 获取选中的设备</span></span><br><span class="line">    <span class="type">int</span> selectedIndex = ui-&gt;deviceComboBox-&gt;<span class="built_in">currentIndex</span>();</span><br><span class="line">    <span class="keyword">if</span> (selectedIndex &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        QMessageBox::<span class="built_in">warning</span>(<span class="keyword">this</span>, <span class="string">&quot;错误&quot;</span>, <span class="string">&quot;没有选择有效的音频输入设备。&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    m_selectedDevice = ui-&gt;deviceComboBox-&gt;<span class="built_in">itemData</span>(selectedIndex).<span class="built_in">value</span>&lt;QAudioDeviceInfo&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 设置音频格式 (例如: 44.1kHz, 16-bit, 立体声)</span></span><br><span class="line">    QAudioFormat format;</span><br><span class="line">    format.<span class="built_in">setSampleRate</span>(<span class="number">44100</span>);</span><br><span class="line">    format.<span class="built_in">setChannelCount</span>(<span class="number">2</span>);</span><br><span class="line">    format.<span class="built_in">setSampleSize</span>(<span class="number">16</span>);</span><br><span class="line">    format.<span class="built_in">setSampleType</span>(QAudioFormat::SignedInt);</span><br><span class="line">    format.<span class="built_in">setByteOrder</span>(QAudioFormat::LittleEndian);</span><br><span class="line">    format.<span class="built_in">setCodec</span>(<span class="string">&quot;audio/pcm&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 检查设备是否支持此格式</span></span><br><span class="line">    <span class="keyword">if</span> (!m_selectedDevice.<span class="built_in">isFormatSupported</span>(format)) &#123;</span><br><span class="line">        QMessageBox::<span class="built_in">warning</span>(<span class="keyword">this</span>, <span class="string">&quot;错误&quot;</span>, <span class="string">&quot;所选设备不支持当前音频格式。&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 设置输出文件</span></span><br><span class="line">    QString savePath = QFileDialog::<span class="built_in">getSaveFileName</span>(<span class="keyword">this</span>, <span class="string">&quot;保存录音&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;WAV 文件 (*.wav)&quot;</span>);</span><br><span class="line">    <span class="keyword">if</span> (savePath.<span class="built_in">isEmpty</span>()) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    m_outputFile = <span class="keyword">new</span> <span class="built_in">QFile</span>(savePath, <span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">if</span> (!m_outputFile-&gt;<span class="built_in">open</span>(QIODevice::WriteOnly | QIODevice::Truncate)) &#123;</span><br><span class="line">        QMessageBox::<span class="built_in">warning</span>(<span class="keyword">this</span>, <span class="string">&quot;错误&quot;</span>, <span class="string">&quot;无法打开输出文件。&quot;</span>);</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 创建并启动 QAudioInput</span></span><br><span class="line">    m_audioInput = <span class="keyword">new</span> <span class="built_in">QAudioInput</span>(m_selectedDevice, format, <span class="keyword">this</span>);</span><br><span class="line">    m_audioInput-&gt;<span class="built_in">start</span>(m_outputFile); <span class="comment">// 直接将音频数据写入文件</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新UI状态</span></span><br><span class="line">    ui-&gt;recordButton-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">    ui-&gt;stopButton-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    ui-&gt;statusLabel-&gt;<span class="built_in">setText</span>(<span class="string">&quot;正在录音...&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">MainWindow::stopRecording</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (!m_audioInput) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 停止录音</span></span><br><span class="line">    m_audioInput-&gt;<span class="built_in">stop</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 清理资源</span></span><br><span class="line">    m_outputFile-&gt;<span class="built_in">close</span>();</span><br><span class="line">    <span class="keyword">delete</span> m_audioInput;</span><br><span class="line">    m_audioInput = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更新UI状态</span></span><br><span class="line">    ui-&gt;recordButton-&gt;<span class="built_in">setEnabled</span>(<span class="literal">true</span>);</span><br><span class="line">    ui-&gt;stopButton-&gt;<span class="built_in">setEnabled</span>(<span class="literal">false</span>);</span><br><span class="line">    ui-&gt;statusLabel-&gt;<span class="built_in">setText</span>(<span class="string">&quot;录音已停止。&quot;</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第三步：处理WAV文件头"><a href="#第三步：处理WAV文件头" class="headerlink" title="第三步：处理WAV文件头"></a>第三步：处理WAV文件头</h2><p><code>QAudioInput</code> 录制的是纯净的 PCM 音频数据。为了让普通播放器能识别，我们需要在文件开头写入一个 WAV 格式的头部信息。由于录制前不知道文件总大小，我们采用“占位-回填”的方式。</p>
+<h3 id="1-录制前写入占位文件头"><a href="#1-录制前写入占位文件头" class="headerlink" title="1. 录制前写入占位文件头"></a>1. 录制前写入占位文件头</h3><p>修改 <code>startRecording</code> 函数，在 <code>m_audioInput-&gt;start(m_outputFile)</code> 之前加入写文件头的逻辑。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 startRecording() 中...</span></span><br><span class="line"><span class="keyword">if</span> (!m_outputFile-&gt;<span class="built_in">open</span>(QIODevice::WriteOnly | QIODevice::Truncate)) &#123; <span class="comment">/*...*/</span> &#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 新增：写入一个44字节的占位WAV头</span></span><br><span class="line"><span class="built_in">writeWavHeader</span>(m_outputFile, format, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">m_audioInput = <span class="keyword">new</span> <span class="built_in">QAudioInput</span>(m_selectedDevice, format, <span class="keyword">this</span>);</span><br><span class="line">m_audioInput-&gt;<span class="built_in">start</span>(m_outputFile);</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-录制后更新文件头"><a href="#2-录制后更新文件头" class="headerlink" title="2. 录制后更新文件头"></a>2. 录制后更新文件头</h3><p>修改 <code>stopRecording</code> 函数，在 <code>m_outputFile-&gt;close()</code> 之后，重新打开文件并更新文件头中的长度信息。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 在 stopRecording() 中...</span></span><br><span class="line">m_audioInput-&gt;<span class="built_in">stop</span>();</span><br><span class="line"></span><br><span class="line">qint64 fileSize = m_outputFile-&gt;<span class="built_in">size</span>();</span><br><span class="line">m_outputFile-&gt;<span class="built_in">close</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">// 新增：更新WAV头的长度信息</span></span><br><span class="line"><span class="built_in">updateWavHeader</span>(m_outputFile-&gt;<span class="built_in">fileName</span>(), fileSize);</span><br><span class="line"></span><br><span class="line"><span class="keyword">delete</span> m_audioInput;</span><br><span class="line"><span class="comment">// ...</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-WAV-文件头辅助函数"><a href="#3-WAV-文件头辅助函数" class="headerlink" title="3. WAV 文件头辅助函数"></a>3. WAV 文件头辅助函数</h3><p>将这些函数添加到 <code>mainwindow.cpp</code> 或一个单独的工具类中。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// mainwindow.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QDataStream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 写一个占位的WAV头</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">writeWavHeader</span><span class="params">(QFile *file, <span class="type">const</span> QAudioFormat &amp;format, qint64 dataSize)</span> </span>&#123;</span><br><span class="line">    <span class="function">QDataStream <span class="title">out</span><span class="params">(file)</span></span>;</span><br><span class="line">    out.<span class="built_in">setByteOrder</span>(QDataStream::LittleEndian);</span><br><span class="line"></span><br><span class="line">    out.<span class="built_in">writeRawData</span>(<span class="string">&quot;RIFF&quot;</span>, <span class="number">4</span>);</span><br><span class="line">    out &lt;&lt; <span class="built_in">quint32</span>(dataSize + <span class="number">36</span>);</span><br><span class="line">    out.<span class="built_in">writeRawData</span>(<span class="string">&quot;WAVE&quot;</span>, <span class="number">4</span>);</span><br><span class="line">    out.<span class="built_in">writeRawData</span>(<span class="string">&quot;fmt &quot;</span>, <span class="number">4</span>);</span><br><span class="line">    out &lt;&lt; <span class="built_in">quint32</span>(<span class="number">16</span>);</span><br><span class="line">    out &lt;&lt; <span class="built_in">quint16</span>(<span class="number">1</span>); <span class="comment">// PCM</span></span><br><span class="line">    out &lt;&lt; <span class="built_in">quint16</span>(format.<span class="built_in">channelCount</span>());</span><br><span class="line">    out &lt;&lt; <span class="built_in">quint32</span>(format.<span class="built_in">sampleRate</span>());</span><br><span class="line">    out &lt;&lt; <span class="built_in">quint32</span>(format.<span class="built_in">sampleRate</span>() * format.<span class="built_in">channelCount</span>() * format.<span class="built_in">sampleSize</span>() / <span class="number">8</span>); <span class="comment">// byteRate</span></span><br><span class="line">    out &lt;&lt; <span class="built_in">quint16</span>(format.<span class="built_in">channelCount</span>() * format.<span class="built_in">sampleSize</span>() / <span class="number">8</span>); <span class="comment">// blockAlign</span></span><br><span class="line">    out &lt;&lt; <span class="built_in">quint16</span>(format.<span class="built_in">sampleSize</span>());</span><br><span class="line">    out.<span class="built_in">writeRawData</span>(<span class="string">&quot;data&quot;</span>, <span class="number">4</span>);</span><br><span class="line">    out &lt;&lt; <span class="built_in">quint32</span>(dataSize);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 录制结束后更新WAV头的尺寸信息</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">updateWavHeader</span><span class="params">(<span class="type">const</span> QString &amp;fileName, qint64 fileSize)</span> </span>&#123;</span><br><span class="line">    <span class="function">QFile <span class="title">file</span><span class="params">(fileName)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (!file.<span class="built_in">open</span>(QIODevice::ReadWrite)) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    qint64 dataSize = fileSize - <span class="number">44</span>;</span><br><span class="line">    <span class="function">QDataStream <span class="title">out</span><span class="params">(&amp;file)</span></span>;</span><br><span class="line">    out.<span class="built_in">setByteOrder</span>(QDataStream::LittleEndian);</span><br><span class="line"></span><br><span class="line">    file.<span class="built_in">seek</span>(<span class="number">4</span>);</span><br><span class="line">    out &lt;&lt; <span class="built_in">quint32</span>(dataSize + <span class="number">36</span>);</span><br><span class="line"></span><br><span class="line">    file.<span class="built_in">seek</span>(<span class="number">40</span>);</span><br><span class="line">    out &lt;&lt; <span class="built_in">quint32</span>(dataSize);</span><br><span class="line"></span><br><span class="line">    file.<span class="built_in">close</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="完整代码参考"><a href="#完整代码参考" class="headerlink" title="完整代码参考"></a>完整代码参考</h2><p>(为简洁起见，此处省略了完整的 <code>main.cpp</code> 和 <code>mainwindow.h</code> 文件，上文已包含所有核心逻辑。)</p>
+<h2 id="高级功能展望-文字说明"><a href="#高级功能展望-文字说明" class="headerlink" title="高级功能展望 (文字说明)"></a>高级功能展望 (文字说明)</h2><ul>
+<li><strong>实时音频监控 (电平表)</strong>: 不将 <code>QFile</code> 传递给 <code>start()</code>，而是调用 <code>QIODevice *device = m_audioInput-&gt;start()</code>。然后连接 <code>device</code> 的 <code>readyRead</code> 信号，从中实时读取音频数据块，计算其振幅（RMS或峰值），并更新 UI 上的 <code>QProgressBar</code>。</li>
+<li><strong>编码为 MP3</strong>: <code>QAudioInput</code> 只产生原始的 PCM 数据。要录制为 MP3，你需要将实时读取的音频数据块传递给一个第三方的 MP3 编码库（如 LAME），然后将编码后的数据写入文件。</li>
+<li><strong>暂停与恢复</strong>: <code>QAudioInput</code> 提供了 <code>suspend()</code> 和 <code>resume()</code> 方法，可以很方便地实现暂停和恢复功能。</li>
+</ul>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>Q1: 录制的 <code>.wav</code> 文件无法播放或播放速度不正常?</strong><br><strong>A</strong>: 这几乎总是因为 WAV 文件头信息不正确。请仔细检查 <code>writeWavHeader</code> 和 <code>updateWavHeader</code> 函数中的计算，特别是 <code>dataSize</code> 和 <code>riffSize</code> 是否正确。</p>
+<p><strong>Q2: 程序提示“默认音频输入设备不支持该格式”?</strong><br><strong>A</strong>: 你的麦克风可能不支持你设置的 <code>QAudioFormat</code>（例如，不支持 48000Hz 采样率或立体声录制）。可以尝试一个更通用的格式，如 44100Hz 采样率、16位、单声道。</p>
+<p><strong>Q3: 录音时有杂音或噪音?</strong><br><strong>A</strong>: 这可能是硬件问题，也可能是缓冲区大小不合适。可以尝试通过 <code>m_audioInput-&gt;setBufferSize()</code> 设置一个更大的缓冲区。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/qt/" rel="tag"># Qt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-QMediaPlayer-%E9%9F%B3%E4%B9%90%E6%92%AD%E6%94%BE%E5%99%A8%E5%BC%80%E5%8F%91%E6%95%99%E7%A8%8B/" rel="prev" title="Qt QMediaPlayer 音乐播放器开发教程">
+                  <i class="fa fa-angle-left"></i> Qt QMediaPlayer 音乐播放器开发教程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-QPainter-%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97%E4%BB%8E%E5%9F%BA%E7%A1%80%E5%88%B0%E9%AB%98%E7%BA%A7/" rel="next" title="QPainter 完整指南：从基础到高级">
+                  QPainter 完整指南：从基础到高级 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

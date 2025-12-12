@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Ubuntu Nginx 反向代理与 HTTPS 配置指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu Ubuntu Nginx 反向代理与 HTTPS 配置指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/2025-12-09-Ubuntu-Ubuntu-Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Ubuntu Nginx 反向代理与 HTTPS 配置指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.178Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Nginx">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/2025-12-09-Ubuntu-Ubuntu-Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/2025-12-09-Ubuntu-Ubuntu-Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/","path":"posts/后端服务架构/web服务器配置/后端服务架构/Web服务器配置/2025-12-09-Ubuntu-Ubuntu-Nginx-反向代理与-HTTPS-配置指南/","title":"Ubuntu Ubuntu Nginx 反向代理与 HTTPS 配置指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Ubuntu Ubuntu Nginx 反向代理与 HTTPS 配置指南 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86-HTTPS-SSL-Let%E2%80%99s-Encrypt-%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-Ubuntu-title-Ubuntu-%E7%8E%AF%E5%A2%83-Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS-%E5%AE%8C%E6%95%B4%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97categories-%E2%80%98%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84%E2%80%99-%E2%80%98Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE%E2%80%99-date-2025-12-04-22-25-54description-%E2%80%9C%E8%AF%A6%E7%BB%86%E7%9A%84%E6%8A%80%E6%9C%AF%E5%AE%89%E8%A3%85%E4%B8%8E%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97%EF%BC%8C%E6%8F%90%E4%BE%9B%E4%BB%8E%E9%9B%B6%E5%BC%80%E5%A7%8B%E7%9A%84%E5%AE%8C%E6%95%B4%E9%83%A8%E7%BD%B2%E6%B5%81%E7%A8%8B%EF%BC%8C%E5%8C%85%E5%90%AB%E7%8E%AF%E5%A2%83%E6%A3%80%E6%9F%A5%E3%80%81%E4%BE%9D%E8%B5%96%E5%AE%89%E8%A3%85%E3%80%81%E5%8F%82%E6%95%B0%E9%85%8D%E7%BD%AE%E3%80%81%E6%B5%8B%E8%AF%95%E9%AA%8C%E8%AF%81%E7%AD%89%E5%85%B3%E9%94%AE%E6%AD%A5%E9%AA%A4%E3%80%82%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">tags: [Nginx, 反向代理, HTTPS, SSL, Let’s Encrypt, 负载均衡, Ubuntu]title: Ubuntu 环境 Nginx 反向代理与 HTTPS 完整配置指南categories: [‘后端服务架构’, ‘Web服务器配置’]date: 2025-12-04 22:25:54description: “详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ubuntu-Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">Ubuntu Nginx 反向代理与 HTTPS 配置指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85-Nginx"><span class="nav-number">2.2.</span> <span class="nav-text">第一步：安装 Nginx</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E8%AE%BE%E7%BD%AE%E5%9F%BA%E7%A1%80-Web-%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="nav-number">2.3.</span> <span class="nav-text">第二步：设置基础 Web 服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS"><span class="nav-number">2.4.</span> <span class="nav-text">第三步：配置反向代理与 HTTPS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E4%BD%BF%E7%94%A8-Certbot-%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE-SSL"><span class="nav-number">2.5.</span> <span class="nav-text">第四步：使用 Certbot 自动配置 SSL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9A%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AA%E6%9C%AC%E5%9C%B0%E5%BA%94%E7%94%A8%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86-%E5%8F%AF%E9%80%89"><span class="nav-number">2.6.</span> <span class="nav-text">第五步：配置多个本地应用的反向代理 (可选)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E"><span class="nav-number">2.6.1.</span> <span class="nav-text">配置说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%EF%BC%9A%E9%85%8D%E7%BD%AE%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E5%8F%AF%E9%80%89"><span class="nav-number">2.7.</span> <span class="nav-text">第六步：配置负载均衡 (可选)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A%E6%80%A7%E8%83%BD%E4%B8%8E%E5%AE%89%E5%85%A8%E4%BC%98%E5%8C%96"><span class="nav-number">2.8.</span> <span class="nav-text">附录：性能与安全优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Gzip-%E5%8E%8B%E7%BC%A9"><span class="nav-number">2.8.1.</span> <span class="nav-text">Gzip 压缩</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%9A%90%E8%97%8F-Nginx-%E7%89%88%E6%9C%AC%E5%8F%B7"><span class="nav-number">2.8.2.</span> <span class="nav-text">隐藏 Nginx 版本号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%93%E5%86%B2%E5%8C%BA%E4%BC%98%E5%8C%96"><span class="nav-number">2.8.3.</span> <span class="nav-text">缓冲区优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E9%99%90%E5%88%B6"><span class="nav-number">2.8.4.</span> <span class="nav-text">连接限制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A6%81%E7%94%A8%E4%B8%8D%E5%AE%89%E5%85%A8%E7%9A%84-HTTP-%E6%96%B9%E6%B3%95"><span class="nav-number">2.8.5.</span> <span class="nav-text">禁用不安全的 HTTP 方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">2.9.</span> <span class="nav-text">常见问题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/2025-12-09-Ubuntu-Ubuntu-Nginx-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-HTTPS-%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Ubuntu Ubuntu Nginx 反向代理与 HTTPS 配置指南 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Ubuntu Nginx 反向代理与 HTTPS 配置指南的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Ubuntu Ubuntu Nginx 反向代理与 HTTPS 配置指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/" itemprop="url" rel="index"><span itemprop="name">后端服务架构</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/" itemprop="url" rel="index"><span itemprop="name">Web服务器配置</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Ubuntu Nginx 反向代理与 HTTPS 配置指南的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="tags-Nginx-反向代理-HTTPS-SSL-Let’s-Encrypt-负载均衡-Ubuntu-title-Ubuntu-环境-Nginx-反向代理与-HTTPS-完整配置指南categories-‘后端服务架构’-‘Web服务器配置’-date-2025-12-04-22-25-54description-“详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”"><a href="#tags-Nginx-反向代理-HTTPS-SSL-Let’s-Encrypt-负载均衡-Ubuntu-title-Ubuntu-环境-Nginx-反向代理与-HTTPS-完整配置指南categories-‘后端服务架构’-‘Web服务器配置’-date-2025-12-04-22-25-54description-“详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”" class="headerlink" title="tags: [Nginx, 反向代理, HTTPS, SSL, Let’s Encrypt, 负载均衡, Ubuntu]title: Ubuntu 环境 Nginx 反向代理与 HTTPS 完整配置指南categories: [‘后端服务架构’, ‘Web服务器配置’]date: 2025-12-04 22:25:54description: “详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”"></a>tags: [Nginx, 反向代理, HTTPS, SSL, Let’s Encrypt, 负载均衡, Ubuntu]<br>title: Ubuntu 环境 Nginx 反向代理与 HTTPS 完整配置指南<br>categories: [‘后端服务架构’, ‘Web服务器配置’]<br>date: 2025-12-04 22:25:54<br>description: “详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。”</h2><h1 id="Ubuntu-Nginx-反向代理与-HTTPS-配置指南"><a href="#Ubuntu-Nginx-反向代理与-HTTPS-配置指南" class="headerlink" title="Ubuntu Nginx 反向代理与 HTTPS 配置指南"></a>Ubuntu Nginx 反向代理与 HTTPS 配置指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%AE%89%E8%A3%85-nginx">第一步：安装 Nginx</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E8%AE%BE%E7%BD%AE%E5%9F%BA%E7%A1%80-web-%E6%9C%8D%E5%8A%A1%E5%99%A8">第二步：设置基础 Web 服务器</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E4%B8%8E-https">第三步：配置反向代理与 HTTPS</a></li>
+<li><a href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E4%BD%BF%E7%94%A8-certbot-%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE-ssl">第四步：使用 Certbot 自动配置 SSL</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%E9%85%8D%E7%BD%AE%E5%A4%9A%E4%B8%AA%E6%9C%AC%E5%9C%B0%E5%BA%94%E7%94%A8%E7%9A%84%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86-%E5%8F%AF%E9%80%89">第五步：配置多个本地应用的反向代理 (可选)</a></li>
+<li><a href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%E9%85%8D%E7%BD%AE%E8%B4%9F%E8%BD%BD%E5%9D%87%E8%A1%A1-%E5%8F%AF%E9%80%89">第六步：配置负载均衡 (可选)</a></li>
+<li><a href="#%E9%99%84%E5%BD%95%E6%80%A7%E8%83%BD%E4%B8%8E%E5%AE%89%E5%85%A8%E4%BC%98%E5%8C%96">附录：性能与安全优化</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+</ul>
+<h2 id="第一步：安装-Nginx"><a href="#第一步：安装-Nginx" class="headerlink" title="第一步：安装 Nginx"></a>第一步：安装 Nginx</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 更新软件包列表</span></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装 Nginx</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 允许 Nginx 通过防火墙（如果启用了 UFW）</span></span><br><span class="line"><span class="built_in">sudo</span> ufw allow <span class="string">&#x27;Nginx Full&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查服务状态</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status nginx</span><br></pre></td></tr></table></figure>
+<p>安装完成后，通过浏览器访问 <code>http://&lt;你的服务器IP&gt;</code>，应能看到 Nginx 的欢迎页面。</p>
+<h2 id="第二步：设置基础-Web-服务器"><a href="#第二步：设置基础-Web-服务器" class="headerlink" title="第二步：设置基础 Web 服务器"></a>第二步：设置基础 Web 服务器</h2><p>即使我们主要用 Nginx 做反向代理，创建一个基础的服务器块（Server Block）也是一个好习惯。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 为你的域名创建网站根目录</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /var/www/your_domain.com/html</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> -R <span class="variable">$USER</span>:<span class="variable">$USER</span> /var/www/your_domain.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 创建一个 Nginx 配置文件</span></span><br><span class="line"><span class="built_in">sudo</span> nano /etc/nginx/sites-available/your_domain.com</span><br></pre></td></tr></table></figure>
+
+<p>将以下基础配置粘贴进去：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span>;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">root</span> /var/www/your_domain.com/html;</span><br><span class="line">    <span class="attribute">index</span> index.html;</span><br><span class="line"></span><br><span class="line">    <span class="attribute">server_name</span> your_domain.com www.your_domain.com;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">try_files</span> <span class="variable">$uri</span> <span class="variable">$uri</span>/ =<span class="number">404</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 3. 启用该站点</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">ln</span> -s /etc/nginx/sites-available/your_domain.com /etc/nginx/sites-enabled/</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 测试 Nginx 配置是否有语法错误</span></span><br><span class="line"><span class="built_in">sudo</span> nginx -t</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 重启 Nginx</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart nginx</span><br></pre></td></tr></table></figure>
+
+<h2 id="第三步：配置反向代理与-HTTPS"><a href="#第三步：配置反向代理与-HTTPS" class="headerlink" title="第三步：配置反向代理与 HTTPS"></a>第三步：配置反向代理与 HTTPS</h2><p>现在，我们将修改配置文件，使其将 HTTP 请求重定向到 HTTPS，并将所有流量反向代理到一个后端应用（例如，一个运行在 <code>localhost:8080</code> 的 Node.js 或 Java 应用）。</p>
+<p>编辑你的配置文件：<code>sudo nano /etc/nginx/sites-available/your_domain.com</code></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># HTTP 请求 (端口 80) - 强制跳转到 HTTPS</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">80</span>;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">80</span>;</span><br><span class="line">    <span class="attribute">server_name</span> your_domain.com www.your_domain.com;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将所有 HTTP 请求 301 重定向到 HTTPS</span></span><br><span class="line">    <span class="attribute">return</span> <span class="number">301</span> https://<span class="variable">$host</span><span class="variable">$request_uri</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># HTTPS 服务 (端口 443)</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">server_name</span> your_domain.com www.your_domain.com;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># SSL 证书路径 (稍后由 Certbot 自动填充)</span></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/letsencrypt/live/your_domain.com/fullchain.pem;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/letsencrypt/live/your_domain.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- SSL/TLS 安全增强配置 ---</span></span><br><span class="line">    <span class="comment"># 推荐只使用 TLS 1.2 和 1.3，这是当前的安全标准</span></span><br><span class="line">    <span class="attribute">ssl_protocols</span> TLSv1.<span class="number">2</span> TLSv1.<span class="number">3</span>;</span><br><span class="line">    <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="comment"># 现代 OpenSSL 兼容的安全加密套件（2024年推荐）</span></span><br><span class="line">    <span class="attribute">ssl_ciphers</span> ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># SSL 会话缓存优化</span></span><br><span class="line">    <span class="attribute">ssl_session_cache</span> shared:SSL:<span class="number">10m</span>;</span><br><span class="line">    <span class="attribute">ssl_session_timeout</span> <span class="number">10m</span>;</span><br><span class="line">    <span class="attribute">ssl_session_tickets</span> <span class="literal">off</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># OCSP Stapling</span></span><br><span class="line">    <span class="attribute">ssl_stapling</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">ssl_stapling_verify</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">resolver</span> <span class="number">8.8.8.8</span> <span class="number">8.8.4.4</span> valid=<span class="number">300s</span>;</span><br><span class="line">    <span class="attribute">resolver_timeout</span> <span class="number">5s</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># --- 安全头 (Security Headers) ---</span></span><br><span class="line">    <span class="comment"># HSTS (HTTP Strict Transport Security): 强制客户端在指定时间内只能通过 HTTPS 访问</span></span><br><span class="line">    <span class="attribute">add_header</span> Strict-Transport-Security <span class="string">&quot;max-age=15768000; includeSubDomains; preload&quot;</span> always;</span><br><span class="line">    <span class="comment"># X-Frame-Options: 防止点击劫持攻击</span></span><br><span class="line">    <span class="attribute">add_header</span> X-Frame-Options DENY;</span><br><span class="line">    <span class="comment"># X-Content-Type-Options: 防止 MIME 类型嗅探攻击</span></span><br><span class="line">    <span class="attribute">add_header</span> X-Content-Type-Options nosniff;</span><br><span class="line">    <span class="comment"># X-XSS-Protection: 启用 XSS 保护</span></span><br><span class="line">    <span class="attribute">add_header</span> X-XSS-Protection <span class="string">&quot;1; mode=block&quot;</span>;</span><br><span class="line">    <span class="comment"># Referrer Policy: 控制referrer信息发送</span></span><br><span class="line">    <span class="attribute">add_header</span> Referrer-Policy <span class="string">&quot;strict-origin-when-cross-origin&quot;</span>;</span><br><span class="line">    <span class="comment"># Content Security Policy: 防止代码注入攻击（基础配置）</span></span><br><span class="line">    <span class="attribute">add_header</span> Content-Security-Policy <span class="string">&quot;default-src &#x27;self&#x27;; script-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;; style-src &#x27;self&#x27; &#x27;unsafe-inline&#x27;; img-src &#x27;self&#x27; data: https:; font-src &#x27;self&#x27; data: https:; connect-src &#x27;self&#x27;; frame-ancestors &#x27;none&#x27;;&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 核心：反向代理配置</span></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="comment"># 将请求转发到后端应用</span></span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:8080;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 设置必要的请求头，以便后端应用能获取到真实的客户端信息</span></span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># WebSocket 支持 (如果后端应用需要)</span></span><br><span class="line">        <span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Upgrade <span class="variable">$http_upgrade</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Connection <span class="string">&quot;upgrade&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第四步：使用-Certbot-自动配置-SSL"><a href="#第四步：使用-Certbot-自动配置-SSL" class="headerlink" title="第四步：使用 Certbot 自动配置 SSL"></a>第四步：使用 Certbot 自动配置 SSL</h2><p>Let’s Encrypt 提供免费的 SSL 证书，<code>certbot</code> 是其官方推荐的客户端。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 安装 Certbot 及其 Nginx 插件</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y certbot python3-certbot-nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 运行 Certbot</span></span><br><span class="line"><span class="comment"># Certbot 会自动读取你的 Nginx 配置，找到 server_name，然后为你申请证书并自动修改配置</span></span><br><span class="line"><span class="built_in">sudo</span> certbot --nginx -d your_domain.com -d www.your_domain.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果提示需要邮件通知，请输入邮箱地址</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 验证自动续期</span></span><br><span class="line"><span class="comment"># Certbot 的安装包通常会自动设置一个定时任务来续期证书</span></span><br><span class="line"><span class="built_in">sudo</span> certbot renew --dry-run</span><br></pre></td></tr></table></figure>
+<p>执行完毕后，你的网站就应该可以通过 <code>https://your_domain.com</code> 访问了。</p>
+<h2 id="第五步：配置多个本地应用的反向代理-可选"><a href="#第五步：配置多个本地应用的反向代理-可选" class="headerlink" title="第五步：配置多个本地应用的反向代理 (可选)"></a>第五步：配置多个本地应用的反向代理 (可选)</h2><p>如果你有多个本地应用需要通过同一个域名访问，可以基于不同的路径前缀进行反向代理配置。</p>
+<p>编辑你的配置文件：<code>sudo nano /etc/nginx/sites-available/your_domain.com</code></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># HTTPS 服务 (端口 443)</span></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">server_name</span> your_domain.com www.your_domain.com;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># SSL 证书路径 (由 Certbot 自动配置)</span></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/letsencrypt/live/your_domain.com/fullchain.pem;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/letsencrypt/live/your_domain.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># SSL/TLS 安全配置...</span></span><br><span class="line">    <span class="comment"># (同之前的配置)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- 多个应用的反向代理配置 ---</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># API 服务 (运行在端口 3000)</span></span><br><span class="line">    <span class="section">location</span> /api/ &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:3000/;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 设置必要的请求头</span></span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># API 服务优化配置</span></span><br><span class="line">        <span class="attribute">proxy_buffering</span> <span class="literal">on</span>;</span><br><span class="line">        <span class="attribute">proxy_buffer_size</span> <span class="number">4k</span>;</span><br><span class="line">        <span class="attribute">proxy_buffers</span> <span class="number">8</span> <span class="number">4k</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 管理后台 (运行在端口 8080)</span></span><br><span class="line">    <span class="section">location</span> /admin/ &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:8080/;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 设置必要的请求头</span></span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># WebSocket 服务 (运行在端口 9090)</span></span><br><span class="line">    <span class="section">location</span> /ws/ &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:9090/;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># WebSocket 特殊配置</span></span><br><span class="line">        <span class="attribute">proxy_http_version</span> <span class="number">1</span>.<span class="number">1</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Upgrade <span class="variable">$http_upgrade</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Connection <span class="string">&quot;upgrade&quot;</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># WebSocket 超时配置</span></span><br><span class="line">        <span class="attribute">proxy_read_timeout</span> <span class="number">86400</span>;</span><br><span class="line">        <span class="attribute">proxy_send_timeout</span> <span class="number">86400</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 静态文件服务 (前端应用，运行在端口 3001)</span></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:3001/;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 设置必要的请求头</span></span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 静态文件优化</span></span><br><span class="line">        <span class="attribute">proxy_cache_bypass</span> <span class="variable">$http_upgrade</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Connection <span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 特定文件类型的缓存配置</span></span><br><span class="line">    <span class="section">location</span> <span class="regexp">~* \.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot)$</span> &#123;</span><br><span class="line">        <span class="attribute">proxy_pass</span> http://127.0.0.1:3001;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 缓存配置</span></span><br><span class="line">        <span class="attribute">expires</span> <span class="number">1y</span>;</span><br><span class="line">        <span class="attribute">add_header</span> Cache-Control <span class="string">&quot;public, immutable&quot;</span>;</span><br><span class="line">        <span class="attribute">add_header</span> Vary Accept-Encoding;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="配置说明"><a href="#配置说明" class="headerlink" title="配置说明"></a>配置说明</h3><ol>
+<li><p><strong>路径匹配规则</strong>：</p>
+<ul>
+<li><code>/api/</code> → 匹配所有以 <code>/api/</code> 开头的请求</li>
+<li><code>/admin/</code> → 匹配所有以 <code>/admin/</code> 开头的请求</li>
+<li><code>/ws/</code> → 匹配所有以 <code>/ws/</code> 开头的请求</li>
+<li><code>/</code> → 匹配所有其他请求（默认）</li>
+</ul>
+</li>
+<li><p><strong>proxy_pass 路径处理</strong>：</p>
+<ul>
+<li><code>proxy_pass http://127.0.0.1:3000/</code> → 末尾的 <code>/</code> 会将匹配的 location 路径部分完全替换</li>
+<li>例如：<code>/api/users</code> → 转发到 <code>http://127.0.0.1:3000/users</code>（<code>/api/</code> 被完全移除）</li>
+</ul>
+<p>对比示例：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 带末尾斜杠（移除匹配路径）</span></span><br><span class="line"><span class="section">location</span> /api/ &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://127.0.0.1:3000/;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># /api/users → http://127.0.0.1:3000/users</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 不带末尾斜杠（保留完整路径）</span></span><br><span class="line"><span class="section">location</span> /api/ &#123;</span><br><span class="line">    <span class="attribute">proxy_pass</span> http://127.0.0.1:3000;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment"># /api/users → http://127.0.0.1:3000/api/users</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>WebSocket 支持注意事项</strong>：</p>
+<ul>
+<li>必须设置 <code>proxy_http_version 1.1</code></li>
+<li>必须添加 <code>Upgrade</code> 和 <code>Connection</code> 头</li>
+<li>建议增加超时时间，防止连接断开</li>
+</ul>
+</li>
+<li><p><strong>测试配置</strong>：</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 测试 Nginx 配置</span></span><br><span class="line"><span class="built_in">sudo</span> nginx -t</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启 Nginx</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart nginx</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检查各个应用是否正常运行</span></span><br><span class="line"><span class="comment"># 注意：这些测试URL需要根据你的实际应用路径调整</span></span><br><span class="line"><span class="comment"># curl http://127.0.0.1:3000/health</span></span><br><span class="line"><span class="comment"># curl http://127.0.0.1:8080/health</span></span><br><span class="line"><span class="comment"># curl http://127.0.0.1:9090/</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试HTTPS站点是否正常</span></span><br><span class="line">curl -I https://your_domain.com</span><br></pre></td></tr></table></figure>
+
+<h2 id="第六步：配置负载均衡-可选"><a href="#第六步：配置负载均衡-可选" class="headerlink" title="第六步：配置负载均衡 (可选)"></a>第六步：配置负载均衡 (可选)</h2><p>如果你有多个后端应用服务器，可以使用 Nginx 的 <code>upstream</code> 模块来实现负载均衡。</p>
+<p>编辑你的配置文件：<code>sudo nano /etc/nginx/sites-available/your_domain.com</code></p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在 server 块之前定义上游服务器组</span></span><br><span class="line"><span class="section">upstream</span> backend_servers &#123;</span><br><span class="line">    <span class="comment"># 默认策略是轮询 (Round Robin)</span></span><br><span class="line">    <span class="attribute">server</span> backend1.example.com:<span class="number">8080</span>;</span><br><span class="line">    <span class="attribute">server</span> backend2.example.com:<span class="number">8080</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 也可以指定权重 (weight)</span></span><br><span class="line">    <span class="comment"># server backend1.example.com:8080 weight=3;</span></span><br><span class="line">    <span class="comment"># server backend2.example.com:8080 weight=1;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># 或者使用 ip_hash 策略，确保同一客户端总是访问同一台服务器</span></span><br><span class="line">    <span class="comment"># ip_hash;</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="attribute">listen</span> <span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">listen</span> [::]:<span class="number">443</span> ssl http2;</span><br><span class="line">    <span class="attribute">server_name</span> your_domain.com;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># SSL 证书配置（同前文）</span></span><br><span class="line">    <span class="attribute">ssl_certificate</span> /etc/letsencrypt/live/your_domain.com/fullchain.pem;</span><br><span class="line">    <span class="attribute">ssl_certificate_key</span> /etc/letsencrypt/live/your_domain.com/privkey.pem;</span><br><span class="line"></span><br><span class="line">    <span class="comment"># SSL 安全配置（同前文）</span></span><br><span class="line">    <span class="attribute">ssl_protocols</span> TLSv1.<span class="number">2</span> TLSv1.<span class="number">3</span>;</span><br><span class="line">    <span class="attribute">ssl_prefer_server_ciphers</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">ssl_ciphers</span> ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384;</span><br><span class="line"></span><br><span class="line">    <span class="section">location</span> / &#123;</span><br><span class="line">        <span class="comment"># 将请求转发到上游服务器组</span></span><br><span class="line">        <span class="attribute">proxy_pass</span> http://backend_servers;</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 设置必要的请求头</span></span><br><span class="line">        <span class="attribute">proxy_set_header</span> Host <span class="variable">$host</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Real-IP <span class="variable">$remote_addr</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-For <span class="variable">$proxy_add_x_forwarded_for</span>;</span><br><span class="line">        <span class="attribute">proxy_set_header</span> X-Forwarded-Proto <span class="variable">$scheme</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改配置后，不要忘记测试和重启 Nginx：<code>sudo nginx -t &amp;&amp; sudo systemctl restart nginx</code>。</p>
+<h2 id="附录：性能与安全优化"><a href="#附录：性能与安全优化" class="headerlink" title="附录：性能与安全优化"></a>附录：性能与安全优化</h2><h3 id="Gzip-压缩"><a href="#Gzip-压缩" class="headerlink" title="Gzip 压缩"></a>Gzip 压缩</h3><p>在 <code>/etc/nginx/nginx.conf</code> 的 <code>http</code> 块中添加或取消注释：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    <span class="attribute">gzip</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">gzip_vary</span> <span class="literal">on</span>;</span><br><span class="line">    <span class="attribute">gzip_proxied</span> any;</span><br><span class="line">    <span class="attribute">gzip_comp_level</span> <span class="number">6</span>;</span><br><span class="line">    <span class="attribute">gzip_min_length</span> <span class="number">1000</span>;</span><br><span class="line">    <span class="attribute">gzip_types</span></span><br><span class="line">        text/plain</span><br><span class="line">        text/css</span><br><span class="line">        text/xml</span><br><span class="line">        text/javascript</span><br><span class="line">        application/javascript</span><br><span class="line">        application/xml+rss</span><br><span class="line">        application/json</span><br><span class="line">        application/xml</span><br><span class="line">        image/svg+xml;</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="隐藏-Nginx-版本号"><a href="#隐藏-Nginx-版本号" class="headerlink" title="隐藏 Nginx 版本号"></a>隐藏 Nginx 版本号</h3><p>同样在 <code>http</code> 块中添加：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">http</span> &#123;</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    <span class="attribute">server_tokens</span> <span class="literal">off</span>;</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="缓冲区优化"><a href="#缓冲区优化" class="headerlink" title="缓冲区优化"></a>缓冲区优化</h3><p>在 <code>http</code> 或 <code>server</code> 块中配置：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 客户端请求体缓冲区大小</span></span><br><span class="line"><span class="attribute">client_body_buffer_size</span> <span class="number">128k</span>;</span><br><span class="line"><span class="attribute">client_max_body_size</span> <span class="number">20m</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 代理缓冲区配置</span></span><br><span class="line"><span class="attribute">proxy_buffering</span> <span class="literal">on</span>;</span><br><span class="line"><span class="attribute">proxy_buffer_size</span> <span class="number">4k</span>;</span><br><span class="line"><span class="attribute">proxy_buffers</span> <span class="number">8</span> <span class="number">4k</span>;</span><br><span class="line"><span class="attribute">proxy_busy_buffers_size</span> <span class="number">8k</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 超时配置</span></span><br><span class="line"><span class="attribute">client_header_timeout</span> <span class="number">10</span>;</span><br><span class="line"><span class="attribute">client_body_timeout</span> <span class="number">10</span>;</span><br><span class="line"><span class="attribute">keepalive_timeout</span> <span class="number">65</span>;</span><br><span class="line"><span class="attribute">send_timeout</span> <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="连接限制"><a href="#连接限制" class="headerlink" title="连接限制"></a>连接限制</h3><p>防止 DoS 攻击：</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 在 http 块中配置</span></span><br><span class="line"><span class="attribute">limit_conn_zone</span> <span class="variable">$binary_remote_addr</span> zone=addr:<span class="number">10m</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在 server 块中使用</span></span><br><span class="line"><span class="attribute">limit_conn</span> addr <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<h3 id="禁用不安全的-HTTP-方法"><a href="#禁用不安全的-HTTP-方法" class="headerlink" title="禁用不安全的 HTTP 方法"></a>禁用不安全的 HTTP 方法</h3><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">server</span> &#123;</span><br><span class="line">    <span class="comment"># ...</span></span><br><span class="line">    <span class="comment"># 禁用 TRACE 和 TRACK 方法</span></span><br><span class="line">    <span class="attribute">if</span> (<span class="variable">$request_method</span> <span class="regexp">~ ^(TRACE|TRACK)$)</span> &#123;</span><br><span class="line">        <span class="attribute">return</span> <span class="number">405</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>Q: 502 Bad Gateway 错误?</strong><br><strong>A</strong>: 这通常意味着 Nginx 无法连接到你的后端应用。请检查：</p>
+<ol>
+<li>你的后端应用（如 Node.js, Java）是否正在 <code>127.0.0.1:8080</code> 上正常运行。</li>
+<li>检查后端应用的防火墙设置。</li>
+<li>查看 Nginx 的错误日志 <code>sudo tail -f /var/log/nginx/error.log</code>。</li>
+</ol>
+<p><strong>Q: HTTPS 网站提示不安全?</strong><br><strong>A</strong>: 这通常是 SSL 证书配置问题。</p>
+<ol>
+<li>确保证书路径正确。</li>
+<li>确保证书链完整 (<code>fullchain.pem</code>)。</li>
+<li>使用 SSL Labs 的 <a target="_blank" rel="noopener" href="https://www.ssllabs.com/ssltest/">SSL Test</a> 工具来全面分析你的 HTTPS 配置。</li>
+</ol>
+<p><strong>Q: 证书续期失败?</strong></p>
+<p><strong>A</strong>: 检查以下几点：</p>
+<ol>
+<li>确认服务器时间正确：<code>sudo timedatectl status</code></li>
+<li>手动测试续期：<code>sudo certbot renew --dry-run</code></li>
+<li>检查 cron 或 systemd timer 是否正常运行：<code>sudo systemctl status certbot.timer</code></li>
+</ol>
+<p><strong>Q: WebSocket 连接失败?</strong></p>
+<p><strong>A</strong>: 检查以下配置：</p>
+<ol>
+<li>确保设置了 <code>proxy_http_version 1.1</code></li>
+<li>确保添加了正确的 <code>Upgrade</code> 和 <code>Connection</code> 头</li>
+<li>检查后端应用是否支持 WebSocket</li>
+<li>确认超时设置足够长</li>
+</ol>
+<p><strong>Q: 静态文件 404 错误?</strong></p>
+<p><strong>A</strong>: 可能的原因：</p>
+<ol>
+<li>后端应用端口未正确启动</li>
+<li>静态文件路径不正确</li>
+<li>权限问题：检查 <code>sudo chown -R www-data:www-data /var/www/</code></li>
+<li>检查 SELinux 或 AppArmor 是否阻止访问</li>
+</ol>
+<p><strong>Q: 如何查看 Nginx 访问日志和错误日志?</strong></p>
+<p><strong>A</strong>: 日志文件位置：</p>
+<ul>
+<li>访问日志：<code>/var/log/nginx/access.log</code></li>
+<li>错误日志：<code>/var/log/nginx/error.log</code></li>
+<li>实时监控：<code>sudo tail -f /var/log/nginx/error.log</code></li>
+</ul>
+<p><strong>Q: 如何重载 Nginx 配置而不中断服务?</strong></p>
+<p><strong>A</strong>: 使用重载命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> nginx -t &amp;&amp; <span class="built_in">sudo</span> systemctl reload nginx</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/nginx/" rel="tag"># Nginx</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Windows-Windows-%E7%8E%AF%E5%A2%83-Redis-%E6%9C%8D%E5%8A%A1%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" rel="prev" title="Windows Windows 环境 Redis 服务配置指南">
+                  <i class="fa fa-angle-left"></i> Windows Windows 环境 Redis 服务配置指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%8E%E7%BC%93%E5%AD%98/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-Redis-C-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97-hiredis/" rel="next" title="Linux Linux 环境 Redis C++ 开发指南 (hiredis)">
+                  Linux Linux 环境 Redis C++ 开发指南 (hiredis) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

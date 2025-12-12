@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Qt 单元测试指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Qt 单元测试指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Qt 单元测试指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.167Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Qt">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97/","path":"posts/c-核心开发/qt框架/C++核心开发/Qt框架/2025-12-09-Qt-单元测试指南/","title":"Qt 单元测试指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Qt 单元测试指南 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#title-%E2%80%9CQt-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97%E2%80%9Dcategories-%E2%80%98C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91%E2%80%99-%E2%80%98Qt%E6%A1%86%E6%9E%B6%E2%80%99-description-%E2%80%9C%E4%B8%93%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%EF%BC%8C%E6%B6%B5%E7%9B%96%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E3%80%81%E5%AE%9E%E8%B7%B5%E6%93%8D%E4%BD%9C%E3%80%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%89%E5%85%A8%E6%96%B9%E4%BD%8D%E5%86%85%E5%AE%B9%EF%BC%8C%E5%8A%A9%E5%8A%9B%E6%8A%80%E8%83%BD%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8D%87%E3%80%82%E2%80%9Dtags-Qt-C-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95-Qt-Test-TDD-%E8%87%AA%E5%8A%A8%E5%8C%96%E6%B5%8B%E8%AF%95-date-2025-12-04-22-09-53"><span class="nav-number">1.</span> <span class="nav-text">title: “Qt 单元测试指南”categories: [‘C++核心开发’, ‘Qt框架’]description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”tags: [Qt, C++, 单元测试, Qt Test, TDD, 自动化测试]date: 2025-12-04 22:09:53</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Qt-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">Qt 单元测试指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">2.2.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE"><span class="nav-number">2.3.</span> <span class="nav-text">第一步：项目配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E7%BC%96%E5%86%99%E5%9F%BA%E7%A1%80%E6%B5%8B%E8%AF%95"><span class="nav-number">2.4.</span> <span class="nav-text">第二步：编写基础测试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%B5%8B%E8%AF%95%E7%B1%BB%E7%BB%93%E6%9E%84"><span class="nav-number">2.4.1.</span> <span class="nav-text">1. 测试类结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E6%B5%8B%E8%AF%95%E5%AE%8F"><span class="nav-number">2.4.2.</span> <span class="nav-text">2. 测试宏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E5%AE%8C%E6%95%B4%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.4.3.</span> <span class="nav-text">3. 完整示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E6%B5%8B%E8%AF%95"><span class="nav-number">2.5.</span> <span class="nav-text">第三步：数据驱动测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9AGUI-%E6%B5%8B%E8%AF%95"><span class="nav-number">2.6.</span> <span class="nav-text">第四步：GUI 测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%A8%A1%E6%8B%9F%E5%AF%B9%E8%B1%A1-Mocking"><span class="nav-number">2.7.</span> <span class="nav-text">第五步：使用模拟对象 (Mocking)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%EF%BC%9A%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95%E4%B8%8E%E7%94%9F%E6%88%90%E6%8A%A5%E5%91%8A"><span class="nav-number">2.8.</span> <span class="nav-text">第六步：运行测试与生成报告</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E5%8F%82%E6%95%B0"><span class="nav-number">2.8.1.</span> <span class="nav-text">命令行参数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90-CI-CD"><span class="nav-number">2.9.</span> <span class="nav-text">附录：持续集成 (CI&#x2F;CD)</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Qt 单元测试指南 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Qt 单元测试指南的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Qt 单元测试指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/" itemprop="url" rel="index"><span itemprop="name">C++核心开发</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/" itemprop="url" rel="index"><span itemprop="name">Qt框架</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Qt 单元测试指南的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="title-“Qt-单元测试指南”categories-‘C-核心开发’-‘Qt框架’-description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”tags-Qt-C-单元测试-Qt-Test-TDD-自动化测试-date-2025-12-04-22-09-53"><a href="#title-“Qt-单元测试指南”categories-‘C-核心开发’-‘Qt框架’-description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”tags-Qt-C-单元测试-Qt-Test-TDD-自动化测试-date-2025-12-04-22-09-53" class="headerlink" title="title: “Qt 单元测试指南”categories: [‘C++核心开发’, ‘Qt框架’]description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”tags: [Qt, C++, 单元测试, Qt Test, TDD, 自动化测试]date: 2025-12-04 22:09:53"></a>title: “Qt 单元测试指南”<br>categories: [‘C++核心开发’, ‘Qt框架’]<br>description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”<br>tags: [Qt, C++, 单元测试, Qt Test, TDD, 自动化测试]<br>date: 2025-12-04 22:09:53</h2><h1 id="Qt-单元测试指南"><a href="#Qt-单元测试指南" class="headerlink" title="Qt 单元测试指南"></a>Qt 单元测试指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE">第一步：项目配置</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E7%BC%96%E5%86%99%E5%9F%BA%E7%A1%80%E6%B5%8B%E8%AF%95">第二步：编写基础测试</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E6%95%B0%E6%8D%AE%E9%A9%B1%E5%8A%A8%E6%B5%8B%E8%AF%95">第三步：数据驱动测试</a></li>
+<li><a href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5gui-%E6%B5%8B%E8%AF%95">第四步：GUI 测试</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%E4%BD%BF%E7%94%A8%E6%A8%A1%E6%8B%9F%E5%AF%B9%E8%B1%A1-mocking">第五步：使用模拟对象 (Mocking)</a></li>
+<li><a href="#%E7%AC%AC%E5%85%AD%E6%AD%A5%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95%E4%B8%8E%E7%94%9F%E6%88%90%E6%8A%A5%E5%91%8A">第六步：运行测试与生成报告</a></li>
+<li><a href="#%E9%99%84%E5%BD%95%E6%8C%81%E7%BB%AD%E9%9B%86%E6%88%90-cicd">附录：持续集成 (CI&#x2F;CD)</a></li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>单元测试是保证代码质量、方便重构、减少 Bug 的关键实践。Qt 提供了自家的测试框架 <code>Qt Test</code>，它轻量、快速，并与 Qt 的元对象系统和事件循环深度集成，尤其擅长进行 GUI 测试。</p>
+<h2 id="第一步：项目配置"><a href="#第一步：项目配置" class="headerlink" title="第一步：项目配置"></a>第一步：项目配置</h2><p>要开始使用 <code>Qt Test</code>，首先需要配置你的 <code>.pro</code> 文件。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"># test_project.pro</span><br><span class="line"></span><br><span class="line"># 1. 添加 testlib 模块</span><br><span class="line">QT += testlib</span><br><span class="line"></span><br><span class="line"># 2. 告诉 qmake 这是一个测试用例</span><br><span class="line">CONFIG += testcase</span><br><span class="line"></span><br><span class="line"># 3. 添加测试源文件和头文件</span><br><span class="line">SOURCES += test_calculator.cpp</span><br><span class="line">HEADERS += test_calculator.h</span><br><span class="line"></span><br><span class="line"># 4. (可选) 如果被测试的类在另一个目录，包含其 .pri 文件</span><br><span class="line"># include(../src/src.pri)</span><br></pre></td></tr></table></figure>
+
+<h2 id="第二步：编写基础测试"><a href="#第二步：编写基础测试" class="headerlink" title="第二步：编写基础测试"></a>第二步：编写基础测试</h2><p>一个测试用例通常是一个继承自 <code>QObject</code> 的类，其中包含一系列以 <code>test</code> 开头的私有槽函数 (private slots)。</p>
+<h3 id="1-测试类结构"><a href="#1-测试类结构" class="headerlink" title="1. 测试类结构"></a>1. 测试类结构</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test_calculator.h</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QObject&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestCalculator</span> : <span class="keyword">public</span> QObject &#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">initTestCase</span><span class="params">()</span></span>;    <span class="comment">// 在所有测试用例执行前调用</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">cleanupTestCase</span><span class="params">()</span></span>; <span class="comment">// 在所有测试用例执行后调用</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">init</span><span class="params">()</span></span>;            <span class="comment">// 在每个测试函数执行前调用</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">cleanup</span><span class="params">()</span></span>;         <span class="comment">// 在每个测试函数执行后调用</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// --- 测试函数 ---</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">testAddition</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">testDivision</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">testDivisionByZero_expectedFailure</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-测试宏"><a href="#2-测试宏" class="headerlink" title="2. 测试宏"></a>2. 测试宏</h3><p><code>Qt Test</code> 提供了丰富的宏来进行断言：</p>
+<ul>
+<li><code>QCOMPARE(actual, expected)</code>: 比较两个值是否相等。</li>
+<li><code>QVERIFY(condition)</code>: 验证条件是否为 <code>true</code>。</li>
+<li><code>QVERIFY2(condition, message)</code>: 同上，但失败时会输出自定义消息。</li>
+<li><code>QVERIFY_EXCEPTION_THROWN(expression, ExceptionType)</code>: 验证表达式是否会抛出指定类型的异常。</li>
+<li><code>QWARN(message)</code>: 输出一条警告信息。</li>
+<li><code>QBENCHMARK</code>: 用于简单的性能基准测试。</li>
+</ul>
+<h3 id="3-完整示例"><a href="#3-完整示例" class="headerlink" title="3. 完整示例"></a>3. 完整示例</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test_calculator.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QtTest&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;calculator.h&quot;</span> <span class="comment">// 假设被测试的类在这里</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdexcept&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// ... TestCalculator 类的声明 ...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestCalculator::initTestCase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Starting calculator tests...&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestCalculator::cleanupTestCase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">qDebug</span>() &lt;&lt; <span class="string">&quot;Calculator tests finished.&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestCalculator::init</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 每个测试函数都会有一个新的 Calculator 实例</span></span><br><span class="line">    m_calculator = <span class="keyword">new</span> <span class="built_in">Calculator</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestCalculator::cleanup</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">delete</span> m_calculator;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestCalculator::testAddition</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">QCOMPARE</span>(m_calculator-&gt;<span class="built_in">add</span>(<span class="number">2</span>, <span class="number">3</span>), <span class="number">5</span>);</span><br><span class="line">    <span class="built_in">QCOMPARE</span>(m_calculator-&gt;<span class="built_in">add</span>(<span class="number">-1</span>, <span class="number">1</span>), <span class="number">0</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestCalculator::testDivision</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 对于浮点数，使用 qFuzzyCompare</span></span><br><span class="line">    <span class="built_in">QVERIFY</span>(<span class="built_in">qFuzzyCompare</span>(m_calculator-&gt;<span class="built_in">divide</span>(<span class="number">10</span>, <span class="number">3</span>), <span class="number">3.33333</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestCalculator::testDivisionByZero_expectedFailure</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 验证除以零是否会按预期抛出异常</span></span><br><span class="line">    <span class="built_in">QVERIFY_EXCEPTION_THROWN</span>(m_calculator-&gt;<span class="built_in">divide</span>(<span class="number">1</span>, <span class="number">0</span>), std::runtime_error);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 启动测试 ---</span></span><br><span class="line"><span class="comment">// QTEST_APPLESS_MAIN 用于非 GUI 测试，它不创建 QApplication 实例，更轻量</span></span><br><span class="line"><span class="built_in">QTEST_APPLESS_MAIN</span>(TestCalculator)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果你的测试需要事件循环或测试GUI组件，应使用 QTEST_MAIN</span></span><br><span class="line"><span class="comment">// QTEST_MAIN(TestCalculator)</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_calculator.moc&quot;</span> <span class="comment">// 必须包含 moc 文件</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="第三步：数据驱动测试"><a href="#第三步：数据驱动测试" class="headerlink" title="第三步：数据驱动测试"></a>第三步：数据驱动测试</h2><p>当你想用多组不同的数据测试同一个逻辑时，数据驱动测试非常有用。测试函数会为每一行数据独立运行一次。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test_string_utils.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QtTest&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;algorithm&gt;</span> <span class="comment">// for std::reverse</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestStringUtils</span> : <span class="keyword">public</span> QObject &#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">testToUpperCase_data</span><span class="params">()</span></span>; <span class="comment">// 函数名必须是 &quot;测试函数名_data&quot;</span></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">testToUpperCase</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">testReverse_data</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">testReverse</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestStringUtils::testToUpperCase_data</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 1. 定义数据列</span></span><br><span class="line">    QTest::<span class="built_in">addColumn</span>&lt;QString&gt;(<span class="string">&quot;input&quot;</span>);</span><br><span class="line">    QTest::<span class="built_in">addColumn</span>&lt;QString&gt;(<span class="string">&quot;expected&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 添加数据行</span></span><br><span class="line">    QTest::<span class="built_in">newRow</span>(<span class="string">&quot;all_lower&quot;</span>) &lt;&lt; <span class="string">&quot;hello&quot;</span> &lt;&lt; <span class="string">&quot;HELLO&quot;</span>;</span><br><span class="line">    QTest::<span class="built_in">newRow</span>(<span class="string">&quot;mixed&quot;</span>)     &lt;&lt; <span class="string">&quot;World&quot;</span> &lt;&lt; <span class="string">&quot;WORLD&quot;</span>;</span><br><span class="line">    QTest::<span class="built_in">newRow</span>(<span class="string">&quot;empty&quot;</span>)      &lt;&lt; <span class="string">&quot;&quot;</span>      &lt;&lt; <span class="string">&quot;&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestStringUtils::testToUpperCase</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 3. 在测试函数中获取数据</span></span><br><span class="line">    <span class="built_in">QFETCH</span>(QString, input);</span><br><span class="line">    <span class="built_in">QFETCH</span>(QString, expected);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">QCOMPARE</span>(input.<span class="built_in">toUpper</span>(), expected);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestStringUtils::testReverse_data</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    QTest::<span class="built_in">addColumn</span>&lt;QString&gt;(<span class="string">&quot;input&quot;</span>);</span><br><span class="line">    QTest::<span class="built_in">addColumn</span>&lt;QString&gt;(<span class="string">&quot;expected&quot;</span>);</span><br><span class="line">    QTest::<span class="built_in">newRow</span>(<span class="string">&quot;simple&quot;</span>) &lt;&lt; <span class="string">&quot;abc&quot;</span> &lt;&lt; <span class="string">&quot;cba&quot;</span>;</span><br><span class="line">    QTest::<span class="built_in">newRow</span>(<span class="string">&quot;palindrome&quot;</span>) &lt;&lt; <span class="string">&quot;madam&quot;</span> &lt;&lt; <span class="string">&quot;madam&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">TestStringUtils::testReverse</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">QFETCH</span>(QString, input);</span><br><span class="line">    <span class="built_in">QFETCH</span>(QString, expected);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 修正：QString 没有 reverse() 方法，需要使用 std::reverse</span></span><br><span class="line">    std::<span class="built_in">reverse</span>(input.<span class="built_in">begin</span>(), input.<span class="built_in">end</span>());</span><br><span class="line">    <span class="built_in">QCOMPARE</span>(input, expected);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">QTEST_APPLESS_MAIN</span>(TestStringUtils)</span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_string_utils.moc&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="第四步：GUI-测试"><a href="#第四步：GUI-测试" class="headerlink" title="第四步：GUI 测试"></a>第四步：GUI 测试</h2><p><code>Qt Test</code> 框架最强大的功能之一就是测试 GUI 交互。</p>
+<ul>
+<li><code>QTest::mouseClick(widget, button, modifiers, delay)</code>: 模拟鼠标点击。</li>
+<li><code>QTest::keyClicks(widget, sequence)</code>: 模拟键盘输入字符串。</li>
+<li><code>QTest::keyClick(widget, key)</code>: 模拟单个按键。</li>
+<li><code>QSignalSpy</code>: 一个非常强大的工具，用于监视信号的发射情况。</li>
+</ul>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// test_login_dialog.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QtTest&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QPushButton&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;QLineEdit&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;logindialog.h&quot;</span> <span class="comment">// 假设这是你的登录对话框UI类</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestLoginDialog</span> : <span class="keyword">public</span> QObject &#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">testLogin</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        LoginDialog dialog;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 1. 查找子控件</span></span><br><span class="line">        QLineEdit *usernameEdit = dialog.<span class="built_in">findChild</span>&lt;QLineEdit*&gt;(<span class="string">&quot;usernameEdit&quot;</span>);</span><br><span class="line">        QLineEdit *passwordEdit = dialog.<span class="built_in">findChild</span>&lt;QLineEdit*&gt;(<span class="string">&quot;passwordEdit&quot;</span>);</span><br><span class="line">        QPushButton *loginButton = dialog.<span class="built_in">findChild</span>&lt;QPushButton*&gt;(<span class="string">&quot;loginButton&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="built_in">QVERIFY</span>(usernameEdit);</span><br><span class="line">        <span class="built_in">QVERIFY</span>(passwordEdit);</span><br><span class="line">        <span class="built_in">QVERIFY</span>(loginButton);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 2. 创建信号监视器</span></span><br><span class="line">        <span class="function">QSignalSpy <span class="title">loginSpy</span><span class="params">(&amp;dialog, &amp;LoginDialog::accepted)</span></span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3. 模拟用户输入</span></span><br><span class="line">        QTest::<span class="built_in">keyClicks</span>(usernameEdit, <span class="string">&quot;testuser&quot;</span>);</span><br><span class="line">        QTest::<span class="built_in">keyClicks</span>(passwordEdit, <span class="string">&quot;password&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4. 模拟点击</span></span><br><span class="line">        QTest::<span class="built_in">mouseClick</span>(loginButton, Qt::LeftButton);</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 5. 验证信号是否被发射</span></span><br><span class="line">        <span class="built_in">QCOMPARE</span>(loginSpy.<span class="built_in">count</span>(), <span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="built_in">QTEST_MAIN</span>(TestLoginDialog) <span class="comment">// GUI 测试需要 QApplication，使用 QTEST_MAIN</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;test_login_dialog.moc&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="第五步：使用模拟对象-Mocking"><a href="#第五步：使用模拟对象-Mocking" class="headerlink" title="第五步：使用模拟对象 (Mocking)"></a>第五步：使用模拟对象 (Mocking)</h2><p>当被测试的代码依赖于外部系统（如网络、数据库）时，使用模拟对象（Mock）来隔离依赖，使测试更快速、更稳定。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// --- 1. 定义一个通用接口 ---</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">INetworkManager</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="keyword">virtual</span> ~<span class="built_in">INetworkManager</span>() &#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> QString <span class="title">fetchData</span><span class="params">(<span class="type">const</span> QUrl &amp;url)</span> </span>= <span class="number">0</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 2. 业务类依赖于接口，而不是具体实现 ---</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DataProcessor</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">DataProcessor</span>(INetworkManager *networkManager) : <span class="built_in">m_net</span>(networkManager) &#123;&#125;</span><br><span class="line">    <span class="function">QString <span class="title">processUrl</span><span class="params">(<span class="type">const</span> QUrl &amp;url)</span> </span>&#123;</span><br><span class="line">        QString data = m_net-&gt;<span class="built_in">fetchData</span>(url);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;Processed: &quot;</span> + data.<span class="built_in">toUpper</span>();</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    INetworkManager *m_net;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 3. 创建一个模拟实现用于测试 ---</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MockNetworkManager</span> : <span class="keyword">public</span> INetworkManager &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function">QString <span class="title">fetchData</span><span class="params">(<span class="type">const</span> QUrl &amp;url)</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        <span class="comment">// 在测试中，我们不进行真实网络请求，而是直接返回一个预设值</span></span><br><span class="line">        <span class="keyword">if</span> (url.<span class="built_in">toString</span>().<span class="built_in">contains</span>(<span class="string">&quot;test&quot;</span>)) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="string">&quot;mock_data&quot;</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&quot;&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// --- 4. 编写测试用例 ---</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">TestDataProcessor</span> : <span class="keyword">public</span> QObject &#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">testProcessing</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        MockNetworkManager mockNet;</span><br><span class="line">        <span class="function">DataProcessor <span class="title">processor</span><span class="params">(&amp;mockNet)</span></span>;</span><br><span class="line"></span><br><span class="line">        QString result = processor.<span class="built_in">processUrl</span>(<span class="built_in">QUrl</span>(<span class="string">&quot;http://test.com&quot;</span>));</span><br><span class="line"></span><br><span class="line">        <span class="built_in">QCOMPARE</span>(result, <span class="built_in">QString</span>(<span class="string">&quot;Processed: MOCK_DATA&quot;</span>));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第六步：运行测试与生成报告"><a href="#第六步：运行测试与生成报告" class="headerlink" title="第六步：运行测试与生成报告"></a>第六步：运行测试与生成报告</h2><p>编译你的测试项目后，会生成一个可执行文件。直接运行它将在控制台显示测试结果。</p>
+<h3 id="命令行参数"><a href="#命令行参数" class="headerlink" title="命令行参数"></a>命令行参数</h3><p><code>Qt Test</code> 支持丰富的命令行参数来控制测试执行和输出。</p>
+<ul>
+<li><strong>运行特定测试</strong>: <code>my_test_executable testAddition</code></li>
+<li><strong>输出为 XML 格式</strong>: <code>my_test_executable -o my_report.xml,xunitxml</code></li>
+<li><strong>输出为 CSV 格式</strong>: <code>my_test_executable -o my_report.csv,csv</code></li>
+</ul>
+<p>生成的 <code>xunitxml</code> 格式的报告可以被 Jenkins、GitLab CI、GitHub Actions 等几乎所有 CI&#x2F;CD 工具识别和展示。</p>
+<h2 id="附录：持续集成-CI-CD"><a href="#附录：持续集成-CI-CD" class="headerlink" title="附录：持续集成 (CI&#x2F;CD)"></a>附录：持续集成 (CI&#x2F;CD)</h2><p>在 CI&#x2F;CD 流程中自动运行单元测试是保证项目质量的关键。以下是一个简化的 GitHub Actions 工作流示例。</p>
+<p><code>.github/workflows/ci.yml</code>:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">name:</span> <span class="string">Qt</span> <span class="string">CI</span></span><br><span class="line"></span><br><span class="line"><span class="attr">on:</span> [<span class="string">push</span>, <span class="string">pull_request</span>]</span><br><span class="line"></span><br><span class="line"><span class="attr">jobs:</span></span><br><span class="line">  <span class="attr">test:</span></span><br><span class="line">    <span class="attr">runs-on:</span> <span class="string">ubuntu-latest</span></span><br><span class="line">    <span class="attr">steps:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">uses:</span> <span class="string">actions/checkout@v3</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Install</span> <span class="string">Qt</span></span><br><span class="line">      <span class="attr">uses:</span> <span class="string">jurplel/install-qt-action@v3</span></span><br><span class="line">      <span class="attr">with:</span></span><br><span class="line">        <span class="attr">version:</span> <span class="string">&#x27;6.2.4&#x27;</span> <span class="comment"># 选择你的 Qt 版本</span></span><br><span class="line"></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Build</span> <span class="string">Project</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line"><span class="string">        qmake</span></span><br><span class="line"><span class="string">        make -j$(nproc)</span></span><br><span class="line"><span class="string"></span></span><br><span class="line">    <span class="bullet">-</span> <span class="attr">name:</span> <span class="string">Run</span> <span class="string">Tests</span></span><br><span class="line">      <span class="attr">run:</span> <span class="string">|</span></span><br><span class="line">        <span class="string">./test_project</span> <span class="comment"># 运行测试可执行文件</span></span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/qt/" rel="tag"># Qt</a>
+              <a href="/tags/git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-QCamera-%E6%91%84%E5%83%8F%E5%A4%B4%E5%9B%BE%E5%83%8F%E9%87%87%E9%9B%86%E6%8C%87%E5%8D%97/" rel="prev" title="Qt QCamera 摄像头图像采集指南">
+                  <i class="fa fa-angle-left"></i> Qt QCamera 摄像头图像采集指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/c-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/qt%E6%A1%86%E6%9E%B6/C++%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/Qt%E6%A1%86%E6%9E%B6/2025-12-09-Qt-SQLite-%E5%8A%A0%E5%AF%86%E6%8C%87%E5%8D%97-%E4%BD%BF%E7%94%A8-SQLCipher/" rel="next" title="Qt SQLite 加密指南 (使用 SQLCipher)">
+                  Qt SQLite 加密指南 (使用 SQLCipher) <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

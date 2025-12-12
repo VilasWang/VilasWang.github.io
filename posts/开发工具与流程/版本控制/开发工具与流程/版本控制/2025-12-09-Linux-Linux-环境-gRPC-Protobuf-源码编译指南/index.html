@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Linux 环境 gRPC &amp; Protobuf 源码编译指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Linux 环境 gRPC &amp; Protobuf 源码编译指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-gRPC-Protobuf-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Linux 环境 gRPC &amp; Protobuf 源码编译指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.188Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-gRPC-Protobuf-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-gRPC-Protobuf-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97/","path":"posts/开发工具与流程/版本控制/开发工具与流程/版本控制/2025-12-09-Linux-Linux-环境-gRPC-Protobuf-源码编译指南/","title":"Linux Linux 环境 gRPC & Protobuf 源码编译指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux Linux 环境 gRPC & Protobuf 源码编译指南 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-gRPC-Protobuf-%E7%BC%96%E8%AF%91-Linux-C-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91-title-Linux-%E7%8E%AF%E5%A2%83%E7%BC%96%E8%AF%91-gRPC-%E6%BA%90%E7%A0%81%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97categories-%E2%80%98C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91%E2%80%99-%E2%80%98%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%8ERPC%E2%80%99-date-2025-12-04-13-13-21description-%E2%80%9C%E4%B8%93%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%EF%BC%8C%E6%B6%B5%E7%9B%96%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E3%80%81%E5%AE%9E%E8%B7%B5%E6%93%8D%E4%BD%9C%E3%80%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%89%E5%85%A8%E6%96%B9%E4%BD%8D%E5%86%85%E5%AE%B9%EF%BC%8C%E5%8A%A9%E5%8A%9B%E6%8A%80%E8%83%BD%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8D%87%E3%80%82%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">tags: [gRPC, Protobuf, 编译, Linux, C++, 源码编译]title: Linux 环境编译 gRPC 源码完整指南categories: [‘C++核心开发’, ‘网络编程与RPC’]date: 2025-12-04 13:13:21description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-%E7%8E%AF%E5%A2%83-gRPC-Protobuf-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">Linux 环境 gRPC &amp; Protobuf 源码编译指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A6%82%E8%BF%B0"><span class="nav-number">2.2.</span> <span class="nav-text">概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%B3%BB%E7%BB%9F%E8%A6%81%E6%B1%82"><span class="nav-number">2.2.1.</span> <span class="nav-text">系统要求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">2.3.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%BA%90%E7%A0%81"><span class="nav-number">2.4.</span> <span class="nav-text">获取源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="nav-number">2.5.</span> <span class="nav-text">编译与安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83"><span class="nav-number">2.6.</span> <span class="nav-text">配置环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E9%85%8D%E7%BD%AE%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%99%A8"><span class="nav-number">2.6.1.</span> <span class="nav-text">1. 配置动态链接器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AE-PATH-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">2.6.2.</span> <span class="nav-text">2. 配置 PATH 环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%AA%8C%E8%AF%81%E5%AE%89%E8%A3%85"><span class="nav-number">2.7.</span> <span class="nav-text">验证安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">2.8.</span> <span class="nav-text">常见问题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-gRPC-Protobuf-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux Linux 环境 gRPC &amp; Protobuf 源码编译指南 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Linux 环境 gRPC &amp; Protobuf 源码编译指南的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux Linux 环境 gRPC & Protobuf 源码编译指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">开发工具与流程</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">版本控制</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Linux 环境 gRPC & Protobuf 源码编译指南的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="tags-gRPC-Protobuf-编译-Linux-C-源码编译-title-Linux-环境编译-gRPC-源码完整指南categories-‘C-核心开发’-‘网络编程与RPC’-date-2025-12-04-13-13-21description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"><a href="#tags-gRPC-Protobuf-编译-Linux-C-源码编译-title-Linux-环境编译-gRPC-源码完整指南categories-‘C-核心开发’-‘网络编程与RPC’-date-2025-12-04-13-13-21description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”" class="headerlink" title="tags: [gRPC, Protobuf, 编译, Linux, C++, 源码编译]title: Linux 环境编译 gRPC 源码完整指南categories: [‘C++核心开发’, ‘网络编程与RPC’]date: 2025-12-04 13:13:21description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"></a>tags: [gRPC, Protobuf, 编译, Linux, C++, 源码编译]<br>title: Linux 环境编译 gRPC 源码完整指南<br>categories: [‘C++核心开发’, ‘网络编程与RPC’]<br>date: 2025-12-04 13:13:21<br>description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</h2><h1 id="Linux-环境-gRPC-Protobuf-源码编译指南"><a href="#Linux-环境-gRPC-Protobuf-源码编译指南" class="headerlink" title="Linux 环境 gRPC &amp; Protobuf 源码编译指南"></a>Linux 环境 gRPC &amp; Protobuf 源码编译指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87">环境准备</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E6%BA%90%E7%A0%81">获取源码</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E4%B8%8E%E5%AE%89%E8%A3%85">编译与安装</a></li>
+<li><a href="#%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83">配置环境</a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81%E5%AE%89%E8%A3%85">验证安装</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本指南详细介绍如何在 Linux 系统（以 Ubuntu&#x2F;Debian 为例）下，通过 CMake 从源码编译和安装 gRPC 及其核心依赖 Protobuf。</p>
+<p>此方法遵循 gRPC 官方推荐的流程，通过 Git 子模块来构建其依赖，确保版本兼容性，过程最简单、最可靠。</p>
+<h3 id="系统要求"><a href="#系统要求" class="headerlink" title="系统要求"></a>系统要求</h3><ul>
+<li><strong>操作系统</strong>: Ubuntu 20.04+ &#x2F; Debian 10+</li>
+<li><strong>编译器</strong>: GCC 9+ 或 Clang 9+</li>
+<li><strong>CMake</strong>: 3.13+</li>
+<li><strong>内存</strong>: 建议 8GB+</li>
+<li><strong>磁盘空间</strong>: 建议 15GB+ 可用空间</li>
+</ul>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 更新软件包列表</span></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 安装核心编译工具和依赖</span></span><br><span class="line"><span class="built_in">sudo</span> apt install -y \</span><br><span class="line">    build-essential \</span><br><span class="line">    autoconf \</span><br><span class="line">    libtool \</span><br><span class="line">    pkg-config \</span><br><span class="line">    cmake \</span><br><span class="line">    git \</span><br><span class="line">    zlib1g-dev</span><br></pre></td></tr></table></figure>
+
+<h2 id="获取源码"><a href="#获取源码" class="headerlink" title="获取源码"></a>获取源码</h2><blockquote>
+<p><strong>提示</strong>: 本文以 gRPC <strong>v1.64.0</strong> 为例。你可以从 gRPC 的 <a target="_blank" rel="noopener" href="https://github.com/grpc/grpc/releases">GitHub Releases</a> 页面选择一个你需要的稳定版本标签。</p>
+</blockquote>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 创建工作目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p ~/dev/grpc-build &amp;&amp; <span class="built_in">cd</span> ~/dev/grpc-build</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 克隆 gRPC 仓库</span></span><br><span class="line"><span class="comment"># --recurse-submodules 会在克隆时自动初始化并拉取所有子模块 (包括 protobuf, abseil, re2 等)</span></span><br><span class="line"><span class="comment"># --depth 1 只克隆最新一次提交，加快下载速度</span></span><br><span class="line"><span class="comment"># --shallow-submodules 也对子模块执行此操作</span></span><br><span class="line">git <span class="built_in">clone</span> --recurse-submodules --depth 1 --shallow-submodules -b v1.64.0 https://github.com/grpc/grpc.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果克隆时忘记了 --recurse-submodules，可以进入目录后执行:</span></span><br><span class="line"><span class="comment"># cd grpc</span></span><br><span class="line"><span class="comment"># git submodule update --init</span></span><br></pre></td></tr></table></figure>
+<p><em>国内用户如果访问 GitHub 速度慢，可以搜索 gRPC 的 Gitee 镜像，并相应地修改 <code>.gitmodules</code> 文件中的子模块 URL。</em></p>
+<h2 id="编译与安装"><a href="#编译与安装" class="headerlink" title="编译与安装"></a>编译与安装</h2><p>整个编译过程在 gRPC 源码目录内完成。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 进入 gRPC 源码目录</span></span><br><span class="line"><span class="built_in">cd</span> grpc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 创建并进入 CMake 构建目录</span></span><br><span class="line"><span class="built_in">mkdir</span> -p cmake/build</span><br><span class="line"><span class="built_in">cd</span> cmake/build</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 运行 CMake 配置</span></span><br><span class="line"><span class="comment"># CMAKE_INSTALL_PREFIX: 指定最终的安装路径</span></span><br><span class="line"><span class="comment"># gRPC_INSTALL: 确保生成 install 目标</span></span><br><span class="line"><span class="comment"># CMAKE_BUILD_TYPE: 编译 Release 版本</span></span><br><span class="line">cmake -DCMAKE_BUILD_TYPE=Release \</span><br><span class="line">      -DgRPC_INSTALL=ON \</span><br><span class="line">      -DCMAKE_INSTALL_PREFIX=/usr/local/grpc \</span><br><span class="line">      ../..</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 执行编译</span></span><br><span class="line"><span class="comment"># -j 后面的数字是并行编译的线程数，通常设为CPU核心数 `$(nproc)`</span></span><br><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 安装到指定目录</span></span><br><span class="line"><span class="built_in">sudo</span> make install</span><br></pre></td></tr></table></figure>
+
+<h2 id="配置环境"><a href="#配置环境" class="headerlink" title="配置环境"></a>配置环境</h2><h3 id="1-配置动态链接器"><a href="#1-配置动态链接器" class="headerlink" title="1. 配置动态链接器"></a>1. 配置动态链接器</h3><p>为了让系统能在运行时找到刚刚安装的 gRPC 和 Protobuf 库文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 创建一个新的 linker 配置文件</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">tee</span> /etc/ld.so.conf.d/grpc.conf &gt; /dev/null &lt;&lt;<span class="string">EOF</span></span><br><span class="line"><span class="string">/usr/local/grpc/lib</span></span><br><span class="line"><span class="string">EOF</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 刷新 linker 缓存使其生效</span></span><br><span class="line"><span class="built_in">sudo</span> ldconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 验证是否生效 (应能看到 grpc++ 和 protobuf 相关的库)</span></span><br><span class="line">ldconfig -p | grep grpc</span><br><span class="line">ldconfig -p | grep protobuf</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-配置-PATH-环境变量"><a href="#2-配置-PATH-环境变量" class="headerlink" title="2. 配置 PATH 环境变量"></a>2. 配置 PATH 环境变量</h3><p>为了能直接使用 <code>protoc</code> 和 <code>grpc_cpp_plugin</code> 等命令行工具。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将 bin 目录添加到 shell 配置文件 (例如 ~/.bashrc 或 ~/.zshrc)</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;export PATH=&quot;/usr/local/grpc/bin:$PATH&quot;&#x27;</span> &gt;&gt; ~/.bashrc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 立即应用更改</span></span><br><span class="line"><span class="built_in">source</span> ~/.bashrc</span><br></pre></td></tr></table></figure>
+
+<h2 id="验证安装"><a href="#验证安装" class="headerlink" title="验证安装"></a>验证安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 验证 protoc (Protocol Buffers 编译器)</span></span><br><span class="line">protoc --version</span><br><span class="line"><span class="comment"># 期望输出: libprotoc 25.x (或与 gRPC v1.64.0 匹配的版本)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 验证 gRPC C++ 插件</span></span><br><span class="line"><span class="built_in">which</span> grpc_cpp_plugin</span><br><span class="line"><span class="comment"># 期望输出: /usr/local/grpc/bin/grpc_cpp_plugin</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 编译并运行官方 HelloWorld 示例</span></span><br><span class="line"><span class="built_in">cd</span> ~/dev/grpc-build/grpc/examples/cpp/helloworld</span><br><span class="line"><span class="built_in">mkdir</span> -p cmake/build &amp;&amp; <span class="built_in">cd</span> cmake/build</span><br><span class="line"></span><br><span class="line"><span class="comment"># 使用 CMAKE_PREFIX_PATH 告诉 CMake 在哪里寻找 gRPC 的配置</span></span><br><span class="line">cmake -DCMAKE_PREFIX_PATH=/usr/local/grpc ../..</span><br><span class="line">make -j$(<span class="built_in">nproc</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在一个终端中运行服务端</span></span><br><span class="line">./greeter_server &amp;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在另一个终端中运行客户端</span></span><br><span class="line">./greeter_client</span><br><span class="line"><span class="comment"># 期望输出: Greeter received: Hello world</span></span><br></pre></td></tr></table></figure>
+<p>如果客户端成功输出了 “Hello world”，则说明你的 gRPC 环境已成功编译并可以正常工作。</p>
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>Q1: Git 克隆或子模块更新非常慢或失败?</strong><br><strong>A</strong>: 这是国内常见的网络问题。你可以尝试为 Git 配置代理，或者查找并使用 Gitee 上的镜像。如果使用镜像，你可能需要手动修改 <code>.gitmodules</code> 文件中各个子模块的 <code>url</code>，然后再次运行 <code>git submodule sync</code> 和 <code>git submodule update --init</code>。</p>
+<p><strong>Q2: 编译过程中提示内存不足 (Killed) ?</strong><br><strong>A</strong>: gRPC 编译需要大量内存。如果你的机器内存小于 8GB，可能会发生这种情况。</p>
+<ul>
+<li><strong>减少并行任务数</strong>: 尝试 <code>make -j2</code> 或 <code>make -j1</code>。</li>
+<li><strong>增加交换空间 (Swap)</strong>:<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> fallocate -l 4G /swapfile</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chmod</span> 600 /swapfile</span><br><span class="line"><span class="built_in">sudo</span> mkswap /swapfile</span><br><span class="line"><span class="built_in">sudo</span> swapon /swapfile</span><br><span class="line"><span class="comment"># 编译完成后可以禁用并删除</span></span><br><span class="line"><span class="comment"># sudo swapoff /swapfile &amp;&amp; sudo rm /swapfile</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<p><strong>Q3: <code>sudo make install</code> 后，<code>protoc --version</code> 仍然显示旧版本?</strong><br><strong>A</strong>: 这通常是因为你的 <code>PATH</code> 环境变量中，系统自带的旧版本 <code>protoc</code> (如 <code>/usr/bin/protoc</code>) 位于你新安装的 <code>/usr/local/grpc/bin</code> 之前。</p>
+<ul>
+<li>运行 <code>which protoc</code> 确认你正在使用的是哪个 <code>protoc</code>。</li>
+<li>确保 <code>/usr/local/grpc/bin</code> 在 <code>PATH</code> 的最前面。</li>
+<li>或者，卸载系统自带的 <code>protobuf-compiler</code> (<code>sudo apt remove protobuf-compiler</code>)</li>
+</ul>
+<pre><code>
+</code></pre>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/Windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/2025-12-09-Boost-b2-bjam-%E6%9E%84%E5%BB%BA%E5%8F%82%E6%95%B0%E5%8F%82%E8%80%83%E6%89%8B%E5%86%8C/" rel="prev" title="Boost b2 (bjam) 构建参数参考手册">
+                  <i class="fa fa-angle-left"></i> Boost b2 (bjam) 构建参数参考手册
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-JsonCpp-%E5%BA%93%E9%85%8D%E7%BD%AE%E4%B8%8E%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" rel="next" title="Linux Linux 环境 JsonCpp 库配置与使用指南">
+                  Linux Linux 环境 JsonCpp 库配置与使用指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

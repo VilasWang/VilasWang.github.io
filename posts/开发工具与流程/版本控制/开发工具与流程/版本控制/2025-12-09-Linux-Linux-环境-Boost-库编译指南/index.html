@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍Linux 环境 Boost 库编译指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux Linux 环境 Boost 库编译指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-Boost-%E5%BA%93%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍Linux 环境 Boost 库编译指南的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.187Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Git">
+<meta property="article:tag" content="Linux">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-Boost-%E5%BA%93%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-Boost-%E5%BA%93%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97/","path":"posts/开发工具与流程/版本控制/开发工具与流程/版本控制/2025-12-09-Linux-Linux-环境-Boost-库编译指南/","title":"Linux Linux 环境 Boost 库编译指南"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux Linux 环境 Boost 库编译指南 | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#tags-C-Boost-Linux-%E5%BA%93%E7%BC%96%E8%AF%91-%E7%B3%BB%E7%BB%9F%E5%BA%93-title-Linux-%E7%8E%AF%E5%A2%83%E7%BC%96%E8%AF%91-Boost-%E5%BA%93%E5%AE%8C%E6%95%B4%E6%8C%87%E5%8D%97categories-%E2%80%98C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91%E2%80%99-%E2%80%98C-%E5%9F%BA%E7%A1%80%E4%B8%8E%E8%BF%9B%E9%98%B6%E2%80%99-date-2025-12-04-13-13-20description-%E2%80%9C%E4%B8%93%E4%B8%9A%E6%8A%80%E6%9C%AF%E5%AE%8C%E5%85%A8%E6%8C%87%E5%8D%97%EF%BC%8C%E6%B6%B5%E7%9B%96%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80%E3%80%81%E5%AE%9E%E8%B7%B5%E6%93%8D%E4%BD%9C%E3%80%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E7%AD%89%E5%85%A8%E6%96%B9%E4%BD%8D%E5%86%85%E5%AE%B9%EF%BC%8C%E5%8A%A9%E5%8A%9B%E6%8A%80%E8%83%BD%E5%BF%AB%E9%80%9F%E6%8F%90%E5%8D%87%E3%80%82%E2%80%9D"><span class="nav-number">1.</span> <span class="nav-text">tags: [C++, Boost, Linux, 库编译, 系统库]title: Linux 环境编译 Boost 库完整指南categories: [‘C++核心开发’, ‘C++基础与进阶’]date: 2025-12-04 13:13:20description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux-%E7%8E%AF%E5%A2%83-Boost-%E5%BA%93%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97"><span class="nav-number">2.</span> <span class="nav-text">Linux 环境 Boost 库编译指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-number">2.1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%B8%80%EF%BC%9A%E4%BD%BF%E7%94%A8%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%E5%AE%89%E8%A3%85"><span class="nav-number">2.2.</span> <span class="nav-text">方式一：使用包管理器安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%EF%BC%9A%E4%BB%8E%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91-%E6%8E%A8%E8%8D%90"><span class="nav-number">2.3.</span> <span class="nav-text">方式二：从源码编译 (推荐)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-number">2.3.1.</span> <span class="nav-text">1. 安装依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E4%B8%8B%E8%BD%BD%E6%BA%90%E7%A0%81"><span class="nav-number">2.3.2.</span> <span class="nav-text">2. 下载源码</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E9%A1%B9-A-%E4%BD%BF%E7%94%A8-wget-%E4%B8%8B%E8%BD%BD"><span class="nav-number">2.3.2.1.</span> <span class="nav-text">选项 A: 使用 wget 下载</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%80%89%E9%A1%B9-B-%E4%BD%BF%E7%94%A8-Git-%E5%85%8B%E9%9A%86"><span class="nav-number">2.3.2.2.</span> <span class="nav-text">选项 B: 使用 Git 克隆</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E7%94%9F%E6%88%90%E7%BC%96%E8%AF%91%E5%B7%A5%E5%85%B7"><span class="nav-number">2.3.3.</span> <span class="nav-text">3. 生成编译工具</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E7%BC%96%E8%AF%91%E4%B8%8E%E5%AE%89%E8%A3%85"><span class="nav-number">2.3.4.</span> <span class="nav-text">4. 编译与安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E5%90%8E%E9%85%8D%E7%BD%AE"><span class="nav-number">2.4.</span> <span class="nav-text">编译后配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E9%85%8D%E7%BD%AE%E5%8A%A8%E6%80%81%E9%93%BE%E6%8E%A5%E5%99%A8"><span class="nav-number">2.4.1.</span> <span class="nav-text">配置动态链接器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E9%AA%8C%E8%AF%81"><span class="nav-number">2.5.</span> <span class="nav-text">测试验证</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E7%BC%96%E5%86%99%E6%B5%8B%E8%AF%95%E4%BB%A3%E7%A0%81"><span class="nav-number">2.5.1.</span> <span class="nav-text">1. 编写测试代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E7%BC%96%E8%AF%91%E5%B9%B6%E8%BF%90%E8%A1%8C"><span class="nav-number">2.5.2.</span> <span class="nav-text">2. 编译并运行</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9%E8%AF%A6%E8%A7%A3"><span class="nav-number">2.6.</span> <span class="nav-text">编译选项详解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90-Makefile-CMake"><span class="nav-number">2.7.</span> <span class="nav-text">项目集成 (Makefile &amp; CMake)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Makefile-%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.7.1.</span> <span class="nav-text">Makefile 示例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CMakeLists-txt-%E7%A4%BA%E4%BE%8B"><span class="nav-number">2.7.2.</span> <span class="nav-text">CMakeLists.txt 示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-number">2.8.</span> <span class="nav-text">常见问题</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Linux-Linux-%E7%8E%AF%E5%A2%83-Boost-%E5%BA%93%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux Linux 环境 Boost 库编译指南 | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍Linux 环境 Boost 库编译指南的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux Linux 环境 Boost 库编译指南
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">开发工具与流程</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/" itemprop="url" rel="index"><span itemprop="name">版本控制</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍Linux 环境 Boost 库编译指南的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><hr>
+<h2 id="tags-C-Boost-Linux-库编译-系统库-title-Linux-环境编译-Boost-库完整指南categories-‘C-核心开发’-‘C-基础与进阶’-date-2025-12-04-13-13-20description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"><a href="#tags-C-Boost-Linux-库编译-系统库-title-Linux-环境编译-Boost-库完整指南categories-‘C-核心开发’-‘C-基础与进阶’-date-2025-12-04-13-13-20description-“专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”" class="headerlink" title="tags: [C++, Boost, Linux, 库编译, 系统库]title: Linux 环境编译 Boost 库完整指南categories: [‘C++核心开发’, ‘C++基础与进阶’]date: 2025-12-04 13:13:20description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”"></a>tags: [C++, Boost, Linux, 库编译, 系统库]<br>title: Linux 环境编译 Boost 库完整指南<br>categories: [‘C++核心开发’, ‘C++基础与进阶’]<br>date: 2025-12-04 13:13:20<br>description: “专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。”</h2><h1 id="Linux-环境-Boost-库编译指南"><a href="#Linux-环境-Boost-库编译指南" class="headerlink" title="Linux 环境 Boost 库编译指南"></a>Linux 环境 Boost 库编译指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%96%B9%E5%BC%8F%E4%B8%80%E4%BD%BF%E7%94%A8%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8%E5%AE%89%E8%A3%85">方式一：使用包管理器安装</a></li>
+<li><a href="#%E6%96%B9%E5%BC%8F%E4%BA%8C%E4%BB%8E%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91-%E6%8E%A8%E8%8D%90">方式二：从源码编译 (推荐)</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E5%90%8E%E9%85%8D%E7%BD%AE">编译后配置</a></li>
+<li><a href="#%E6%B5%8B%E8%AF%95%E9%AA%8C%E8%AF%81">测试验证</a></li>
+<li><a href="#%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9%E8%AF%A6%E8%A7%A3">编译选项详解</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90-makefile--cmake">项目集成 (Makefile &amp; CMake)</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+</ul>
+<h2 id="方式一：使用包管理器安装"><a href="#方式一：使用包管理器安装" class="headerlink" title="方式一：使用包管理器安装"></a>方式一：使用包管理器安装</h2><p>这是最简单的方式，但版本可能不是最新的。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 适用于 Ubuntu/Debian</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 搜索可用的 Boost 包</span></span><br><span class="line"><span class="built_in">sudo</span> apt-cache search libboost</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 安装开发包 (包含头文件和库)</span></span><br><span class="line"><span class="comment"># 这会安装一个默认版本的所有模块</span></span><br><span class="line"><span class="built_in">sudo</span> apt install libboost-all-dev</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 验证安装</span></span><br><span class="line">dpkg -s libboost-dev | grep Version</span><br></pre></td></tr></table></figure>
+
+<h2 id="方式二：从源码编译-推荐"><a href="#方式二：从源码编译-推荐" class="headerlink" title="方式二：从源码编译 (推荐)"></a>方式二：从源码编译 (推荐)</h2><p>这种方式可以让你完全控制 Boost 的版本、编译选项和安装路径。</p>
+<h3 id="1-安装依赖"><a href="#1-安装依赖" class="headerlink" title="1. 安装依赖"></a>1. 安装依赖</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 适用于 Ubuntu/Debian</span></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y build-essential g++ python3-dev autotools-dev libicu-dev libbz2-dev libopenmpi-dev</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-下载源码"><a href="#2-下载源码" class="headerlink" title="2. 下载源码"></a>2. 下载源码</h3><blockquote>
+<p><strong>提示</strong>: 本文以 <strong>1.85.0</strong> 版本为例。建议访问 <a target="_blank" rel="noopener" href="https://www.boost.org/users/history/">Boost 官网</a> 获取最新版本号，并替换下面的命令。</p>
+</blockquote>
+<h4 id="选项-A-使用-wget-下载"><a href="#选项-A-使用-wget-下载" class="headerlink" title="选项 A: 使用 wget 下载"></a>选项 A: 使用 wget 下载</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下载源码包</span></span><br><span class="line">wget https://boostorg.jfrog.io/artifactory/main/release/1.85.0/source/boost_1_85_0.tar.bz2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 解压</span></span><br><span class="line">tar --bzip2 -xf boost_1_85_0.tar.bz2</span><br><span class="line"><span class="built_in">cd</span> boost_1_85_0/</span><br></pre></td></tr></table></figure>
+
+<h4 id="选项-B-使用-Git-克隆"><a href="#选项-B-使用-Git-克隆" class="headerlink" title="选项 B: 使用 Git 克隆"></a>选项 B: 使用 Git 克隆</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 克隆特定版本的标签</span></span><br><span class="line">git <span class="built_in">clone</span> --branch boost-1.85.0 https://github.com/boostorg/boost.git boost-1.85.0</span><br><span class="line"><span class="built_in">cd</span> boost-1.85.0</span><br><span class="line"></span><br><span class="line"><span class="comment"># [关键步骤] 初始化并获取所有子模块（即各个库的源码）</span></span><br><span class="line">git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-生成编译工具"><a href="#3-生成编译工具" class="headerlink" title="3. 生成编译工具"></a>3. 生成编译工具</h3><p>此步骤会生成 <code>b2</code> 编译引擎。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># --prefix 指定了最终的安装目录</span></span><br><span class="line">./bootstrap.sh --prefix=/usr/local/boost</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-编译与安装"><a href="#4-编译与安装" class="headerlink" title="4. 编译与安装"></a>4. 编译与安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. (可选) 查看所有可以编译的库</span></span><br><span class="line">./b2 --show-libraries</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 执行编译和安装</span></span><br><span class="line"><span class="comment"># -j 后面的数字是并行编译的线程数，通常设为CPU核心数 `$(nproc)`</span></span><br><span class="line"><span class="comment"># --with-&lt;library&gt;` 用于指定编译哪些库，不写则编译所有需要的库</span></span><br><span class="line"><span class="comment"># 推荐只编译需要的库以节省时间</span></span><br><span class="line"><span class="built_in">sudo</span> ./b2 install -j$(<span class="built_in">nproc</span>) --with-thread --with-system --with-serialization --with-filesystem --with-date_time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 如果想编译所有库 (耗时很长)</span></span><br><span class="line"><span class="comment"># sudo ./b2 install -j$(nproc)</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="编译后配置"><a href="#编译后配置" class="headerlink" title="编译后配置"></a>编译后配置</h2><h3 id="配置动态链接器"><a href="#配置动态链接器" class="headerlink" title="配置动态链接器"></a>配置动态链接器</h3><p>为了让系统能在运行时找到刚刚安装的 Boost 库文件。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 创建一个新的 linker 配置文件</span></span><br><span class="line"><span class="built_in">sudo</span> nano /etc/ld.so.conf.d/boost.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 在文件中添加 Boost 库的路径 (即 bootstrap 时 --prefix 指定的路径下的 lib 目录)</span></span><br><span class="line">/usr/local/boost/lib</span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 保存文件并刷新 linker 缓存</span></span><br><span class="line"><span class="built_in">sudo</span> ldconfig</span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 验证是否生效 (应能看到 boost 相关的库)</span></span><br><span class="line">ldconfig -p | grep boost</span><br></pre></td></tr></table></figure>
+
+<h2 id="测试验证"><a href="#测试验证" class="headerlink" title="测试验证"></a>测试验证</h2><h3 id="1-编写测试代码"><a href="#1-编写测试代码" class="headerlink" title="1. 编写测试代码"></a>1. 编写测试代码</h3><p><code>test_boost.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/version.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/thread.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">hello_boost</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Hello from Boost thread!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Using Boost Version: &quot;</span> &lt;&lt; BOOST_LIB_VERSION &lt;&lt; std::endl;</span><br><span class="line">    </span><br><span class="line">    <span class="function">boost::thread <span class="title">my_thread</span><span class="params">(&amp;hello_boost)</span></span>;</span><br><span class="line">    my_thread.<span class="built_in">join</span>();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-编译并运行"><a href="#2-编译并运行" class="headerlink" title="2. 编译并运行"></a>2. 编译并运行</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -I 指定头文件路径, -L 指定库文件路径</span></span><br><span class="line"><span class="comment"># -lboost_thread 链接 boost.thread 库, -lpthread 是其依赖</span></span><br><span class="line">g++ test_boost.cpp -I/usr/local/boost/include -L/usr/local/boost/lib -o test_boost -lboost_thread -lpthread</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行</span></span><br><span class="line">./test_boost</span><br></pre></td></tr></table></figure>
+<p>如果成功输出版本号和 “Hello from Boost thread!”，则说明编译安装成功。</p>
+<h2 id="编译选项详解"><a href="#编译选项详解" class="headerlink" title="编译选项详解"></a>编译选项详解</h2><p>在执行 <code>./b2</code> 命令时，可以附加许多参数来控制编译行为。</p>
+<ul>
+<li><code>--with-&lt;library&gt;</code> &#x2F; <code>--without-&lt;library&gt;</code>: 指定编译或不编译某个库。</li>
+<li><code>variant=debug|release</code>: 编译调试版还是发布版。</li>
+<li><code>link=static|shared</code>: 编译静态库 (.a) 还是动态库 (.so)。</li>
+<li><code>runtime-link=static|shared</code>: 链接到静态 C++ 运行时库还是动态的。</li>
+<li><code>address-model=32|64</code>: 编译 32 位或 64 位。</li>
+</ul>
+<p><strong>示例：编译 64 位静态发布版</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">sudo</span> ./b2 install -j$(<span class="built_in">nproc</span>) variant=release <span class="built_in">link</span>=static address-model=64</span><br></pre></td></tr></table></figure>
+
+<h2 id="项目集成-Makefile-CMake"><a href="#项目集成-Makefile-CMake" class="headerlink" title="项目集成 (Makefile &amp; CMake)"></a>项目集成 (Makefile &amp; CMake)</h2><h3 id="Makefile-示例"><a href="#Makefile-示例" class="headerlink" title="Makefile 示例"></a>Makefile 示例</h3><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">CXX = g++</span><br><span class="line">CXXFLAGS = -std=c++17 -Wall -O2</span><br><span class="line"></span><br><span class="line"><span class="comment"># Boost 路径</span></span><br><span class="line">BOOST_ROOT = /usr/local/boost</span><br><span class="line">BOOST_INCLUDE = <span class="variable">$(BOOST_ROOT)</span>/<span class="keyword">include</span></span><br><span class="line">BOOST_LIB_PATH = <span class="variable">$(BOOST_ROOT)</span>/lib</span><br><span class="line"></span><br><span class="line"><span class="comment"># 需要链接的 Boost 库</span></span><br><span class="line">BOOST_LIBS = -lboost_system -lboost_thread</span><br><span class="line"></span><br><span class="line">TARGET = my_app</span><br><span class="line">SOURCES = main.cpp</span><br><span class="line"></span><br><span class="line"><span class="variable">$(TARGET)</span>: <span class="variable">$(SOURCES)</span></span><br><span class="line">	<span class="variable">$(CXX)</span> <span class="variable">$(CXXFLAGS)</span> -I<span class="variable">$(BOOST_INCLUDE)</span> -L<span class="variable">$(BOOST_LIB_PATH)</span> -o <span class="variable">$@</span> <span class="variable">$^</span> <span class="variable">$(BOOST_LIBS)</span> -lpthread</span><br><span class="line"></span><br><span class="line"><span class="section">clean:</span></span><br><span class="line">	rm -f <span class="variable">$(TARGET)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="CMakeLists-txt-示例"><a href="#CMakeLists-txt-示例" class="headerlink" title="CMakeLists.txt 示例"></a>CMakeLists.txt 示例</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.15</span>)</span><br><span class="line"><span class="keyword">project</span>(MyBoostProject CXX)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">17</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 让 CMake 寻找 Boost</span></span><br><span class="line"><span class="comment"># 你可以设置 BOOST_ROOT 环境变量或在 CMake 命令中指定</span></span><br><span class="line"><span class="comment"># set(BOOST_ROOT &quot;/usr/local/boost&quot;)</span></span><br><span class="line"><span class="keyword">find_package</span>(Boost <span class="number">1.85</span>.<span class="number">0</span> REQUIRED COMPONENTS system thread filesystem)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(Boost_FOUND)</span><br><span class="line">    <span class="keyword">message</span>(STATUS <span class="string">&quot;Found Boost: $&#123;Boost_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line">    <span class="keyword">include_directories</span>(<span class="variable">$&#123;Boost_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">add_executable</span>(my_app main.cpp)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 链接 Boost 库</span></span><br><span class="line">    <span class="keyword">target_link_libraries</span>(my_app PRIVATE Boost::system Boost::thread Boost::filesystem)</span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>Q1: 编译失败，提示缺少 Python.h?</strong><br><strong>A</strong>: 需要安装 Python 开发包。<code>sudo apt install python3-dev</code>。</p>
+<p><strong>Q2: 编译时提示找不到库，如 <code>cannot find -lboost_thread</code>?</strong><br><strong>A</strong>: 确保 <code>-L/usr/local/boost/lib</code> 路径正确，并且该目录下确实存在对应的库文件（如 <code>libboost_thread.so</code> 或 <code>libboost_thread.a</code>）。</p>
+<p><strong>Q3: 运行时提示 <code>error while loading shared libraries</code>?</strong><br><strong>A</strong>: 这是因为动态链接器找不到库。请返回 <a href="#%E7%BC%96%E8%AF%91%E5%90%8E%E9%85%8D%E7%BD%AE">编译后配置</a> 章节，正确设置 <code>ldconfig</code>。临时的解决方法是 <code>export LD_LIBRARY_PATH=/usr/local/boost/lib:$LD_LIBRARY_PATH</code>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># Linux</a>
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4%E7%AE%A1%E7%90%86/Windows%E6%9C%8D%E5%8A%A1%E7%AE%A1%E7%90%86/2025-12-09--FileZilla-Server-%E8%8A%B1%E7%94%9F%E5%A3%B3%E5%86%85%E7%BD%91%E7%A9%BF%E9%80%8F%E9%85%8D%E7%BD%AE%E6%8C%87%E5%8D%97/" rel="prev" title="🌐 FileZilla Server + 花生壳内网穿透配置指南">
+                  <i class="fa fa-angle-left"></i> 🌐 FileZilla Server + 花生壳内网穿透配置指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Git-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4%E6%8C%87%E5%8D%97/" rel="next" title="Git 常用命令指南">
+                  Git 常用命令指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter+Variable:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=-apple-system:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=BlinkMacSystemFont:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Segoe+UI':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=sans-serif:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=JetBrains+Mono:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Source+Code+Pro':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family='Courier+New':ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=monospace:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap&subset=latin,latin-ext">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"vilaswang.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":true,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":360,"width_dual_column":280,"display":"post","padding":24,"offset":16},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.json","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false,"trigger":"auto","display":3,"path":"search.json"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="详细介绍🤖 C++ Web Project Specialized Agents Design Guide的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="🤖 C++ Web Project Specialized Agents Design Guide">
+<meta property="og:url" content="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/2025-12-09--C-Web-Project-Specialized-Agents-Design-Guide/">
+<meta property="og:site_name" content="个人技术知识库">
+<meta property="og:description" content="详细介绍🤖 C++ Web Project Specialized Agents Design Guide的技术实现、配置方法、最佳实践等内容。">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2025-12-09T15:45:49.000Z">
+<meta property="article:modified_time" content="2025-12-12T05:05:33.183Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="Git">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/2025-12-09--C-Web-Project-Specialized-Agents-Design-Guide/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/2025-12-09--C-Web-Project-Specialized-Agents-Design-Guide/","path":"posts/开发工具与流程/构建与部署/开发工具与流程/构建与部署/2025-12-09--C-Web-Project-Specialized-Agents-Design-Guide/","title":"🤖 C++ Web Project Specialized Agents Design Guide"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>🤖 C++ Web Project Specialized Agents Design Guide | 个人技术知识库</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.5.0/search.js" integrity="sha256-xFC6PJ82SL9b3WkGjFavNiA9gm5z6UBxWPiu4CYjptg=" crossorigin="anonymous" defer></script>
+<script src="/js/third-party/search/local-search.js" defer></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">个人技术知识库</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">技术文档、开发经验、问题解决</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-overview"><a href="/overview/" rel="section"><i class="fa fa-dashboard fa-fw"></i>overview</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%F0%9F%A4%96-C-Web-Project-Specialized-Agents-Design-Guide"><span class="nav-number">1.</span> <span class="nav-text">🤖 C++ Web Project Specialized Agents Design Guide</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="nav-number">1.1.</span> <span class="nav-text">📑 目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%F0%9F%93%96-%E6%A6%82%E8%BF%B0"><span class="nav-number">1.2.</span> <span class="nav-text">1. 📖 概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="nav-number">1.2.1.</span> <span class="nav-text">🎯 设计目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8F%97%EF%B8%8F-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="nav-number">1.2.2.</span> <span class="nav-text">🏗️ 系统架构图</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%F0%9F%8E%AF-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="nav-number">1.3.</span> <span class="nav-text">2. 🎯 设计原则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%F0%9F%94%84-%E8%81%8C%E8%B4%A3%E5%88%86%E7%A6%BB%E5%8E%9F%E5%88%99"><span class="nav-number">1.3.1.</span> <span class="nav-text">2.1 🔄 职责分离原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%F0%9F%93%8B-%E5%8F%AF%E8%BF%BD%E6%BA%AF%E6%80%A7%E5%8E%9F%E5%88%99"><span class="nav-number">1.3.2.</span> <span class="nav-text">2.2 📋 可追溯性原则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%F0%9F%94%84-%E8%BF%AD%E4%BB%A3%E6%94%B9%E8%BF%9B%E5%8E%9F%E5%88%99"><span class="nav-number">1.3.3.</span> <span class="nav-text">2.3 🔄 迭代改进原则</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%F0%9F%8F%A2-Agent-%E6%9E%B6%E6%9E%84"><span class="nav-number">1.4.</span> <span class="nav-text">3. 🏢 Agent 架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%F0%9F%94%A7-%E6%A0%87%E5%87%86%E5%8C%96-Agent-%E7%BB%93%E6%9E%84"><span class="nav-number">1.4.1.</span> <span class="nav-text">3.1 🔧 标准化 Agent 结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%F0%9F%94%97-Agent-%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="nav-number">1.4.2.</span> <span class="nav-text">3.2 🔗 Agent 通信协议</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%F0%9F%8E%AD-%E6%A0%B8%E5%BF%83%E5%9B%A2%E9%98%9F-Agents"><span class="nav-number">1.5.</span> <span class="nav-text">4. 🎭 核心团队 Agents</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%F0%9F%8F%97%EF%B8%8F-Project-Architect-Agent"><span class="nav-number">1.5.1.</span> <span class="nav-text">4.1 🏗️ Project Architect Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Agent-cpp-architect"><span class="nav-number">1.5.1.1.</span> <span class="nav-text">Agent: cpp_architect</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%F0%9F%93%9D-API-Designer-Agent"><span class="nav-number">1.5.2.</span> <span class="nav-text">4.2 📝 API Designer Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Agent-api-designer"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">Agent: api_designer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E2%9A%99%EF%B8%8F-Core-Logic-Developer-Agent"><span class="nav-number">1.5.3.</span> <span class="nav-text">4.3 ⚙️ Core Logic Developer Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Agent-core-logic-developer"><span class="nav-number">1.5.3.1.</span> <span class="nav-text">Agent: core_logic_developer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-%F0%9F%8C%90-Web-Service-Integrator-Agent"><span class="nav-number">1.5.4.</span> <span class="nav-text">4.4 🌐 Web Service Integrator Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Agent-web-service-integrator"><span class="nav-number">1.5.4.1.</span> <span class="nav-text">Agent: web_service_integrator</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-5-%F0%9F%94%A8-Build-Dependency-Expert-Agent"><span class="nav-number">1.5.5.</span> <span class="nav-text">4.5 🔨 Build &amp; Dependency Expert Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Agent-build-dependency-expert"><span class="nav-number">1.5.5.1.</span> <span class="nav-text">Agent: build_dependency_expert</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-6-%F0%9F%94%8D-QA-Specialist-Agent"><span class="nav-number">1.5.6.</span> <span class="nav-text">4.6 🔍 QA Specialist Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Agent-qa-specialist"><span class="nav-number">1.5.6.1.</span> <span class="nav-text">Agent: qa_specialist</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-7-%F0%9F%9A%80-Deployment-Operator-Agent"><span class="nav-number">1.5.7.</span> <span class="nav-text">4.7 🚀 Deployment Operator Agent</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Agent-deployment-operator"><span class="nav-number">1.5.7.1.</span> <span class="nav-text">Agent: deployment_operator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%F0%9F%94%84-%E5%8D%8F%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-number">1.6.</span> <span class="nav-text">5. 🔄 协作流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-%F0%9F%93%8B-%E6%A0%87%E5%87%86%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-number">1.6.1.</span> <span class="nav-text">5.1 📋 标准开发流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-%F0%9F%94%84-%E8%BF%AD%E4%BB%A3%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="nav-number">1.6.2.</span> <span class="nav-text">5.2 🔄 迭代开发流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-%F0%9F%9A%A8-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="nav-number">1.6.3.</span> <span class="nav-text">5.3 🚨 错误处理流程</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%F0%9F%93%96-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97"><span class="nav-number">1.7.</span> <span class="nav-text">6. 📖 使用指南</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-%F0%9F%9A%80-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="nav-number">1.7.1.</span> <span class="nav-text">6.1 🚀 快速开始</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-1-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.7.1.1.</span> <span class="nav-text">步骤 1: 初始化项目</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-2-%E7%94%9F%E6%88%90%E6%9E%B6%E6%9E%84"><span class="nav-number">1.7.1.2.</span> <span class="nav-text">步骤 2: 生成架构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%AD%A5%E9%AA%A4-3-%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E9%80%BB%E8%BE%91"><span class="nav-number">1.7.1.3.</span> <span class="nav-text">步骤 3: 实现核心逻辑</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-%F0%9F%94%A7-Agent-%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="nav-number">1.7.2.</span> <span class="nav-text">6.2 🔧 Agent 管理命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-3-%F0%9F%93%9D-%E5%8D%8F%E4%BD%9C%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="nav-number">1.7.3.</span> <span class="nav-text">6.3 📝 协作最佳实践</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-%F0%9F%94%84-%E6%89%A9%E5%B1%95%E5%92%8C%E7%BB%B4%E6%8A%A4"><span class="nav-number">1.8.</span> <span class="nav-text">7. 🔄 扩展和维护</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#7-1-%E2%9E%95-%E6%B7%BB%E5%8A%A0%E6%96%B0-Agent"><span class="nav-number">1.8.1.</span> <span class="nav-text">7.1 ➕ 添加新 Agent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-2-%F0%9F%94%A7-Agent-%E4%BC%98%E5%8C%96"><span class="nav-number">1.8.2.</span> <span class="nav-text">7.2 🔧 Agent 优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-3-%F0%9F%93%8A-Agent-%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="nav-number">1.8.3.</span> <span class="nav-text">7.3 📊 Agent 性能指标</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%F0%9F%93%8A-%E6%80%BB%E7%BB%93"><span class="nav-number">1.9.</span> <span class="nav-text">📊 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E2%9C%85-Agent-%E5%9B%A2%E9%98%9F%E4%BC%98%E5%8A%BF"><span class="nav-number">1.9.1.</span> <span class="nav-text">✅ Agent 团队优势</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%8E%AF-%E5%AE%9E%E6%96%BD%E5%BB%BA%E8%AE%AE"><span class="nav-number">1.9.2.</span> <span class="nav-text">🎯 实施建议</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%F0%9F%93%9A-%E6%89%A9%E5%B1%95%E8%B5%84%E6%BA%90"><span class="nav-number">1.9.3.</span> <span class="nav-text">📚 扩展资源</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">vilas</p>
+  <div class="site-description" itemprop="description">一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">59</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://vilaswang.github.io/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/2025-12-09--C-Web-Project-Specialized-Agents-Design-Guide/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="vilas">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="个人技术知识库">
+      <meta itemprop="description" content="一个结构化的技术文档管理系统，涵盖开发工具、编程语言、数据库、Web服务器、操作系统、安全证书和云服务等领域">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="🤖 C++ Web Project Specialized Agents Design Guide | 个人技术知识库">
+      <meta itemprop="description" content="详细介绍🤖 C++ Web Project Specialized Agents Design Guide的技术实现、配置方法、最佳实践等内容。">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          🤖 C++ Web Project Specialized Agents Design Guide
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-12-09 23:45:49" itemprop="dateCreated datePublished" datetime="2025-12-09T23:45:49+08:00">2025-12-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-12-12 13:05:33" itemprop="dateModified" datetime="2025-12-12T13:05:33+08:00">2025-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">开发工具与流程</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E6%9E%84%E5%BB%BA%E4%B8%8E%E9%83%A8%E7%BD%B2/" itemprop="url" rel="index"><span itemprop="name">构建与部署</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+            <div class="post-description">详细介绍🤖 C++ Web Project Specialized Agents Design Guide的技术实现、配置方法、最佳实践等内容。</div>
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><h1 id="🤖-C-Web-Project-Specialized-Agents-Design-Guide"><a href="#🤖-C-Web-Project-Specialized-Agents-Design-Guide" class="headerlink" title="🤖 C++ Web Project Specialized Agents Design Guide"></a>🤖 C++ Web Project Specialized Agents Design Guide</h1><blockquote>
+<p><strong>文档创建时间</strong>: 2025-11-14<br><strong>最后更新</strong>: 2025-11-14<br><strong>标签</strong>: <code>agents</code>, <code>cpp</code>, <code>web-development</code>, <code>specialization</code>, <code>ai-assistants</code>, <code>claude-code</code></p>
+</blockquote>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#1-%E6%A6%82%E8%BF%B0">1. 概述</a></li>
+<li><a href="#2-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99">2. 设计原则</a></li>
+<li><a href="#3-agent-%E6%9E%B6%E6%9E%84">3. Agent 架构</a></li>
+<li><a href="#4-%E6%A0%B8%E5%BF%83%E5%9B%A2%E9%98%9F-agents">4. 核心团队 Agents</a><ul>
+<li><a href="#41-project-architect-agent">4.1 Project Architect Agent</a></li>
+<li><a href="#42-api-designer-agent">4.2 API Designer Agent</a></li>
+<li><a href="#43-core-logic-developer-agent">4.3 Core Logic Developer Agent</a></li>
+<li><a href="#44-web-service-integrator-agent">4.4 Web Service Integrator Agent</a></li>
+<li><a href="#45-build--dependency-expert-agent">4.5 Build &amp; Dependency Expert Agent</a></li>
+<li><a href="#46-qa-specialist-agent">4.6 QA Specialist Agent</a></li>
+<li><a href="#47-deployment-operator-agent">4.7 Deployment Operator Agent</a></li>
+</ul>
+</li>
+<li><a href="#5-%E5%8D%8F%E4%BD%9C%E6%B5%81%E7%A8%8B">5. 协作流程</a></li>
+<li><a href="#6-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97">6. 使用指南</a></li>
+<li><a href="#7-%E6%89%A9%E5%B1%95%E5%92%8C%E7%BB%B4%E6%8A%A4">7. 扩展和维护</a></li>
+</ul>
+<hr>
+<h2 id="1-📖-概述"><a href="#1-📖-概述" class="headerlink" title="1. 📖 概述"></a>1. 📖 概述</h2><p>本指南详细说明如何为 C++ Web 项目创建专门化的 AI Agent 团队，每个 Agent 都具有特定的职责和专业能力，通过协同工作完成从设计到部署的完整开发流程。</p>
+<h3 id="🎯-设计目标"><a href="#🎯-设计目标" class="headerlink" title="🎯 设计目标"></a>🎯 设计目标</h3><ul>
+<li>✅ <strong>专业化分工</strong> - 每个 Agent 专注于特定领域</li>
+<li>✅ <strong>流程标准化</strong> - 建立清晰的开发工作流程</li>
+<li>✅ <strong>质量保证</strong> - 确保代码质量和最佳实践</li>
+<li>✅ <strong>可扩展性</strong> - 支持项目规模和复杂度增长</li>
+<li>✅ <strong>一致性</strong> - 维护项目规范和标准统一</li>
+</ul>
+<h3 id="🏗️-系统架构图"><a href="#🏗️-系统架构图" class="headerlink" title="🏗️ 系统架构图"></a>🏗️ 系统架构图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    A[Project Requirements] --&gt; B[Team Lead / Coordinator]</span><br><span class="line"></span><br><span class="line">    B --&gt; C[Project Architect]</span><br><span class="line">    B --&gt; D[API Designer]</span><br><span class="line">    B --&gt; E[Core Logic Developer]</span><br><span class="line">    B --&gt; F[Web Service Integrator]</span><br><span class="line">    B --&gt; G[Build Expert]</span><br><span class="line">    B --&gt; H[QA Specialist]</span><br><span class="line">    B --&gt; I[Deployment Operator]</span><br><span class="line"></span><br><span class="line">    C --&gt; J[System Architecture]</span><br><span class="line">    C --&gt; K[Technology Stack]</span><br><span class="line"></span><br><span class="line">    D --&gt; L[API Specifications]</span><br><span class="line">    D --&gt; M[Documentation]</span><br><span class="line"></span><br><span class="line">    E --&gt; N[Business Logic]</span><br><span class="line">    E --&gt; O[Core Algorithms]</span><br><span class="line"></span><br><span class="line">    F --&gt; P[Web Framework Integration]</span><br><span class="line">    F --&gt; Q[Request Handling]</span><br><span class="line"></span><br><span class="line">    G --&gt; R[Build Configuration]</span><br><span class="line">    G --&gt; S[Dependency Management]</span><br><span class="line"></span><br><span class="line">    H --&gt; T[Testing Strategy]</span><br><span class="line">    H --&gt; U[Quality Metrics]</span><br><span class="line"></span><br><span class="line">    I --&gt; V[Containerization]</span><br><span class="line">    I --&gt; W[Deployment Scripts]</span><br><span class="line"></span><br><span class="line">    J --&gt; X[C++ Web Application]</span><br><span class="line">    L --&gt; X</span><br><span class="line">    N --&gt; X</span><br><span class="line">    P --&gt; X</span><br><span class="line">    R --&gt; X</span><br><span class="line">    T --&gt; X</span><br><span class="line">    V --&gt; X</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-🎯-设计原则"><a href="#2-🎯-设计原则" class="headerlink" title="2. 🎯 设计原则"></a>2. 🎯 设计原则</h2><h3 id="2-1-🔄-职责分离原则"><a href="#2-1-🔄-职责分离原则" class="headerlink" title="2.1 🔄 职责分离原则"></a>2.1 🔄 职责分离原则</h3><p>每个 Agent 都应该有明确的职责边界，避免功能重叠：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[架构设计] --&gt; B[业务逻辑] --&gt; C[Web集成] --&gt; D[构建部署]</span><br><span class="line"></span><br><span class="line">    style A fill:#e1f5fe</span><br><span class="line">    style B fill:#f3e5f5</span><br><span class="line">    style C fill:#e8f5e8</span><br><span class="line">    style D fill:#fff3e0</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-📋-可追溯性原则"><a href="#2-2-📋-可追溯性原则" class="headerlink" title="2.2 📋 可追溯性原则"></a>2.2 📋 可追溯性原则</h3><p>每个产出物都应该能够追溯到创建它的 Agent：</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>产出物</th>
+<th>可追溯标识</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Architect</td>
+<td><code>CMakeLists.txt</code></td>
+<td><code>// Generated by: cpp_architect</code></td>
+</tr>
+<tr>
+<td>API Designer</td>
+<td>OpenAPI spec</td>
+<td><code>// Designed by: api_designer</code></td>
+</tr>
+<tr>
+<td>Core Logic</td>
+<td><code>.cpp/.hpp</code> files</td>
+<td><code>// Implemented by: core_logic_developer</code></td>
+</tr>
+</tbody></table>
+<h3 id="2-3-🔄-迭代改进原则"><a href="#2-3-🔄-迭代改进原则" class="headerlink" title="2.3 🔄 迭代改进原则"></a>2.3 🔄 迭代改进原则</h3><p>Agent 应该能够基于反馈进行迭代改进，而不需要完全重写。</p>
+<hr>
+<h2 id="3-🏢-Agent-架构"><a href="#3-🏢-Agent-架构" class="headerlink" title="3. 🏢 Agent 架构"></a>3. 🏢 Agent 架构</h2><h3 id="3-1-🔧-标准化-Agent-结构"><a href="#3-1-🔧-标准化-Agent-结构" class="headerlink" title="3.1 🔧 标准化 Agent 结构"></a>3.1 🔧 标准化 Agent 结构</h3><p>每个 Agent 都遵循统一的模板结构：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Agent: &#123;agent<span class="emphasis">_name&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">## Description</span></span></span><br><span class="line"><span class="emphasis"><span class="section">&#123;详细的角色描述和职责&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">## Capabilities</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;核心能力列表&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;专业技能&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;工具和框架&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">## Workflow</span></span></span><br><span class="line"><span class="emphasis"><span class="section">1. &#123;步骤1&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section">2. &#123;步骤2&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section">3. &#123;步骤3&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">## Input Dependencies</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;需要的前置输入&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;依赖的文件或配置&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">## Output Artifacts</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;生成的文件&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;文档产出&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;配置文件&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section">## Collaboration</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;与其他 Agent 的协作方式&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;交互接口&#125;</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- &#123;数据交换格式&#125;</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-🔗-Agent-通信协议"><a href="#3-2-🔗-Agent-通信协议" class="headerlink" title="3.2 🔗 Agent 通信协议"></a>3.2 🔗 Agent 通信协议</h3><p>定义标准化的 Agent 间通信格式：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;agent_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;core_logic_developer&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;task_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;task_uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;inputs&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;api_spec&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/openapi.yaml&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;architecture&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/architecture.md&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;outputs&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;source_files&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;src/*.cpp&quot;</span><span class="punctuation">,</span> <span class="string">&quot;include/*.hpp&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;unit_tests&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;tests/*.cpp&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;metadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;created_at&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-11-14T10:00:00Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-🎭-核心团队-Agents"><a href="#4-🎭-核心团队-Agents" class="headerlink" title="4. 🎭 核心团队 Agents"></a>4. 🎭 核心团队 Agents</h2><h3 id="4-1-🏗️-Project-Architect-Agent"><a href="#4-1-🏗️-Project-Architect-Agent" class="headerlink" title="4.1 🏗️ Project Architect Agent"></a>4.1 🏗️ Project Architect Agent</h3><h4 id="Agent-cpp-architect"><a href="#Agent-cpp-architect" class="headerlink" title="Agent: cpp_architect"></a>Agent: <code>cpp_architect</code></h4><p><strong>Description:</strong><br>你是一位经验丰富的 C++ 系统架构师。你的核心职责是为新的 C++ Web 服务项目进行高层次设计和技术选型。你专注于系统的可扩展性、性能和可维护性。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>系统架构设计和模式选择</li>
+<li>C++ Web 框架技术选型</li>
+<li>性能分析和优化策略</li>
+<li>代码规范和最佳实践制定</li>
+<li>项目结构设计</li>
+<li>依赖关系管理</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>需求分析</strong> - 分析项目需求，确定核心模块和组件</li>
+<li><strong>技术选型</strong> - 选择合适的 C++ Web 框架并说明理由</li>
+<li><strong>架构设计</strong> - 设计系统架构图，包括组件关系和数据流</li>
+<li><strong>接口定义</strong> - 定义关键的数据结构、接口和命名空间</li>
+<li><strong>规范制定</strong> - 制定代码规范和项目结构准则</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>项目需求文档</li>
+<li>性能要求</li>
+<li>部署环境信息</li>
+<li>团队技能水平</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>docs/architecture.md</code> - 架构设计文档</li>
+<li><code>CMakeLists.txt</code> - 初始构建配置</li>
+<li><code>project_structure.txt</code> - 项目目录结构规划</li>
+<li><code>include/core/</code> - 核心模块头文件草图</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>向 API Designer 提供架构约束</strong></li>
+<li><strong>接收 Build Expert 的技术反馈</strong></li>
+<li><strong>指导 Core Logic Developer 的模块设计</strong></li>
+</ul>
+<hr>
+<h3 id="4-2-📝-API-Designer-Agent"><a href="#4-2-📝-API-Designer-Agent" class="headerlink" title="4.2 📝 API Designer Agent"></a>4.2 📝 API Designer Agent</h3><h4 id="Agent-api-designer"><a href="#Agent-api-designer" class="headerlink" title="Agent: api_designer"></a>Agent: <code>api_designer</code></h4><p><strong>Description:</strong><br>你是一名专注于 API 设计的专家。你的任务是将业务需求转化为一组清晰、符合 RESTful 规范或 RPC 规范的 Web API 接口。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>RESTful API 设计原则</li>
+<li>OpenAPI&#x2F;Swagger 规范编写</li>
+<li>API 文档生成和维护</li>
+<li>数据模型设计</li>
+<li>错误处理和状态码设计</li>
+<li>API 版本管理策略</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>需求沟通</strong> - 与 <code>cpp_architect</code> 和需求方沟通，理解功能点</li>
+<li><strong>接口设计</strong> - 设计每个 API 端点的 URL 路径、HTTP 方法</li>
+<li><strong>数据格式定义</strong> - 定义请求和响应的数据格式（JSON Schema）</li>
+<li><strong>文档编写</strong> - 编写详细的 API 文档，包括参数说明、状态码和示例</li>
+<li><strong>验证测试</strong> - 创建 API 验证测试用例</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>业务需求文档</li>
+<li>系统架构设计</li>
+<li>用户故事和用例</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>api/openapi.yaml</code> - OpenAPI 规范文件</li>
+<li><code>docs/api.md</code> - 人类可读的 API 文档</li>
+<li><code>include/api/dtos.hpp</code> - C++ 数据传输对象定义</li>
+<li><code>tests/api_validation.cpp</code> - API 验证测试</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>从 Architect 获取架构约束</strong></li>
+<li><strong>为 Core Logic Developer 提供数据结构</strong></li>
+<li><strong>与 QA Specialist 协作设计测试用例</strong></li>
+</ul>
+<hr>
+<h3 id="4-3-⚙️-Core-Logic-Developer-Agent"><a href="#4-3-⚙️-Core-Logic-Developer-Agent" class="headerlink" title="4.3 ⚙️ Core Logic Developer Agent"></a>4.3 ⚙️ Core Logic Developer Agent</h3><h4 id="Agent-core-logic-developer"><a href="#Agent-core-logic-developer" class="headerlink" title="Agent: core_logic_developer"></a>Agent: <code>core_logic_developer</code></h4><p><strong>Description:</strong><br>你是一名纯粹的 C++ 核心逻辑程序员。你只关心业务逻辑和算法的实现，不涉及任何 Web 或网络细节。你编写的代码应该是框架无关的、可测试的。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>现代 C++ 编程（C++17&#x2F;20）</li>
+<li>算法和数据结构实现</li>
+<li>设计模式应用</li>
+<li>内存管理和性能优化</li>
+<li>异常处理和错误管理</li>
+<li>单元测试编写</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>需求理解</strong> - 接收来自 <code>api_designer</code> 的数据结构定义和业务规则</li>
+<li><strong>设计实现</strong> - 实现具体的业务逻辑类、函数和算法</li>
+<li><strong>编码质量</strong> - 确保代码高效、安全（异常处理、内存管理）</li>
+<li><strong>测试编写</strong> - 为每个函数和类编写单元测试</li>
+<li><strong>规范遵循</strong> - 遵循 <code>cpp_architect</code> 制定的代码规范</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>API 数据结构定义</li>
+<li>业务逻辑规则</li>
+<li>性能要求</li>
+<li>代码规范</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>src/core/*.cpp</code> - 纯净的 C++ 业务逻辑实现</li>
+<li><code>include/core/*.hpp</code> - 核心逻辑头文件</li>
+<li><code>tests/unit/*.cpp</code> - 单元测试文件</li>
+<li><code>docs/core_design.md</code> - 核心逻辑设计文档</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>从 API Designer 获取数据模型</strong></li>
+<li><strong>向 Web Service Integrator 提供接口</strong></li>
+<li><strong>与 QA Specialist 协作测试策略</strong></li>
+</ul>
+<hr>
+<h3 id="4-4-🌐-Web-Service-Integrator-Agent"><a href="#4-4-🌐-Web-Service-Integrator-Agent" class="headerlink" title="4.4 🌐 Web Service Integrator Agent"></a>4.4 🌐 Web Service Integrator Agent</h3><h4 id="Agent-web-service-integrator"><a href="#Agent-web-service-integrator" class="headerlink" title="Agent: web_service_integrator"></a>Agent: <code>web_service_integrator</code></h4><p><strong>Description:</strong><br>你是一名集成专家，负责将 <code>core_logic_developer</code> 编写的业务逻辑与 <code>cpp_architect</code> 选定的 Web 框架”粘合”在一起。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>Web 框架集成（Drogon, Pistache, Crow 等）</li>
+<li>HTTP 请求&#x2F;响应处理</li>
+<li>序列化&#x2F;反序列化（JSON, XML 等）</li>
+<li>路由配置和管理</li>
+<li>中间件开发</li>
+<li>错误处理和日志记录</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>框架准备</strong> - 引入 <code>core_logic_developer</code> 创建的库或代码</li>
+<li><strong>控制器开发</strong> - 使用选定的 Web 框架创建控制器</li>
+<li><strong>请求处理</strong> - 在控制器中处理 HTTP 请求，调用业务逻辑</li>
+<li><strong>响应格式化</strong> - 将业务逻辑结果序列化为 HTTP 响应</li>
+<li><strong>路由配置</strong> - 配置路由，将 URL 映射到对应的控制器</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>选定的 Web 框架</li>
+<li>核心业务逻辑代码</li>
+<li>API 接口定义</li>
+<li>系统架构设计</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>src/web/*.cpp</code> - Web 框架特定的源代码</li>
+<li><code>src/main.cpp</code> - 程序入口文件</li>
+<li><code>config/routes.json</code> - 路由配置文件</li>
+<li><code>docs/integration_guide.md</code> - 集成指南</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>集成 Core Logic Developer 的代码</strong></li>
+<li><strong>实现 API Designer 定义的接口</strong></li>
+<li><strong>使用 Architect 选择的框架</strong></li>
+</ul>
+<hr>
+<h3 id="4-5-🔨-Build-Dependency-Expert-Agent"><a href="#4-5-🔨-Build-Dependency-Expert-Agent" class="headerlink" title="4.5 🔨 Build &amp; Dependency Expert Agent"></a>4.5 🔨 Build &amp; Dependency Expert Agent</h3><h4 id="Agent-build-dependency-expert"><a href="#Agent-build-dependency-expert" class="headerlink" title="Agent: build_dependency_expert"></a>Agent: <code>build_dependency_expert</code></h4><p><strong>Description:</strong><br>你是一名构建系统大师，精通 CMake 和 C++ 依赖管理（如 Conan, vcpkg）。你确保项目可以在不同平台上一键构建。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>CMake 高级配置和优化</li>
+<li>包管理器集成（Conan, vcpkg, Hunter）</li>
+<li>跨平台构建配置</li>
+<li>CI&#x2F;CD 管道设置</li>
+<li>静态分析和代码检查集成</li>
+<li>构建性能优化</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>构建配置</strong> - 维护和优化 <code>CMakeLists.txt</code> 文件</li>
+<li><strong>依赖管理</strong> - 管理项目的所有第三方依赖</li>
+<li><strong>编译配置</strong> - 配置编译选项、警告级别、优化设置</li>
+<li><strong>工具集成</strong> - 设置静态分析或代码格式化工具</li>
+<li><strong>CI&#x2F;CD 配置</strong> - 创建持续集成和部署管道</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>项目架构和依赖需求</li>
+<li>目标平台信息</li>
+<li>团队开发工具链</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>CMakeLists.txt</code> - 完整的构建配置</li>
+<li><code>conanfile.txt</code> - Conan 依赖配置</li>
+<li><code>.github/workflows/</code> - CI&#x2F;CD 配置文件</li>
+<li><code>scripts/build.sh</code> - 构建脚本</li>
+<li><code>docs/build_guide.md</code> - 构建指南</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>支持所有其他 Agent 的构建需求</strong></li>
+<li><strong>优化整个项目的构建流程</strong></li>
+<li><strong>确保跨平台兼容性</strong></li>
+</ul>
+<hr>
+<h3 id="4-6-🔍-QA-Specialist-Agent"><a href="#4-6-🔍-QA-Specialist-Agent" class="headerlink" title="4.6 🔍 QA Specialist Agent"></a>4.6 🔍 QA Specialist Agent</h3><h4 id="Agent-qa-specialist"><a href="#Agent-qa-specialist" class="headerlink" title="Agent: qa_specialist"></a>Agent: <code>qa_specialist</code></h4><p><strong>Description:</strong><br>你是一名一丝不苟的质量保证工程师。你为项目的所有关键部分编写全面的测试用例，并确保代码质量标准得到执行。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>单元测试和集成测试设计</li>
+<li>性能测试和基准测试</li>
+<li>代码覆盖率分析</li>
+<li>静态代码分析</li>
+<li>测试自动化</li>
+<li>质量指标监控</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>测试策略</strong> - 制定全面的测试策略和计划</li>
+<li><strong>单元测试</strong> - 为 <code>core_logic_developer</code> 编写的每个函数和类编写单元测试</li>
+<li><strong>集成测试</strong> - 为 <code>web_service_integrator</code> 创建的 API 端点编写集成测试</li>
+<li><strong>质量检查</strong> - 进行代码覆盖率分析和静态代码分析</li>
+<li><strong>CI 集成</strong> - 确保测试融入 CI&#x2F;CD 流程</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>业务逻辑代码</li>
+<li>API 接口定义</li>
+<li>质量标准和要求</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>tests/unit/*.cpp</code> - 单元测试</li>
+<li><code>tests/integration/*.cpp</code> - 集成测试</li>
+<li><code>tests/performance/*.cpp</code> - 性能测试</li>
+<li><code>.codecov.yml</code> - 代码覆盖率配置</li>
+<li><code>docs/testing_guide.md</code> - 测试指南</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>验证 Core Logic Developer 的代码</strong></li>
+<li><strong>测试 Web Service Integrator 的接口</strong></li>
+<li><strong>确保 Deployment Operator 的部署质量</strong></li>
+</ul>
+<hr>
+<h3 id="4-7-🚀-Deployment-Operator-Agent"><a href="#4-7-🚀-Deployment-Operator-Agent" class="headerlink" title="4.7 🚀 Deployment Operator Agent"></a>4.7 🚀 Deployment Operator Agent</h3><h4 id="Agent-deployment-operator"><a href="#Agent-deployment-operator" class="headerlink" title="Agent: deployment_operator"></a>Agent: <code>deployment_operator</code></h4><p><strong>Description:</strong><br>你是一名 DevOps 工程师，负责将开发完成的服务打包并部署到目标环境，确保生产环境的稳定性和可靠性。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>容器化（Docker, Podman）</li>
+<li>容器编排（Docker Compose, Kubernetes）</li>
+<li>配置管理</li>
+<li>监控和日志</li>
+<li>自动化部署脚本</li>
+<li>基础设施即代码</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>容器化</strong> - 编写 <code>Dockerfile</code>，创建服务的容器镜像</li>
+<li><strong>编排配置</strong> - 编写 <code>docker-compose.yml</code> 文件，用于一键部署</li>
+<li><strong>脚本编写</strong> - 编写部署脚本或 CI&#x2F;CD 流水线配置</li>
+<li><strong>配置模板</strong> - 生成生产环境配置文件模板</li>
+<li><strong>监控设置</strong> - 配置监控和日志收集</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>构建好的应用程序</li>
+<li>部署环境信息</li>
+<li>运行时配置需求</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>Dockerfile</code> - 容器镜像定义</li>
+<li><code>docker-compose.yml</code> - 服务编排配置</li>
+<li><code>scripts/deploy.sh</code> - 部署脚本</li>
+<li><code>config/production.env</code> - 生产环境配置</li>
+<li><code>docs/deployment_guide.md</code> - 部署指南</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>打包 Build Expert 的构建产物</strong></li>
+<li><strong>部署 Web Service Integrator 的服务</strong></li>
+<li><strong>配置 QA Specialist 批准的版本</strong></li>
+</ul>
+<hr>
+<h2 id="5-🔄-协作流程"><a href="#5-🔄-协作流程" class="headerlink" title="5. 🔄 协作流程"></a>5. 🔄 协作流程</h2><h3 id="5-1-📋-标准开发流程"><a href="#5-1-📋-标准开发流程" class="headerlink" title="5.1 📋 标准开发流程"></a>5.1 📋 标准开发流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant PM as Project Manager</span><br><span class="line">    participant A as Architect</span><br><span class="line">    participant API as API Designer</span><br><span class="line">    participant CL as Core Logic</span><br><span class="line">    participant WSI as Web Integrator</span><br><span class="line">    participant BE as Build Expert</span><br><span class="line">    participant QA as QA Specialist</span><br><span class="line">    participant DO as Deployment Operator</span><br><span class="line"></span><br><span class="line">    PM-&gt;&gt;A: 项目需求</span><br><span class="line">    A-&gt;&gt;API: 架构约束</span><br><span class="line">    A-&gt;&gt;BE: 技术栈选择</span><br><span class="line">    API-&gt;&gt;CL: API 规范</span><br><span class="line">    CL-&gt;&gt;WSI: 核心逻辑</span><br><span class="line">    WSI-&gt;&gt;BE: 依赖需求</span><br><span class="line">    BE-&gt;&gt;QA: 构建配置</span><br><span class="line">    QA-&gt;&gt;DO: 测试报告</span><br><span class="line">    DO-&gt;&gt;PM: 部署就绪</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-🔄-迭代开发流程"><a href="#5-2-🔄-迭代开发流程" class="headerlink" title="5.2 🔄 迭代开发流程"></a>5.2 🔄 迭代开发流程</h3><ol>
+<li><strong>Sprint Planning</strong> - Architect 和团队确定下一个迭代目标</li>
+<li><strong>API Design</strong> - API Designer 先行设计接口规范</li>
+<li><strong>Parallel Development</strong> - Core Logic 和 Web Integrator 并行开发</li>
+<li><strong>Integration Testing</strong> - QA Specialist 执行集成测试</li>
+<li><strong>Build &amp; Deploy</strong> - Build Expert 和 Deployment Operator 完成构建部署</li>
+</ol>
+<h3 id="5-3-🚨-错误处理流程"><a href="#5-3-🚨-错误处理流程" class="headerlink" title="5.3 🚨 错误处理流程"></a>5.3 🚨 错误处理流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[发现错误] --&gt; B&#123;错误类型&#125;</span><br><span class="line">    B --&gt;|构建错误| C[Build Expert]</span><br><span class="line">    B --&gt;|逻辑错误| D[Core Logic Developer]</span><br><span class="line">    B --&gt;|集成错误| E[Web Service Integrator]</span><br><span class="line">    B --&gt;|测试失败| F[QA Specialist]</span><br><span class="line"></span><br><span class="line">    C --&gt; G[修复配置]</span><br><span class="line">    D --&gt; H[修复逻辑]</span><br><span class="line">    E --&gt; I[修复集成]</span><br><span class="line">    F --&gt; J[修复测试]</span><br><span class="line"></span><br><span class="line">    G --&gt; K[重新验证]</span><br><span class="line">    H --&gt; K</span><br><span class="line">    I --&gt; K</span><br><span class="line">    J --&gt; K</span><br><span class="line"></span><br><span class="line">    K --&gt; L[错误解决]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="6-📖-使用指南"><a href="#6-📖-使用指南" class="headerlink" title="6. 📖 使用指南"></a>6. 📖 使用指南</h2><h3 id="6-1-🚀-快速开始"><a href="#6-1-🚀-快速开始" class="headerlink" title="6.1 🚀 快速开始"></a>6.1 🚀 快速开始</h3><h4 id="步骤-1-初始化项目"><a href="#步骤-1-初始化项目" class="headerlink" title="步骤 1: 初始化项目"></a>步骤 1: 初始化项目</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/agents create cpp_architect</span><br><span class="line">&quot;创建一个新的 C++ Web 项目，需要实现用户管理系统，要求高性能和可扩展性&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-2-生成架构"><a href="#步骤-2-生成架构" class="headerlink" title="步骤 2: 生成架构"></a>步骤 2: 生成架构</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/agents create api_designer</span><br><span class="line">&quot;基于架构设计用户管理系统的 API，包括用户注册、登录、信息管理等接口&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-3-实现核心逻辑"><a href="#步骤-3-实现核心逻辑" class="headerlink" title="步骤 3: 实现核心逻辑"></a>步骤 3: 实现核心逻辑</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/agents create core_logic_developer</span><br><span class="line">&quot;实现用户管理的核心业务逻辑，包括用户验证、密码加密、数据校验等&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-🔧-Agent-管理命令"><a href="#6-2-🔧-Agent-管理命令" class="headerlink" title="6.2 🔧 Agent 管理命令"></a>6.2 🔧 Agent 管理命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建 Agent</span></span><br><span class="line">/agents create &lt;agent_name&gt; <span class="string">&quot;&lt;task_description&gt;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 切换到特定 Agent</span></span><br><span class="line">/agents switch &lt;agent_name&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 列出所有 Agent</span></span><br><span class="line">/agents list</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除 Agent</span></span><br><span class="line">/agents remove &lt;agent_name&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看 Agent 状态</span></span><br><span class="line">/agents status &lt;agent_name&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-📝-协作最佳实践"><a href="#6-3-📝-协作最佳实践" class="headerlink" title="6.3 📝 协作最佳实践"></a>6.3 📝 协作最佳实践</h3><ol>
+<li><strong>明确依赖关系</strong> - 在每个任务开始前明确依赖的产出物</li>
+<li><strong>版本控制</strong> - 每个 Agent 的产出都应该进行版本管理</li>
+<li><strong>文档同步</strong> - 确保 Agent 间的文档保持同步</li>
+<li><strong>定期同步</strong> - 建立定期的 Agent 同步会议或检查点</li>
+<li><strong>质量门禁</strong> - 每个 Agent 的产出都应该通过质量检查</li>
+</ol>
+<hr>
+<h2 id="7-🔄-扩展和维护"><a href="#7-🔄-扩展和维护" class="headerlink" title="7. 🔄 扩展和维护"></a>7. 🔄 扩展和维护</h2><h3 id="7-1-➕-添加新-Agent"><a href="#7-1-➕-添加新-Agent" class="headerlink" title="7.1 ➕ 添加新 Agent"></a>7.1 ➕ 添加新 Agent</h3><p>当项目需要新的专业能力时，可以添加专门的 Agent：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># Agent: security<span class="emphasis">_specialist</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section"><span class="strong">**Description:**</span></span></span></span><br><span class="line"><span class="emphasis"><span class="section">你是一名安全专家，专注于确保 C++ Web 应用的安全性。</span></span></span><br><span class="line"><span class="emphasis"><span class="section"></span></span></span><br><span class="line"><span class="emphasis"><span class="section"><span class="strong">**Capabilities:**</span></span></span></span><br><span class="line"><span class="emphasis"><span class="section">- 安全漏洞评估</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- 加密算法实现</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- 认证和授权机制</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- 安全编码规范</span></span></span><br><span class="line"><span class="emphasis"><span class="section">- 渗透测试</span></span></span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-🔧-Agent-优化"><a href="#7-2-🔧-Agent-优化" class="headerlink" title="7.2 🔧 Agent 优化"></a>7.2 🔧 Agent 优化</h3><p>定期评估和优化现有 Agent：</p>
+<ol>
+<li><strong>性能评估</strong> - 监控 Agent 的工作效率</li>
+<li><strong>质量评估</strong> - 检查 Agent 产出的质量</li>
+<li><strong>能力更新</strong> - 根据新技术更新 Agent 能力</li>
+<li><strong>协作优化</strong> - 改进 Agent 间的协作流程</li>
+</ol>
+<h3 id="7-3-📊-Agent-性能指标"><a href="#7-3-📊-Agent-性能指标" class="headerlink" title="7.3 📊 Agent 性能指标"></a>7.3 📊 Agent 性能指标</h3><table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>关键指标</th>
+<th>目标值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Architect</td>
+<td>架构设计时间</td>
+<td>&lt; 2小时</td>
+</tr>
+<tr>
+<td>API Designer</td>
+<td>API 规范完成率</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Core Logic</td>
+<td>代码覆盖率</td>
+<td>&gt; 80%</td>
+</tr>
+<tr>
+<td>Web Integrator</td>
+<td>集成成功率</td>
+<td>&gt; 95%</td>
+</tr>
+<tr>
+<td>Build Expert</td>
+<td>构建成功率</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>QA Specialist</td>
+<td>缺陷发现率</td>
+<td>&gt; 90%</td>
+</tr>
+<tr>
+<td>Deployment Operator</td>
+<td>部署成功率</td>
+<td>&gt; 99%</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="📊-总结"><a href="#📊-总结" class="headerlink" title="📊 总结"></a>📊 总结</h2><h3 id="✅-Agent-团队优势"><a href="#✅-Agent-团队优势" class="headerlink" title="✅ Agent 团队优势"></a>✅ Agent 团队优势</h3><ul>
+<li>✅ <strong>专业化分工</strong> - 每个 Agent 专注于特定领域</li>
+<li>✅ <strong>标准化流程</strong> - 建立可重复的开发流程</li>
+<li>✅ <strong>质量保证</strong> - 多层次的质量控制机制</li>
+<li>✅ <strong>可扩展性</strong> - 支持项目规模增长</li>
+<li>✅ <strong>知识传承</strong> - Agent 间共享最佳实践</li>
+</ul>
+<h3 id="🎯-实施建议"><a href="#🎯-实施建议" class="headerlink" title="🎯 实施建议"></a>🎯 实施建议</h3><ol>
+<li><strong>从简单开始</strong> - 先创建核心 Agent，逐步完善</li>
+<li><strong>持续迭代</strong> - 根据项目反馈优化 Agent 设计</li>
+<li><strong>文档驱动</strong> - 保持良好的文档习惯</li>
+<li><strong>工具集成</strong> - 集成现有的开发工具和平台</li>
+<li><strong>团队培训</strong> - 确保团队理解 Agent 协作模式</li>
+</ol>
+<h3 id="📚-扩展资源"><a href="#📚-扩展资源" class="headerlink" title="📚 扩展资源"></a>📚 扩展资源</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.anthropic.com/claude-code/agents">Claude Code Agent 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/fffaraz/awesome-cpp#web-frameworks">C++ Web 框架比较</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/isocpp/CppCoreGuidelines">现代 C++ 最佳实践</a></li>
+<li><a target="_blank" rel="noopener" href="https://restfulapi.net/">API 设计指南</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>💡 提示</strong>:</p>
+<ul>
+<li>Agent 间的协作需要明确的接口和规范</li>
+<li>定期回顾和优化 Agent 工作流程</li>
+<li>保持 Agent 知识库的更新和维护</li>
+<li>建立有效的质量监控和反馈机制</li>
+</ul>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/docker/" rel="tag"># Docker</a>
+              <a href="/tags/c/" rel="tag"># C++</a>
+              <a href="/tags/git/" rel="tag"># Git</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Windows-%E4%B8%8B-Drogon-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/" rel="prev" title="Windows 下 Drogon 源码编译安装指南">
+                  <i class="fa fa-angle-left"></i> Windows 下 Drogon 源码编译安装指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/posts/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E4%B8%8E%E6%B5%81%E7%A8%8B/%E7%89%88%E6%9C%AC%E6%8E%A7%E5%88%B6/2025-12-09-Windows-Drogon-Windows-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97/" rel="next" title="Windows 🐉 Drogon Windows 源码编译安装指南">
+                  Windows 🐉 Drogon Windows 源码编译安装指南 <i class="fa fa-angle-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">vilas</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/pisces/" rel="noopener" target="_blank">NexT.Pisces</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+</body>
+</html>
