@@ -1,0 +1,713 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>文件管理 API 规范 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="文件管理 API 规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: api, rest, file-management, authentication, swagger  📑 目录 1. 基础信息 2. 认证与授权 3. 文件管理 4. 文件支持 5. 错误处理 6. 安全机制 7. 速率限制 8. OpenAPI 规范   1. 📋 基础信息">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件管理 API 规范">
+<meta property="og:url" content="https://vilaswang.github.io/posts/eed6fb04/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="文件管理 API 规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: api, rest, file-management, authentication, swagger  📑 目录 1. 基础信息 2. 认证与授权 3. 文件管理 4. 文件支持 5. 错误处理 6. 安全机制 7. 速率限制 8. OpenAPI 规范   1. 📋 基础信息">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-09T06:09:54.000Z">
+<meta property="article:modified_time" content="2025-12-17T15:36:29.297Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="技术文档">
+<meta property="article:tag" content="指南">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "文件管理 API 规范",
+  "url": "https://vilaswang.github.io/posts/eed6fb04/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-09T06:09:54.000Z",
+  "dateModified": "2025-12-17T15:36:29.297Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/eed6fb04/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '文件管理 API 规范',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">文件管理 API 规范</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">文件管理 API 规范</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-09T06:09:54.000Z" title="发表于 2025-12-09 14:09:54">2025-12-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T15:36:29.297Z" title="更新于 2025-12-17 23:36:29">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E6%9E%B6%E6%9E%84%E5%AE%89%E5%85%A8/">Web架构安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="文件管理-API-规范"><a href="#文件管理-API-规范" class="headerlink" title="文件管理 API 规范"></a>文件管理 API 规范</h1><blockquote>
+<p><strong>文档创建时间</strong>: 2025-11-14<br><strong>最后更新</strong>: 2025-11-14<br><strong>版本</strong>: v1.0<br><strong>标签</strong>: <code>api</code>, <code>rest</code>, <code>file-management</code>, <code>authentication</code>, <code>swagger</code></p>
+</blockquote>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#1-%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF">1. 基础信息</a></li>
+<li><a href="#2-%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%8E%88%E6%9D%83">2. 认证与授权</a></li>
+<li><a href="#3-%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86">3. 文件管理</a></li>
+<li><a href="#4-%E6%96%87%E4%BB%B6%E6%94%AF%E6%8C%81">4. 文件支持</a></li>
+<li><a href="#5-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86">5. 错误处理</a></li>
+<li><a href="#6-%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6">6. 安全机制</a></li>
+<li><a href="#7-%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6">7. 速率限制</a></li>
+<li><a href="#8-openapi-%E8%A7%84%E8%8C%83">8. OpenAPI 规范</a></li>
+</ul>
+<hr>
+<h2 id="1-📋-基础信息"><a href="#1-📋-基础信息" class="headerlink" title="1. 📋 基础信息"></a>1. 📋 基础信息</h2><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Base URL</strong></td>
+<td><code>/api/v1</code></td>
+</tr>
+<tr>
+<td><strong>协议</strong></td>
+<td>HTTPS</td>
+</tr>
+<tr>
+<td><strong>数据格式</strong></td>
+<td>JSON</td>
+</tr>
+<tr>
+<td><strong>认证方式</strong></td>
+<td>JWT Bearer Token</td>
+</tr>
+<tr>
+<td><strong>API 版本</strong></td>
+<td>v1.0</td>
+</tr>
+</tbody></table>
+<h3 id="🔐-认证请求格式"><a href="#🔐-认证请求格式" class="headerlink" title="🔐 认证请求格式"></a>🔐 认证请求格式</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">GET</span> <span class="string">/api/v1/files/list</span> <span class="meta">HTTP/1.1</span></span><br><span class="line"><span class="attribute">Host</span><span class="punctuation">: </span>your-domain.com</span><br><span class="line"><span class="attribute">Authorization</span><span class="punctuation">: </span>Bearer &lt;jwt_token&gt;</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-🔐-认证与授权"><a href="#2-🔐-认证与授权" class="headerlink" title="2. 🔐 认证与授权"></a>2. 🔐 认证与授权</h2><h3 id="2-1-👤-用户注册"><a href="#2-1-👤-用户注册" class="headerlink" title="2.1 👤 用户注册"></a>2.1 👤 用户注册</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant C as Client</span><br><span class="line">    participant A as API Server</span><br><span class="line">    participant D as Database</span><br><span class="line"></span><br><span class="line">    C-&gt;&gt;A: POST /auth/register</span><br><span class="line">    A-&gt;&gt;A: 验证输入数据</span><br><span class="line">    A-&gt;&gt;D: 检查用户是否存在</span><br><span class="line">    D--&gt;&gt;A: 返回检查结果</span><br><span class="line">    A-&gt;&gt;A: 加密密码</span><br><span class="line">    A-&gt;&gt;D: 创建新用户</span><br><span class="line">    D--&gt;&gt;A: 返回用户信息</span><br><span class="line">    A-&gt;&gt;A: 生成JWT Token</span><br><span class="line">    A--&gt;&gt;C: 返回用户信息和Token</span><br></pre></td></tr></table></figure>
+
+<h4 id="接口详情"><a href="#接口详情" class="headerlink" title="接口详情"></a>接口详情</h4><p><strong>请求</strong>:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">POST /api/v1/auth/register</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json</span><br></pre></td></tr></table></figure>
+
+<p><strong>请求体</strong>:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;email&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user@example.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;confirmPassword&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>验证规则</strong>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;username&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;required&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&quot;minLength&quot;</span>: <span class="number">3</span>,</span><br><span class="line">        <span class="string">&quot;maxLength&quot;</span>: <span class="number">20</span>,</span><br><span class="line">        <span class="string">&quot;pattern&quot;</span>: <span class="string">&quot;^[a-zA-Z0-9_]+$&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;email&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;required&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&quot;format&quot;</span>: <span class="string">&quot;email&quot;</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">&quot;password&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;required&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&quot;minLength&quot;</span>: <span class="number">8</span>,</span><br><span class="line">        <span class="string">&quot;pattern&quot;</span>: <span class="string">&quot;^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&amp;])[A-Za-z\\d@$!%*?&amp;]&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>成功响应 (201)</strong>:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;success&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;注册成功&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;email&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user@example.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;createdAt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-11-14T10:00:00Z&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-🔑-用户登录"><a href="#2-2-🔑-用户登录" class="headerlink" title="2.2 🔑 用户登录"></a>2.2 🔑 用户登录</h3><p><strong>请求</strong>:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">POST /api/v1/auth/login</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/json</span><br></pre></td></tr></table></figure>
+
+<p><strong>请求体</strong>:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;password&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>成功响应 (200)</strong>:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;success&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;登录成功&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;user&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;email&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user@example.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;lastLoginAt&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-11-14T10:00:00Z&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;expiresIn&quot;</span><span class="punctuation">:</span> <span class="number">86400</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-🌐-OAuth-集成"><a href="#2-3-🌐-OAuth-集成" class="headerlink" title="2.3 🌐 OAuth 集成"></a>2.3 🌐 OAuth 集成</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[用户点击Google登录] --&gt; B[重定向到Google OAuth]</span><br><span class="line">    B --&gt; C[用户授权]</span><br><span class="line">    C --&gt; D[Google回调处理]</span><br><span class="line">    D --&gt; E[创建或查找用户]</span><br><span class="line">    E --&gt; F[生成JWT Token]</span><br><span class="line">    F --&gt; G[重定向到应用]</span><br><span class="line"></span><br><span class="line">    style A fill:#e1f5fe</span><br><span class="line">    style G fill:#e8f5e8</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-📁-文件管理"><a href="#3-📁-文件管理" class="headerlink" title="3. 📁 文件管理"></a>3. 📁 文件管理</h2><h3 id="3-1-📤-单文件上传"><a href="#3-1-📤-单文件上传" class="headerlink" title="3.1 📤 单文件上传"></a>3.1 📤 单文件上传</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant C as Client</span><br><span class="line">    participant S as API Server</span><br><span class="line">    participant F as File Storage</span><br><span class="line">    participant D as Database</span><br><span class="line"></span><br><span class="line">    C-&gt;&gt;S: POST /files/upload (multipart/form-data)</span><br><span class="line">    S-&gt;&gt;S: 验证认证Token</span><br><span class="line">    S-&gt;&gt;S: 文件类型和大小验证</span><br><span class="line">    S-&gt;&gt;S: 生成唯一文件名</span><br><span class="line">    S-&gt;&gt;F: 保存文件</span><br><span class="line">    F--&gt;&gt;S: 返回文件信息</span><br><span class="line">    S-&gt;&gt;D: 保存文件元数据</span><br><span class="line">    D--&gt;&gt;S: 返回保存结果</span><br><span class="line">    S--&gt;&gt;C: 返回上传结果</span><br></pre></td></tr></table></figure>
+
+<h4 id="接口详情-1"><a href="#接口详情-1" class="headerlink" title="接口详情"></a>接口详情</h4><p><strong>请求</strong>:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST /api/v1/files/upload</span><br><span class="line"><span class="attribute">Authorization</span><span class="punctuation">: </span>Bearer &lt;token&gt;</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data</span><br></pre></td></tr></table></figure>
+
+<p><strong>请求体</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file: &lt;binary_data&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>成功响应 (200)</strong>:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;success&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;文件上传成功&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;file&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;document.pdf&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;originalName&quot;</span><span class="punctuation">:</span> <span class="string">&quot;我的文档.pdf&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">1048576</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;mimeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/pdf&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/uploads/2025/11/14/uuid-document.pdf&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;uploadTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-11-14T10:00:00Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;checksum&quot;</span><span class="punctuation">:</span> <span class="string">&quot;sha256:abc123...&quot;</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-📦-多文件上传"><a href="#3-2-📦-多文件上传" class="headerlink" title="3.2 📦 多文件上传"></a>3.2 📦 多文件上传</h3><p><strong>请求</strong>:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">POST /api/v1/files/multi-upload</span><br><span class="line"><span class="attribute">Authorization</span><span class="punctuation">: </span>Bearer &lt;token&gt;</span><br><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>multipart/form-data</span><br></pre></td></tr></table></figure>
+
+<p><strong>限制</strong>:</p>
+<ul>
+<li>最大文件数量: 10个</li>
+<li>单文件最大大小: 100MB</li>
+<li>总大小限制: 500MB</li>
+</ul>
+<p><strong>成功响应 (200)</strong>:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;success&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;文件上传成功&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;uploaded&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;uuid1&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;file1.pdf&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">1048576</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/uploads/uuid1-file1.pdf&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;uuid2&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;file2.jpg&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">2097152</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/uploads/uuid2-file2.jpg&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;failed&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;summary&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;total&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;uploaded&quot;</span><span class="punctuation">:</span> <span class="number">2</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;failed&quot;</span><span class="punctuation">:</span> <span class="number">0</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;totalSize&quot;</span><span class="punctuation">:</span> <span class="number">3145728</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-3-📋-获取文件列表"><a href="#3-3-📋-获取文件列表" class="headerlink" title="3.3 📋 获取文件列表"></a>3.3 📋 获取文件列表</h3><p><strong>请求</strong>:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /api/v1/files/list?page=1&amp;limit=20&amp;sort=name&amp;order=asc</span><br><span class="line"><span class="attribute">Authorization</span><span class="punctuation">: </span>Bearer &lt;token&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>查询参数</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>默认值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>page</code></td>
+<td>integer</td>
+<td>1</td>
+<td>页码</td>
+</tr>
+<tr>
+<td><code>limit</code></td>
+<td>integer</td>
+<td>20</td>
+<td>每页数量 (1-100)</td>
+</tr>
+<tr>
+<td><code>sort</code></td>
+<td>string</td>
+<td>name</td>
+<td>排序字段 (name, size, uploadTime)</td>
+</tr>
+<tr>
+<td><code>order</code></td>
+<td>string</td>
+<td>desc</td>
+<td>排序方向 (asc, desc)</td>
+</tr>
+<tr>
+<td><code>search</code></td>
+<td>string</td>
+<td>-</td>
+<td>搜索文件名</td>
+</tr>
+<tr>
+<td><code>type</code></td>
+<td>string</td>
+<td>-</td>
+<td>文件类型过滤</td>
+</tr>
+</tbody></table>
+<p><strong>成功响应 (200)</strong>:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;success&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Success&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;data&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;files&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">            <span class="punctuation">&#123;</span></span><br><span class="line">                <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;document.pdf&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;size&quot;</span><span class="punctuation">:</span> <span class="number">1048576</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;mimeType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/pdf&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/api/v1/files/download/uuid-document.pdf&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;uploadTime&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-11-14T10:00:00Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;downloadCount&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">                <span class="attr">&quot;thumbnail&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/api/v1/files/thumbnail/uuid-document.jpg&quot;</span></span><br><span class="line">            <span class="punctuation">&#125;</span></span><br><span class="line">        <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;pagination&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;page&quot;</span><span class="punctuation">:</span> <span class="number">1</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;limit&quot;</span><span class="punctuation">:</span> <span class="number">20</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;total&quot;</span><span class="punctuation">:</span> <span class="number">100</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;totalPages&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hasNext&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;hasPrev&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span></span><br><span class="line">        <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;stats&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">            <span class="attr">&quot;totalFiles&quot;</span><span class="punctuation">:</span> <span class="number">100</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;totalSize&quot;</span><span class="punctuation">:</span> <span class="number">1073741824</span><span class="punctuation">,</span></span><br><span class="line">            <span class="attr">&quot;totalDownloads&quot;</span><span class="punctuation">:</span> <span class="number">1250</span></span><br><span class="line">        <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-4-⬇️-文件下载"><a href="#3-4-⬇️-文件下载" class="headerlink" title="3.4 ⬇️ 文件下载"></a>3.4 ⬇️ 文件下载</h3><p><strong>请求</strong>:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">GET /api/v1/files/download/:filename</span><br><span class="line"><span class="attribute">Authorization</span><span class="punctuation">: </span>Bearer &lt;token&gt;</span><br></pre></td></tr></table></figure>
+
+<p><strong>URL 参数</strong>:</p>
+<ul>
+<li><code>filename</code>: 文件名或文件ID</li>
+</ul>
+<p><strong>功能特性</strong>:</p>
+<ul>
+<li>✅ 支持断点续传</li>
+<li>✅ 下载统计</li>
+<li>✅ 访问权限验证</li>
+<li>✅ 下载日志记录</li>
+</ul>
+<p><strong>响应头</strong>:</p>
+<figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">Content-Type</span><span class="punctuation">: </span>application/octet-stream</span><br><span class="line"><span class="attribute">Content-Disposition</span><span class="punctuation">: </span>attachment; filename=&quot;document.pdf&quot;</span><br><span class="line"><span class="attribute">Content-Length</span><span class="punctuation">: </span>1048576</span><br><span class="line"><span class="attribute">Accept-Ranges</span><span class="punctuation">: </span>bytes</span><br><span class="line"><span class="attribute">ETag</span><span class="punctuation">: </span>&quot;abc123...&quot;</span><br><span class="line"><span class="attribute">Last-Modified</span><span class="punctuation">: </span>Wed, 14 Nov 2025 10:00:00 GMT</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-📎-文件支持"><a href="#4-📎-文件支持" class="headerlink" title="4. 📎 文件支持"></a>4. 📎 文件支持</h2><h3 id="4-1-🎨-允许的文件类型"><a href="#4-1-🎨-允许的文件类型" class="headerlink" title="4.1 🎨 允许的文件类型"></a>4.1 🎨 允许的文件类型</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[支持的文件类型] --&gt; B[图片文件]</span><br><span class="line">    A --&gt; C[文档文件]</span><br><span class="line">    A --&gt; D[压缩文件]</span><br><span class="line">    A --&gt; E[代码文件]</span><br><span class="line"></span><br><span class="line">    B --&gt; B1[image/*]</span><br><span class="line">    B --&gt; B2[jpeg, png, gif, webp]</span><br><span class="line"></span><br><span class="line">    C --&gt; C1[application/pdf]</span><br><span class="line">    C --&gt; C2[application/msword]</span><br><span class="line">    C --&gt; C3[text/plain]</span><br><span class="line"></span><br><span class="line">    D --&gt; D1[application/zip]</span><br><span class="line">    D --&gt; D2[application/x-rar-compressed]</span><br><span class="line"></span><br><span class="line">    E --&gt; E1[text/x-code]</span><br><span class="line">    E --&gt; E2[application/json]</span><br></pre></td></tr></table></figure>
+
+<p><strong>详细MIME类型列表</strong>:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;images&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;image/jpeg&quot;</span><span class="punctuation">,</span> <span class="string">&quot;image/png&quot;</span><span class="punctuation">,</span> <span class="string">&quot;image/gif&quot;</span><span class="punctuation">,</span> <span class="string">&quot;image/webp&quot;</span><span class="punctuation">,</span> <span class="string">&quot;image/svg+xml&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;documents&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;application/pdf&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;application/msword&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;application/vnd.openxmlformats-officedocument.wordprocessingml.document&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;application/vnd.ms-excel&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;application/vnd.openxmlformats-officedocument.spreadsheetml.sheet&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;text/plain&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;text/markdown&quot;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;archives&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;application/zip&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;application/x-rar-compressed&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;application/x-7z-compressed&quot;</span></span><br><span class="line">    <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;text/x-code&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;application/json&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;text/xml&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;application/xml&quot;</span></span><br><span class="line">    <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-📏-文件大小限制"><a href="#4-2-📏-文件大小限制" class="headerlink" title="4.2 📏 文件大小限制"></a>4.2 📏 文件大小限制</h3><table>
+<thead>
+<tr>
+<th>文件类型</th>
+<th>最大大小</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>图片文件</strong></td>
+<td>50MB</td>
+<td>JPEG, PNG, GIF等</td>
+</tr>
+<tr>
+<td><strong>PDF文档</strong></td>
+<td>100MB</td>
+<td>PDF文档</td>
+</tr>
+<tr>
+<td><strong>Office文档</strong></td>
+<td>100MB</td>
+<td>Word, Excel, PowerPoint</td>
+</tr>
+<tr>
+<td><strong>压缩文件</strong></td>
+<td>200MB</td>
+<td>ZIP, RAR, 7Z</td>
+</tr>
+<tr>
+<td><strong>其他文件</strong></td>
+<td>50MB</td>
+<td>其他允许的类型</td>
+</tr>
+</tbody></table>
+<h3 id="4-3-🖼️-缩略图生成"><a href="#4-3-🖼️-缩略图生成" class="headerlink" title="4.3 🖼️ 缩略图生成"></a>4.3 🖼️ 缩略图生成</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[上传文件] --&gt; B&#123;是否为图片?&#125;</span><br><span class="line">    B --&gt;|是| C[生成缩略图]</span><br><span class="line">    B --&gt;|否| D[使用默认图标]</span><br><span class="line">    C --&gt; E[存储缩略图]</span><br><span class="line">    D --&gt; F[返回图标路径]</span><br><span class="line">    E --&gt; G[返回缩略图URL]</span><br></pre></td></tr></table></figure>
+
+<p><strong>缩略图规格</strong>:</p>
+<ul>
+<li><strong>尺寸</strong>: 200x200 像素</li>
+<li><strong>格式</strong>: JPEG</li>
+<li><strong>质量</strong>: 85%</li>
+<li><strong>存储路径</strong>: <code>/thumbnails/{file_id}.jpg</code></li>
+</ul>
+<hr>
+<h2 id="5-❌-错误处理"><a href="#5-❌-错误处理" class="headerlink" title="5. ❌ 错误处理"></a>5. ❌ 错误处理</h2><h3 id="5-1-📊-标准错误响应格式"><a href="#5-1-📊-标准错误响应格式" class="headerlink" title="5.1 📊 标准错误响应格式"></a>5.1 📊 标准错误响应格式</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;success&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">false</span></span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;error&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;code&quot;</span><span class="punctuation">:</span> <span class="string">&quot;ERROR_CODE&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;message&quot;</span><span class="punctuation">:</span> <span class="string">&quot;用户友好的错误描述&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;details&quot;</span><span class="punctuation">:</span> <span class="string">&quot;详细错误信息（开发环境）&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;timestamp&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-11-14T10:00:00Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;/api/v1/files/upload&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;requestId&quot;</span><span class="punctuation">:</span> <span class="string">&quot;uuid-for-tracking&quot;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-📋-HTTP-状态码"><a href="#5-2-📋-HTTP-状态码" class="headerlink" title="5.2 📋 HTTP 状态码"></a>5.2 📋 HTTP 状态码</h3><table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>说明</th>
+<th>示例场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>200</strong></td>
+<td>成功</td>
+<td>文件上传成功</td>
+</tr>
+<tr>
+<td><strong>201</strong></td>
+<td>创建成功</td>
+<td>用户注册成功</td>
+</tr>
+<tr>
+<td><strong>400</strong></td>
+<td>请求错误</td>
+<td>参数验证失败</td>
+</tr>
+<tr>
+<td><strong>401</strong></td>
+<td>未认证</td>
+<td>Token无效或过期</td>
+</tr>
+<tr>
+<td><strong>403</strong></td>
+<td>权限不足</td>
+<td>访问他人文件</td>
+</tr>
+<tr>
+<td><strong>404</strong></td>
+<td>资源不存在</td>
+<td>文件不存在</td>
+</tr>
+<tr>
+<td><strong>409</strong></td>
+<td>冲突</td>
+<td>用户名已存在</td>
+</tr>
+<tr>
+<td><strong>413</strong></td>
+<td>文件过大</td>
+<td>超过大小限制</td>
+</tr>
+<tr>
+<td><strong>415</strong></td>
+<td>不支持的类型</td>
+<td>文件类型不允许</td>
+</tr>
+<tr>
+<td><strong>422</strong></td>
+<td>验证失败</td>
+<td>业务逻辑验证失败</td>
+</tr>
+<tr>
+<td><strong>429</strong></td>
+<td>请求过多</td>
+<td>超出速率限制</td>
+</tr>
+<tr>
+<td><strong>500</strong></td>
+<td>服务器错误</td>
+<td>内部服务器错误</td>
+</tr>
+</tbody></table>
+<h3 id="5-3-🔧-错误代码定义"><a href="#5-3-🔧-错误代码定义" class="headerlink" title="5.3 🔧 错误代码定义"></a>5.3 🔧 错误代码定义</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="title class_">ErrorCodes</span> = &#123;</span><br><span class="line">    <span class="comment">// 认证相关</span></span><br><span class="line">    <span class="attr">AUTH_TOKEN_MISSING</span>: <span class="string">&#x27;AUTH_001&#x27;</span>,</span><br><span class="line">    <span class="attr">AUTH_TOKEN_INVALID</span>: <span class="string">&#x27;AUTH_002&#x27;</span>,</span><br><span class="line">    <span class="attr">AUTH_TOKEN_EXPIRED</span>: <span class="string">&#x27;AUTH_003&#x27;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用户相关</span></span><br><span class="line">    <span class="attr">USER_NOT_FOUND</span>: <span class="string">&#x27;USER_001&#x27;</span>,</span><br><span class="line">    <span class="attr">USER_ALREADY_EXISTS</span>: <span class="string">&#x27;USER_002&#x27;</span>,</span><br><span class="line">    <span class="attr">USER_CREDENTIALS_INVALID</span>: <span class="string">&#x27;USER_003&#x27;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 文件相关</span></span><br><span class="line">    <span class="attr">FILE_NOT_FOUND</span>: <span class="string">&#x27;FILE_001&#x27;</span>,</span><br><span class="line">    <span class="attr">FILE_TOO_LARGE</span>: <span class="string">&#x27;FILE_002&#x27;</span>,</span><br><span class="line">    <span class="attr">FILE_TYPE_NOT_ALLOWED</span>: <span class="string">&#x27;FILE_003&#x27;</span>,</span><br><span class="line">    <span class="attr">FILE_UPLOAD_FAILED</span>: <span class="string">&#x27;FILE_004&#x27;</span>,</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 系统相关</span></span><br><span class="line">    <span class="attr">RATE_LIMIT_EXCEEDED</span>: <span class="string">&#x27;SYS_001&#x27;</span>,</span><br><span class="line">    <span class="attr">MAINTENANCE_MODE</span>: <span class="string">&#x27;SYS_002&#x27;</span>,</span><br><span class="line">    <span class="attr">QUOTA_EXCEEDED</span>: <span class="string">&#x27;SYS_003&#x27;</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="6-🔒-安全机制"><a href="#6-🔒-安全机制" class="headerlink" title="6. 🔒 安全机制"></a>6. 🔒 安全机制</h2><h3 id="6-1-🛡️-认证与授权"><a href="#6-1-🛡️-认证与授权" class="headerlink" title="6.1 🛡️ 认证与授权"></a>6.1 🛡️ 认证与授权</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[客户端请求] --&gt; B[JWT验证]</span><br><span class="line">    B --&gt; C&#123;Token有效?&#125;</span><br><span class="line">    C --&gt;|否| D[返回401错误]</span><br><span class="line">    C --&gt;|是| E[权限检查]</span><br><span class="line">    E --&gt; F&#123;权限充足?&#125;</span><br><span class="line">    F --&gt;|否| G[返回403错误]</span><br><span class="line">    F --&gt;|是| H[处理请求]</span><br><span class="line">    H --&gt; I[返回响应]</span><br></pre></td></tr></table></figure>
+
+<h4 id="JWT-Token-结构"><a href="#JWT-Token-结构" class="headerlink" title="JWT Token 结构"></a>JWT Token 结构</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;header&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span> <span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span> <span class="string">&quot;JWT&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;payload&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user_id&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;username&quot;</span><span class="punctuation">:</span> <span class="string">&quot;string&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;email&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user@example.com&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;role&quot;</span><span class="punctuation">:</span> <span class="string">&quot;user&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;iat&quot;</span><span class="punctuation">:</span> <span class="number">1640000000</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;exp&quot;</span><span class="punctuation">:</span> <span class="number">1640086400</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-🔐-密码安全"><a href="#6-2-🔐-密码安全" class="headerlink" title="6.2 🔐 密码安全"></a>6.2 🔐 密码安全</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 密码加密示例</span></span><br><span class="line"><span class="keyword">const</span> bcrypt = <span class="built_in">require</span>(<span class="string">&#x27;bcrypt&#x27;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">hashPassword</span> = <span class="keyword">async</span> (<span class="params">password</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">const</span> saltRounds = <span class="number">12</span>;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">await</span> bcrypt.<span class="title function_">hash</span>(password, saltRounds);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="title function_">verifyPassword</span> = <span class="keyword">async</span> (<span class="params">password, hash</span>) =&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">await</span> bcrypt.<span class="title function_">compare</span>(password, hash);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-📝-输入验证"><a href="#6-3-📝-输入验证" class="headerlink" title="6.3 📝 输入验证"></a>6.3 📝 输入验证</h3><p><strong>文件名验证</strong>:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">&quot;filename&quot;</span>: &#123;</span><br><span class="line">        <span class="string">&quot;required&quot;</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="string">&quot;pattern&quot;</span>: <span class="string">&quot;^[a-zA-Z0-9._-]+$&quot;</span>,</span><br><span class="line">        <span class="string">&quot;maxLength&quot;</span>: <span class="number">255</span>,</span><br><span class="line">        <span class="string">&quot;sanitize&quot;</span>: <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>SQL注入防护</strong>:</p>
+<ul>
+<li>使用参数化查询</li>
+<li>输入转义和过滤</li>
+<li>最小权限原则</li>
+</ul>
+<hr>
+<h2 id="7-⏱️-速率限制"><a href="#7-⏱️-速率限制" class="headerlink" title="7. ⏱️ 速率限制"></a>7. ⏱️ 速率限制</h2><h3 id="7-1-🚦-限制策略"><a href="#7-1-🚦-限制策略" class="headerlink" title="7.1 🚦 限制策略"></a>7.1 🚦 限制策略</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[请求] --&gt; B[速率限制检查]</span><br><span class="line">    B --&gt; C&#123;超出限制?&#125;</span><br><span class="line">    C --&gt;|是| D[返回429错误]</span><br><span class="line">    C --&gt;|否| E[处理请求]</span><br><span class="line">    E --&gt; F[更新计数器]</span><br><span class="line"></span><br><span class="line">    style D fill:#ffcdd2</span><br><span class="line">    style F fill:#c8e6c9</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-📊-限制规则"><a href="#7-2-📊-限制规则" class="headerlink" title="7.2 📊 限制规则"></a>7.2 📊 限制规则</h3><table>
+<thead>
+<tr>
+<th>端点类型</th>
+<th>时间窗口</th>
+<th>最大请求数</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>认证相关</strong></td>
+<td>15分钟</td>
+<td>5次&#x2F;IP</td>
+<td>登录、注册</td>
+</tr>
+<tr>
+<td><strong>文件上传</strong></td>
+<td>1小时</td>
+<td>50次&#x2F;用户</td>
+<td>单文件上传</td>
+</tr>
+<tr>
+<td><strong>文件下载</strong></td>
+<td>1小时</td>
+<td>200次&#x2F;用户</td>
+<td>文件下载</td>
+</tr>
+<tr>
+<td><strong>其他API</strong></td>
+<td>15分钟</td>
+<td>100次&#x2F;IP</td>
+<td>一般请求</td>
+</tr>
+</tbody></table>
+<h3 id="7-3-📈-限制响应头"><a href="#7-3-📈-限制响应头" class="headerlink" title="7.3 📈 限制响应头"></a>7.3 📈 限制响应头</h3><figure class="highlight http"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">HTTP/1.1</span> <span class="number">429</span> Too Many Requests</span><br><span class="line"><span class="attribute">X-RateLimit-Limit</span><span class="punctuation">: </span>5</span><br><span class="line"><span class="attribute">X-RateLimit-Remaining</span><span class="punctuation">: </span>0</span><br><span class="line"><span class="attribute">X-RateLimit-Reset</span><span class="punctuation">: </span>1640090000</span><br><span class="line"><span class="attribute">Retry-After</span><span class="punctuation">: </span>900</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="8-📋-OpenAPI-规范"><a href="#8-📋-OpenAPI-规范" class="headerlink" title="8. 📋 OpenAPI 规范"></a>8. 📋 OpenAPI 规范</h2><h3 id="8-1-🔍-Swagger-配置"><a href="#8-1-🔍-Swagger-配置" class="headerlink" title="8.1 🔍 Swagger 配置"></a>8.1 🔍 Swagger 配置</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">openapi:</span> <span class="number">3.0</span><span class="number">.0</span></span><br><span class="line"><span class="attr">info:</span></span><br><span class="line">  <span class="attr">title:</span> <span class="string">文件管理系统</span> <span class="string">API</span></span><br><span class="line">  <span class="attr">description:</span> <span class="string">基于JWT认证的文件管理系统API文档</span></span><br><span class="line">  <span class="attr">version:</span> <span class="number">1.0</span><span class="number">.0</span></span><br><span class="line">  <span class="attr">contact:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">API</span> <span class="string">Support</span></span><br><span class="line">    <span class="attr">email:</span> <span class="string">support@example.com</span></span><br><span class="line">  <span class="attr">license:</span></span><br><span class="line">    <span class="attr">name:</span> <span class="string">MIT</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">https://opensource.org/licenses/MIT</span></span><br><span class="line"></span><br><span class="line"><span class="attr">servers:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">url:</span> <span class="string">https://api.example.com/api/v1</span></span><br><span class="line">    <span class="attr">description:</span> <span class="string">生产环境</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">url:</span> <span class="string">https://dev-api.example.com/api/v1</span></span><br><span class="line">    <span class="attr">description:</span> <span class="string">开发环境</span></span><br><span class="line"></span><br><span class="line"><span class="attr">security:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="attr">bearerAuth:</span> []</span><br><span class="line"></span><br><span class="line"><span class="attr">components:</span></span><br><span class="line">  <span class="attr">securitySchemes:</span></span><br><span class="line">    <span class="attr">bearerAuth:</span></span><br><span class="line">      <span class="attr">type:</span> <span class="string">http</span></span><br><span class="line">      <span class="attr">scheme:</span> <span class="string">bearer</span></span><br><span class="line">      <span class="attr">bearerFormat:</span> <span class="string">JWT</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="8-2-📝-API-文档生成"><a href="#8-2-📝-API-文档生成" class="headerlink" title="8.2 📝 API 文档生成"></a>8.2 📝 API 文档生成</h3><p><strong>访问 Swagger UI</strong>:</p>
+<ul>
+<li>生产环境: <code>https://api.example.com/docs</code></li>
+<li>开发环境: <code>https://dev-api.example.com/docs</code></li>
+</ul>
+<p><strong>下载 OpenAPI 规范</strong>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -o api-spec.json https://api.example.com/api-spec</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📊-API-使用统计"><a href="#📊-API-使用统计" class="headerlink" title="📊 API 使用统计"></a>📊 API 使用统计</h2><h3 id="9-1-📈-使用情况监控"><a href="#9-1-📈-使用情况监控" class="headerlink" title="9.1 📈 使用情况监控"></a>9.1 📈 使用情况监控</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[API请求] --&gt; B[记录请求日志]</span><br><span class="line">    B --&gt; C[更新统计数据]</span><br><span class="line">    C --&gt; D[实时监控面板]</span><br><span class="line"></span><br><span class="line">    E[错误请求] --&gt; F[错误日志记录]</span><br><span class="line">    F --&gt; G[告警系统]</span><br><span class="line">    G --&gt; H[运维团队]</span><br></pre></td></tr></table></figure>
+
+<h3 id="9-2-🔍-分析指标"><a href="#9-2-🔍-分析指标" class="headerlink" title="9.2 🔍 分析指标"></a>9.2 🔍 分析指标</h3><table>
+<thead>
+<tr>
+<th>指标</th>
+<th>说明</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>请求量</strong></td>
+<td>API调用次数</td>
+<td>性能分析</td>
+</tr>
+<tr>
+<td><strong>响应时间</strong></td>
+<td>平均响应时间</td>
+<td>性能优化</td>
+</tr>
+<tr>
+<td><strong>错误率</strong></td>
+<td>4xx&#x2F;5xx错误比例</td>
+<td>系统稳定性</td>
+</tr>
+<tr>
+<td><strong>并发用户</strong></td>
+<td>同时在线用户数</td>
+<td>容量规划</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="📚-客户端集成"><a href="#📚-客户端集成" class="headerlink" title="📚 客户端集成"></a>📚 客户端集成</h2><h3 id="10-1-🖥️-JavaScript-客户端示例"><a href="#10-1-🖥️-JavaScript-客户端示例" class="headerlink" title="10.1 🖥️ JavaScript 客户端示例"></a>10.1 🖥️ JavaScript 客户端示例</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">FileManagerAPI</span> &#123;</span><br><span class="line">    <span class="title function_">constructor</span>(<span class="params">baseURL</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">baseURL</span> = baseURL;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">token</span> = <span class="literal">null</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="title function_">setToken</span>(<span class="params">token</span>) &#123;</span><br><span class="line">        <span class="variable language_">this</span>.<span class="property">token</span> = token;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">request</span>(<span class="params">method, endpoint, data = <span class="literal">null</span>, options = &#123;&#125;</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> config = &#123;</span><br><span class="line">            method,</span><br><span class="line">            <span class="attr">headers</span>: &#123;</span><br><span class="line">                <span class="string">&#x27;Content-Type&#x27;</span>: <span class="string">&#x27;application/json&#x27;</span>,</span><br><span class="line">                ...options.<span class="property">headers</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (<span class="variable language_">this</span>.<span class="property">token</span>) &#123;</span><br><span class="line">            config.<span class="property">headers</span>.<span class="property">Authorization</span> = <span class="string">`Bearer <span class="subst">$&#123;<span class="variable language_">this</span>.token&#125;</span>`</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (data) &#123;</span><br><span class="line">            config.<span class="property">body</span> = <span class="title class_">JSON</span>.<span class="title function_">stringify</span>(data);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">`<span class="subst">$&#123;<span class="variable language_">this</span>.baseURL&#125;</span><span class="subst">$&#123;endpoint&#125;</span>`</span>, config);</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="title function_">json</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 用户登录</span></span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">login</span>(<span class="params">username, password</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> result = <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="title function_">request</span>(<span class="string">&#x27;POST&#x27;</span>, <span class="string">&#x27;/auth/login&#x27;</span>, &#123;</span><br><span class="line">            username,</span><br><span class="line">            password</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (result.<span class="property">success</span>) &#123;</span><br><span class="line">            <span class="variable language_">this</span>.<span class="title function_">setToken</span>(result.<span class="property">data</span>.<span class="property">token</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 上传文件</span></span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">uploadFile</span>(<span class="params">file</span>) &#123;</span><br><span class="line">        <span class="keyword">const</span> formData = <span class="keyword">new</span> <span class="title class_">FormData</span>();</span><br><span class="line">        formData.<span class="title function_">append</span>(<span class="string">&#x27;file&#x27;</span>, file);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">const</span> response = <span class="keyword">await</span> <span class="title function_">fetch</span>(<span class="string">`<span class="subst">$&#123;<span class="variable language_">this</span>.baseURL&#125;</span>/files/upload`</span>, &#123;</span><br><span class="line">            <span class="attr">method</span>: <span class="string">&#x27;POST&#x27;</span>,</span><br><span class="line">            <span class="attr">headers</span>: &#123;</span><br><span class="line">                <span class="string">&#x27;Authorization&#x27;</span>: <span class="string">`Bearer <span class="subst">$&#123;<span class="variable language_">this</span>.token&#125;</span>`</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="attr">body</span>: formData</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">await</span> response.<span class="title function_">json</span>();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取文件列表</span></span><br><span class="line">    <span class="keyword">async</span> <span class="title function_">getFiles</span>(<span class="params">page = <span class="number">1</span>, limit = <span class="number">20</span></span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">await</span> <span class="variable language_">this</span>.<span class="title function_">request</span>(<span class="string">&#x27;GET&#x27;</span>, <span class="string">`/files/list?page=<span class="subst">$&#123;page&#125;</span>&amp;limit=<span class="subst">$&#123;limit&#125;</span>`</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用示例</span></span><br><span class="line"><span class="keyword">const</span> api = <span class="keyword">new</span> <span class="title class_">FileManagerAPI</span>(<span class="string">&#x27;https://api.example.com/api/v1&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📋-总结"><a href="#📋-总结" class="headerlink" title="📋 总结"></a>📋 总结</h2><h3 id="✅-API-特性总览"><a href="#✅-API-特性总览" class="headerlink" title="✅ API 特性总览"></a>✅ API 特性总览</h3><ul>
+<li>🔐 <strong>安全认证</strong>: JWT Token 认证机制</li>
+<li>📁 <strong>文件管理</strong>: 完整的文件上传下载功能</li>
+<li>🎯 <strong>权限控制</strong>: 用户级别的访问控制</li>
+<li>⚡ <strong>性能优化</strong>: 支持断点续传和缩略图</li>
+<li>📊 <strong>监控统计</strong>: 完整的API使用统计</li>
+<li>📝 <strong>文档完整</strong>: 详细的API文档和示例</li>
+</ul>
+<h3 id="🚀-集成建议"><a href="#🚀-集成建议" class="headerlink" title="🚀 集成建议"></a>🚀 集成建议</h3><ol>
+<li><strong>前端应用</strong>: 使用 JavaScript SDK 快速集成</li>
+<li><strong>移动应用</strong>: 使用 RESTful API 进行数据交互</li>
+<li><strong>第三方服务</strong>: 通过 Webhook 接收文件事件通知</li>
+<li><strong>企业集成</strong>: 支持 SSO 和企业级权限管理</li>
+</ol>
+<h3 id="🔧-扩展功能"><a href="#🔧-扩展功能" class="headerlink" title="🔧 扩展功能"></a>🔧 扩展功能</h3><ul>
+<li>🔄 <strong>文件同步</strong>: 多设备文件同步</li>
+<li>📤 <strong>分享链接</strong>: 生成文件分享链接</li>
+<li>🔍 <strong>全文搜索</strong>: 文件内容全文检索</li>
+<li>🗂️ <strong>版本管理</strong>: 文件版本历史记录</li>
+<li>📱 <strong>移动端</strong>: 专用的移动端API</li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>💡 使用提示</strong>:</p>
+<ul>
+<li>所有API调用都需要有效的JWT Token</li>
+<li>建议使用HTTPS确保传输安全</li>
+<li>定期轮换API密钥和密码</li>
+<li>监控API使用情况避免超出配额限制</li>
+</ul>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/eed6fb04/">https://vilaswang.github.io/posts/eed6fb04/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/">技术文档</a><a class="post-meta__tags" href="/tags/%E6%8C%87%E5%8D%97/">指南</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/6ee89f12/" title="Qt 下载器需求规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Qt 下载器需求规范</div></div><div class="info-2"><div class="info-item-1">Qt 下载器需求规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: qt, downloader, product-requirements, desktop-app, c++  📑 目录 1. 产品概述 2. 用户角色 3. 功能需求 4. 非功能需求 5. 界面设计 6. 数据模型 7. 技术规范 8. 交付要求   1. 🎯 产品概述1.1 产品定位基于 Qt 框架开发的桌面下载管理器，支持多线程并发下载，提供直观的任务管理界面和实时进度监控。 1.2 核心价值 ✅ 批量下载 - 支持多任务并发下载 ✅ 进度监控 - 实时显示下载状态和进度 ✅ 断点续传 - 支持下载中断后继续 ✅ 跨平台 - 支持 Windows、macOS、Linux  1.3 产品架构图12345678910111213141516171819graph TD    A[用户界面] --&gt; B[任务管理器]    B --&gt; C[下载引擎]    C --&gt; D[网络请求层]    B --&gt; E[数据持久化]    B --&...</div></div></div></a><a class="pagination-related" href="/posts/cb45c274/" title="mTLS 证书生成指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">mTLS 证书生成指南</div></div><div class="info-2"><div class="info-item-1">mTLS 证书生成指南生成 CA 证书12345678# mTLS 证书生成指南openssl genrsa -aes256 -out ca-key.pem 4096# mTLS 证书生成指南openssl genrsa -out ca-key.pem 4096# mTLS 证书生成指南openssl req -new -x509 -days 3650 -key ca-key.pem -out ca-crt.pem -sha256  CA 证书生成注意事项：  Common Name: 输入 CA 名称，如 “My-CA” Organization: 输入组织名称 Country: 输入国家代码，如 “CN” 有效期建议设置为 10 年 (3650 天)  生成服务器证书1. 生成服务器私钥1openssl genrsa -out server-key.pem 2048  2. 生成服务器证书签名请求1openssl req -new -sha256 -key server-key.pem -out server-csr.pem  在提示输入信息时：  Country Name:...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">VSCode Qt MSVC 配置指南</div></div><div class="info-2"><div class="info-item-1">VSCode Qt MSVC 配置指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: vscode, qt, msvc, cmake, windows, development, cpp  📑 目录 1. 概述 2. 环境准备 3. VS Code 配置 3.1 C&#x2F;C++ 扩展配置 3.2 调试器配置 3.3 构建任务配置 3.4 Qt 可视化调试   4. CMake 配置 5. 环境验证 6. 常见问题解决 7. 完整工作流程   1. 📖 概述本指南详细介绍如何在 Windows 系统上配置 VS Code 进行 Qt C++ 开发，使用 MSVC 编译器和 CMake 构建系统。 🎯 配置目标 ✅ 使用 MSVC 编译器进行 Qt 开发 ✅ VS Code 完整的 IntelliSense 支持 ✅ 集成的调试和构建功能 ✅ 跨平台 CMake 构建系统  🏗️ 系统架构12345678910111213141516graph TB    A[VS Code IDE] --&gt; B[C/C++ Extension]  ...</div></div></div></a><a class="pagination-related" href="/posts/33eb4929/" title="FileZilla 端口转发指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">FileZilla 端口转发指南</div></div><div class="info-2"><div class="info-item-1">FileZilla 端口转发指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: filezilla, ftp, portforwarding, 花生壳, 内网穿透, 远程访问  📑 目录 1. 概述 2. 配置流程图 3. FileZilla Server 配置 4. 花生壳内网穿透 5. FTP 被动模式配置 6. 防火墙设置 7. 连接测试 8. 故障排除   1. 📖 概述本指南详细介绍如何使用 FileZilla Server 搭建 FTP 服务器，并通过花生壳实现外网访问内网文件的完整解决方案。 🎯 配置目标 ✅ 搭建内网 FTP 服务器 ✅ 配置花生壳内网穿透 ✅ 实现外网安全访问 ✅ 支持文件上传下载  🏗️ 系统架构图1234567891011121314flowchart TD    A[外网客户端] --&gt; B[花生壳外网域名]    B --&gt; C[花生壳服务器]    C --&gt; D[内网服务器]    D --&gt; E[FileZilla Server]    E --&gt; F[共享文件夹]...</div></div></div></a><a class="pagination-related" href="/posts/361d35d7/" title="Claude MCP 配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Claude MCP 配置指南</div></div><div class="info-2"><div class="info-item-1">Claude MCP 配置指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: claude-code, mcp, model-context-protocol, productivity, automation  📑 目录 1. MCP 概述 2. 必装 MCP 服务器 3. 推荐组合 4. 配置步骤 5. Top 15 MCP 服务器 6. 故障排除   1. 📖 MCP 概述MCP (Model Context Protocol) 是 Claude Code 的扩展协议，允许 AI 助手直接控制各种工具和服务。 🎯 MCP 优势 ✅ 扩展能力 - 大幅扩展 Claude 的功能范围 ✅ 自动化 - 实现复杂的自动化工作流 ✅ 集成性 - 连接各种第三方服务和工具 ✅ 实时性 - 获取最新的 API 文档和代码示例   2. ⭐ 必装 MCP 服务器2.1 🌐 Playwright MCP - 浏览器自动化功能: 让 Claude 直接控制浏览器进行测试、截图、数据爬取 12345# Claude MCP 配置指南claude mcp ad...</div></div></div></a><a class="pagination-related" href="/posts/6ee89f12/" title="Qt 下载器需求规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Qt 下载器需求规范</div></div><div class="info-2"><div class="info-item-1">Qt 下载器需求规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: qt, downloader, product-requirements, desktop-app, c++  📑 目录 1. 产品概述 2. 用户角色 3. 功能需求 4. 非功能需求 5. 界面设计 6. 数据模型 7. 技术规范 8. 交付要求   1. 🎯 产品概述1.1 产品定位基于 Qt 框架开发的桌面下载管理器，支持多线程并发下载，提供直观的任务管理界面和实时进度监控。 1.2 核心价值 ✅ 批量下载 - 支持多任务并发下载 ✅ 进度监控 - 实时显示下载状态和进度 ✅ 断点续传 - 支持下载中断后继续 ✅ 跨平台 - 支持 Windows、macOS、Linux  1.3 产品架构图12345678910111213141516171819graph TD    A[用户界面] --&gt; B[任务管理器]    B --&gt; C[下载引擎]    C --&gt; D[网络请求层]    B --&gt; E[数据持久化]    B --&...</div></div></div></a><a class="pagination-related" href="/posts/95bf2167/" title="C++ Web 代理设计架构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">C++ Web 代理设计架构</div></div><div class="info-2"><div class="info-item-1">C++ Web 代理设计架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: agents, cpp, web-development, specialization, ai-assistants, claude-code  📑 目录 1. 概述 2. 设计原则 3. Agent 架构 4. 核心团队 Agents 4.1 Project Architect Agent 4.2 API Designer Agent 4.3 Core Logic Developer Agent 4.4 Web Service Integrator Agent 4.5 Build &amp; Dependency Expert Agent 4.6 QA Specialist Agent 4.7 Deployment Operator Agent   5. 协作流程 6. 使用指南 7. 扩展和维护   1. 📖 概述本指南详细说明如何为 C++ Web 项目创建专门化的 AI Agent 团队，每个 Agent 都具有特定的职责和专业能力，通过协同工作完成从设计到部署...</div></div></div></a><a class="pagination-related" href="/posts/ec4e5506/" title="服务器认证 API 规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">服务器认证 API 规范</div></div><div class="info-2"><div class="info-item-1">服务器认证 API 规范 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: authentication, api, security, jwt, express, nodejs, middleware  📑 目录 1. 概述 2. 认证中间件 3. 认证流程 3.1 注册流程 3.2 登录流程 3.3 Token 验证流程   4. 安全措施 4.1 输入验证 4.2 请求频率限制 4.3 CORS 配置   5. 用户模型 6. 受保护的路由 7. 客户端使用 8. 高级特性 9. 测试与调试   1. 📖 概述本指南详细说明如何实现服务器端的用户认证系统，包括注册、登录、Token 验证以及相关安全措施。 🎯 认证系统特性 ✅ JWT Token 认证 ✅ 密码加密存储 ✅ 请求频率限制 ✅ 输入验证和清理 ✅ CORS 跨域保护 ✅ 错误处理和安全日志  🏗️ 系统架构12345678910graph TD    A[Client Request] --&gt; B[Rate Limiting]    B --&gt; C[Input V...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86-API-%E8%A7%84%E8%8C%83"><span class="toc-number">1.</span> <span class="toc-text">文件管理 API 规范</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">📑 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%F0%9F%93%8B-%E5%9F%BA%E7%A1%80%E4%BF%A1%E6%81%AF"><span class="toc-number">1.2.</span> <span class="toc-text">1. 📋 基础信息</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%90-%E8%AE%A4%E8%AF%81%E8%AF%B7%E6%B1%82%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.2.1.</span> <span class="toc-text">🔐 认证请求格式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%F0%9F%94%90-%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%8E%88%E6%9D%83"><span class="toc-number">1.3.</span> <span class="toc-text">2. 🔐 认证与授权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%F0%9F%91%A4-%E7%94%A8%E6%88%B7%E6%B3%A8%E5%86%8C"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1 👤 用户注册</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E8%AF%A6%E6%83%85"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">接口详情</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%F0%9F%94%91-%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.2 🔑 用户登录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%F0%9F%8C%90-OAuth-%E9%9B%86%E6%88%90"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.3 🌐 OAuth 集成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%F0%9F%93%81-%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">3. 📁 文件管理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%F0%9F%93%A4-%E5%8D%95%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 📤 单文件上传</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8E%A5%E5%8F%A3%E8%AF%A6%E6%83%85-1"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">接口详情</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%F0%9F%93%A6-%E5%A4%9A%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 📦 多文件上传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%F0%9F%93%8B-%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.3 📋 获取文件列表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E2%AC%87%EF%B8%8F-%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.4.4.</span> <span class="toc-text">3.4 ⬇️ 文件下载</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%F0%9F%93%8E-%E6%96%87%E4%BB%B6%E6%94%AF%E6%8C%81"><span class="toc-number">1.5.</span> <span class="toc-text">4. 📎 文件支持</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%F0%9F%8E%A8-%E5%85%81%E8%AE%B8%E7%9A%84%E6%96%87%E4%BB%B6%E7%B1%BB%E5%9E%8B"><span class="toc-number">1.5.1.</span> <span class="toc-text">4.1 🎨 允许的文件类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%F0%9F%93%8F-%E6%96%87%E4%BB%B6%E5%A4%A7%E5%B0%8F%E9%99%90%E5%88%B6"><span class="toc-number">1.5.2.</span> <span class="toc-text">4.2 📏 文件大小限制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%F0%9F%96%BC%EF%B8%8F-%E7%BC%A9%E7%95%A5%E5%9B%BE%E7%94%9F%E6%88%90"><span class="toc-number">1.5.3.</span> <span class="toc-text">4.3 🖼️ 缩略图生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E2%9D%8C-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86"><span class="toc-number">1.6.</span> <span class="toc-text">5. ❌ 错误处理</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%F0%9F%93%8A-%E6%A0%87%E5%87%86%E9%94%99%E8%AF%AF%E5%93%8D%E5%BA%94%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.6.1.</span> <span class="toc-text">5.1 📊 标准错误响应格式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%F0%9F%93%8B-HTTP-%E7%8A%B6%E6%80%81%E7%A0%81"><span class="toc-number">1.6.2.</span> <span class="toc-text">5.2 📋 HTTP 状态码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%F0%9F%94%A7-%E9%94%99%E8%AF%AF%E4%BB%A3%E7%A0%81%E5%AE%9A%E4%B9%89"><span class="toc-number">1.6.3.</span> <span class="toc-text">5.3 🔧 错误代码定义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%F0%9F%94%92-%E5%AE%89%E5%85%A8%E6%9C%BA%E5%88%B6"><span class="toc-number">1.7.</span> <span class="toc-text">6. 🔒 安全机制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%F0%9F%9B%A1%EF%B8%8F-%E8%AE%A4%E8%AF%81%E4%B8%8E%E6%8E%88%E6%9D%83"><span class="toc-number">1.7.1.</span> <span class="toc-text">6.1 🛡️ 认证与授权</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#JWT-Token-%E7%BB%93%E6%9E%84"><span class="toc-number">1.7.1.1.</span> <span class="toc-text">JWT Token 结构</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%F0%9F%94%90-%E5%AF%86%E7%A0%81%E5%AE%89%E5%85%A8"><span class="toc-number">1.7.2.</span> <span class="toc-text">6.2 🔐 密码安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%F0%9F%93%9D-%E8%BE%93%E5%85%A5%E9%AA%8C%E8%AF%81"><span class="toc-number">1.7.3.</span> <span class="toc-text">6.3 📝 输入验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%E2%8F%B1%EF%B8%8F-%E9%80%9F%E7%8E%87%E9%99%90%E5%88%B6"><span class="toc-number">1.8.</span> <span class="toc-text">7. ⏱️ 速率限制</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%F0%9F%9A%A6-%E9%99%90%E5%88%B6%E7%AD%96%E7%95%A5"><span class="toc-number">1.8.1.</span> <span class="toc-text">7.1 🚦 限制策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%F0%9F%93%8A-%E9%99%90%E5%88%B6%E8%A7%84%E5%88%99"><span class="toc-number">1.8.2.</span> <span class="toc-text">7.2 📊 限制规则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%F0%9F%93%88-%E9%99%90%E5%88%B6%E5%93%8D%E5%BA%94%E5%A4%B4"><span class="toc-number">1.8.3.</span> <span class="toc-text">7.3 📈 限制响应头</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%F0%9F%93%8B-OpenAPI-%E8%A7%84%E8%8C%83"><span class="toc-number">1.9.</span> <span class="toc-text">8. 📋 OpenAPI 规范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%F0%9F%94%8D-Swagger-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.9.1.</span> <span class="toc-text">8.1 🔍 Swagger 配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%F0%9F%93%9D-API-%E6%96%87%E6%A1%A3%E7%94%9F%E6%88%90"><span class="toc-number">1.9.2.</span> <span class="toc-text">8.2 📝 API 文档生成</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8A-API-%E4%BD%BF%E7%94%A8%E7%BB%9F%E8%AE%A1"><span class="toc-number">1.10.</span> <span class="toc-text">📊 API 使用统计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#9-1-%F0%9F%93%88-%E4%BD%BF%E7%94%A8%E6%83%85%E5%86%B5%E7%9B%91%E6%8E%A7"><span class="toc-number">1.10.1.</span> <span class="toc-text">9.1 📈 使用情况监控</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#9-2-%F0%9F%94%8D-%E5%88%86%E6%9E%90%E6%8C%87%E6%A0%87"><span class="toc-number">1.10.2.</span> <span class="toc-text">9.2 🔍 分析指标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%9A-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%9B%86%E6%88%90"><span class="toc-number">1.11.</span> <span class="toc-text">📚 客户端集成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#10-1-%F0%9F%96%A5%EF%B8%8F-JavaScript-%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.11.1.</span> <span class="toc-text">10.1 🖥️ JavaScript 客户端示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8B-%E6%80%BB%E7%BB%93"><span class="toc-number">1.12.</span> <span class="toc-text">📋 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-API-%E7%89%B9%E6%80%A7%E6%80%BB%E8%A7%88"><span class="toc-number">1.12.1.</span> <span class="toc-text">✅ API 特性总览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%9A%80-%E9%9B%86%E6%88%90%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.12.2.</span> <span class="toc-text">🚀 集成建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%94%A7-%E6%89%A9%E5%B1%95%E5%8A%9F%E8%83%BD"><span class="toc-number">1.12.3.</span> <span class="toc-text">🔧 扩展功能</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

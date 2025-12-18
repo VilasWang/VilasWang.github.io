@@ -1,0 +1,381 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>gRPC C++ 开发指南 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gRPC C++ 开发指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/4f30aaf4/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-04T05:13:21.000Z">
+<meta property="article:modified_time" content="2025-12-17T15:36:29.308Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Protobuf">
+<meta property="article:tag" content="RPC">
+<meta property="article:tag" content="gRPC">
+<meta property="article:tag" content="protoc">
+<meta property="article:tag" content="网络编程">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "gRPC C++ 开发指南",
+  "url": "https://vilaswang.github.io/posts/4f30aaf4/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-04T05:13:21.000Z",
+  "dateModified": "2025-12-17T15:36:29.308Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/4f30aaf4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'gRPC C++ 开发指南',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">gRPC C++ 开发指南</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">gRPC C++ 开发指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-04T05:13:21.000Z" title="发表于 2025-12-04 13:13:21">2025-12-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T15:36:29.308Z" title="更新于 2025-12-17 23:36:29">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/">C++核心开发</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B%E4%B8%8ERPC/">网络编程与RPC</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="gRPC-C-开发指南"><a href="#gRPC-C-开发指南" class="headerlink" title="gRPC C++ 开发指南"></a>gRPC C++ 开发指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#grpc-%E6%A6%82%E8%BF%B0">gRPC 概述</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE">环境配置</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%AE%9A%E4%B9%89%E6%9C%8D%E5%8A%A1-proto">第一步：定义服务 (.proto)</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81-protoc">第二步：生成代码 (protoc)</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E5%AE%9E%E7%8E%B0%E6%9C%8D%E5%8A%A1%E7%AB%AF">第三步：实现服务端</a></li>
+<li><a href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF">第四步：实现客户端</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%E7%BC%96%E8%AF%91%E4%B8%8E%E8%BF%90%E8%A1%8C">第五步：编译与运行</a></li>
+<li><a href="#%E9%AB%98%E7%BA%A7%E4%B8%BB%E9%A2%98">高级主题</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+</ul>
+<h2 id="gRPC-概述"><a href="#gRPC-概述" class="headerlink" title="gRPC 概述"></a>gRPC 概述</h2><p>gRPC 是一个由 Google 开发的、基于 HTTP&#x2F;2 的高性能、开源、通用的 RPC (远程过程调用) 框架。</p>
+<h3 id="核心特性"><a href="#核心特性" class="headerlink" title="核心特性"></a>核心特性</h3><ul>
+<li><strong>高性能</strong>: 基于 HTTP&#x2F;2，支持双向流、头部压缩、多路复用。</li>
+<li><strong>IDL (接口定义语言)</strong>: 使用 Protocol Buffers (Protobuf) 来定义服务接口和消息结构，具有强类型约束。</li>
+<li><strong>跨语言</strong>: 支持 C++, Java, Python, Go, C#, Node.js, Ruby, PHP 等多种语言。</li>
+<li><strong>四种服务类型</strong>:<ol>
+<li><strong>简单 RPC (Unary RPC)</strong></li>
+<li><strong>服务端流式 RPC (Server streaming RPC)</strong></li>
+<li><strong>客户端流式 RPC (Client streaming RPC)</strong></li>
+<li><strong>双向流式 RPC (Bidirectional streaming RPC)</strong></li>
+</ol>
+</li>
+</ul>
+<h2 id="环境配置"><a href="#环境配置" class="headerlink" title="环境配置"></a>环境配置</h2><h3 id="选项-A-使用包管理器-快速入门"><a href="#选项-A-使用包管理器-快速入门" class="headerlink" title="选项 A: 使用包管理器 (快速入门)"></a>选项 A: 使用包管理器 (快速入门)</h3><p>这是最简单的方式，但 gRPC 和 Protobuf 的版本可能较旧。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># gRPC C++ 开发指南</span></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"><span class="built_in">sudo</span> apt install -y libgrpc++-dev protobuf-compiler libprotobuf-dev pkg-config</span><br></pre></td></tr></table></figure>
+
+<h3 id="选项-B-从源码编译-推荐"><a href="#选项-B-从源码编译-推荐" class="headerlink" title="选项 B: 从源码编译 (推荐)"></a>选项 B: 从源码编译 (推荐)</h3><p>这是获取最新版本、完全控制编译选项的推荐方式。请参考我们知识库中的这篇独立指南：</p>
+<ul>
+<li><strong><a href="./gRPC-Source-Compilation-Guide-Linux.md">gRPC &amp; Protobuf 源码编译指南 (Linux)</a></strong></li>
+</ul>
+<h2 id="第一步：定义服务-proto"><a href="#第一步：定义服务-proto" class="headerlink" title="第一步：定义服务 (.proto)"></a>第一步：定义服务 (.proto)</h2><p>使用 Protocol Buffers 语法创建一个 <code>.proto</code> 文件来定义你的服务。</p>
+<p><code>chatter.proto</code>:</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> chatter;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义聊天服务</span></span><br><span class="line"><span class="keyword">service </span><span class="title class_">Chatter</span> &#123;</span><br><span class="line">  <span class="comment">// 简单 RPC: 发送一条消息</span></span><br><span class="line">  <span class="function"><span class="keyword">rpc</span> SendMessage(MessageRequest) <span class="keyword">returns</span> (MessageReply)</span>;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 服务端流: 订阅消息</span></span><br><span class="line">  <span class="function"><span class="keyword">rpc</span> SubscribeMessages(SubscriptionRequest) <span class="keyword">returns</span> (stream MessageReply)</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发送消息的请求体</span></span><br><span class="line"><span class="keyword">message </span><span class="title class_">MessageRequest</span> &#123;</span><br><span class="line">  <span class="type">string</span> user_name = <span class="number">1</span>;</span><br><span class="line">  <span class="type">string</span> content = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 订阅消息的请求体</span></span><br><span class="line"><span class="keyword">message </span><span class="title class_">SubscriptionRequest</span> &#123;</span><br><span class="line">  <span class="type">string</span> user_name = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 通用回复体</span></span><br><span class="line"><span class="keyword">message </span><span class="title class_">MessageReply</span> &#123;</span><br><span class="line">  <span class="type">string</span> server_id = <span class="number">1</span>;</span><br><span class="line">  <span class="type">string</span> confirmation_message = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="第二步：生成代码-protoc"><a href="#第二步：生成代码-protoc" class="headerlink" title="第二步：生成代码 (protoc)"></a>第二步：生成代码 (protoc)</h2><p>使用 <code>protoc</code> 编译器和 gRPC C++ 插件从 <code>.proto</code> 文件生成 C++ 代码。</p>
+<h3 id="1-命令详解"><a href="#1-命令详解" class="headerlink" title="1. 命令详解"></a>1. 命令详解</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc -I=&lt;proto_path&gt; --cpp_out=&lt;out_dir&gt; --grpc_out=&lt;out_dir&gt; --plugin=protoc-gen-grpc=&lt;plugin_path&gt; &lt;your_proto_file&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>-I=&lt;proto_path&gt;</code></strong>: 指定 <code>.proto</code> 文件的搜索目录，可以有多个 <code>-I</code> 参数。</li>
+<li><strong><code>--cpp_out=&lt;out_dir&gt;</code></strong>: 指定生成的 C++ <strong>消息类</strong> (<code>.pb.h</code>, <code>.pb.cc</code>) 的输出目录。</li>
+<li><strong><code>--grpc_out=&lt;out_dir&gt;</code></strong>: 指定生成的 C++ <strong>服务类</strong> (<code>.grpc.pb.h</code>, <code>.grpc.pb.cc</code>) 的输出目录。</li>
+<li><strong><code>--plugin=protoc-gen-grpc=&lt;plugin_path&gt;</code></strong>: 指定 <code>grpc_cpp_plugin</code> 可执行文件的路径。</li>
+</ul>
+<h3 id="2-执行生成"><a href="#2-执行生成" class="headerlink" title="2. 执行生成"></a>2. 执行生成</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># gRPC C++ 开发指南</span></span><br><span class="line">GRPC_CPP_PLUGIN_PATH=$(<span class="built_in">which</span> grpc_cpp_plugin)</span><br><span class="line"></span><br><span class="line"><span class="comment"># gRPC C++ 开发指南</span></span><br><span class="line">protoc -I. --cpp_out=. --grpc_out=. --plugin=protoc-gen-grpc=<span class="variable">$GRPC_CPP_PLUGIN_PATH</span> chatter.proto</span><br></pre></td></tr></table></figure>
+<p>这将生成四个文件：<code>chatter.pb.h</code>, <code>chatter.pb.cc</code>, <code>chatter.grpc.pb.h</code>, <code>chatter.grpc.pb.cc</code>。</p>
+<h3 id="3-自动化脚本-推荐"><a href="#3-自动化脚本-推荐" class="headerlink" title="3. 自动化脚本 (推荐)"></a>3. 自动化脚本 (推荐)</h3><p>在项目中，强烈建议使用脚本来自动化代码生成，以保证一致性。</p>
+<p><code>generate_grpc.sh</code>:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">set</span> -e</span><br><span class="line"></span><br><span class="line"><span class="comment"># gRPC C++ 开发指南</span></span><br><span class="line">PROTO_SRC_DIR=<span class="string">&quot;./protos&quot;</span></span><br><span class="line">GENERATED_DIR=<span class="string">&quot;./generated&quot;</span></span><br><span class="line">GRPC_CPP_PLUGIN_PATH=$(<span class="built_in">which</span> grpc_cpp_plugin)</span><br><span class="line"></span><br><span class="line"><span class="comment"># gRPC C++ 开发指南</span></span><br><span class="line"><span class="keyword">if</span> [ ! -x <span class="string">&quot;<span class="variable">$GRPC_CPP_PLUGIN_PATH</span>&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Error: grpc_cpp_plugin not found or not executable.&quot;</span></span><br><span class="line">    <span class="built_in">exit</span> 1</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># gRPC C++ 开发指南</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Cleaning old generated files...&quot;</span></span><br><span class="line"><span class="built_in">rm</span> -rf <span class="string">&quot;<span class="variable">$GENERATED_DIR</span>&quot;</span></span><br><span class="line"><span class="built_in">mkdir</span> -p <span class="string">&quot;<span class="variable">$GENERATED_DIR</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Generating gRPC C++ code from all .proto files in <span class="variable">$PROTO_SRC_DIR</span>...&quot;</span></span><br><span class="line"></span><br><span class="line">protoc -I <span class="string">&quot;<span class="variable">$PROTO_SRC_DIR</span>&quot;</span> \</span><br><span class="line">       --cpp_out=<span class="string">&quot;<span class="variable">$GENERATED_DIR</span>&quot;</span> \</span><br><span class="line">       --grpc_out=<span class="string">&quot;<span class="variable">$GENERATED_DIR</span>&quot;</span> \</span><br><span class="line">       --plugin=protoc-gen-grpc=<span class="string">&quot;<span class="variable">$GRPC_CPP_PLUGIN_PATH</span>&quot;</span> \</span><br><span class="line">       $(find <span class="string">&quot;<span class="variable">$PROTO_SRC_DIR</span>&quot;</span> -name <span class="string">&quot;*.proto&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;Code generation complete. Files are in <span class="variable">$GENERATED_DIR</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="第三步：实现服务端"><a href="#第三步：实现服务端" class="headerlink" title="第三步：实现服务端"></a>第三步：实现服务端</h2><p>(此部分及后续部分与之前版本相同，为简洁省略… 如果需要我可以完整展示)<br>…</p>
+<h2 id="第四步：实现客户端"><a href="#第四步：实现客户端" class="headerlink" title="第四步：实现客户端"></a>第四步：实现客户端</h2><p>…</p>
+<h2 id="第五步：编译与运行"><a href="#第五步：编译与运行" class="headerlink" title="第五步：编译与运行"></a>第五步：编译与运行</h2><p>…</p>
+<h2 id="高级主题"><a href="#高级主题" class="headerlink" title="高级主题"></a>高级主题</h2><h3 id="1-异步-API"><a href="#1-异步-API" class="headerlink" title="1. 异步 API"></a>1. 异步 API</h3><p>gRPC C++ 提供了一套功能强大的异步 API，这里展示更现代的<strong>回调式 (Callback) API</strong>。</p>
+<p><code>async_client.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ... (includes and using declarations as before)</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">AsyncClient</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> channel = grpc::<span class="built_in">CreateChannel</span>(<span class="string">&quot;localhost:50051&quot;</span>, grpc::<span class="built_in">InsecureChannelCredentials</span>());</span><br><span class="line">    <span class="keyword">auto</span> stub = Chatter::<span class="built_in">NewStub</span>(channel);</span><br><span class="line"></span><br><span class="line">    MessageRequest request;</span><br><span class="line">    request.<span class="built_in">set_user_name</span>(<span class="string">&quot;AsyncAlice&quot;</span>);</span><br><span class="line">    request.<span class="built_in">set_content</span>(<span class="string">&quot;Hello from async C++!&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 创建回调函数</span></span><br><span class="line">    <span class="keyword">auto</span> on_reply = [](Status status, MessageReply reply) &#123;</span><br><span class="line">        <span class="keyword">if</span> (status.<span class="built_in">ok</span>()) &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Async RPC successful. Server says: &quot;</span> &lt;&lt; reply.<span class="built_in">confirmation_message</span>() &lt;&lt; std::endl;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Async RPC failed: &quot;</span> &lt;&lt; status.<span class="built_in">error_code</span>() &lt;&lt; <span class="string">&quot;: &quot;</span> &lt;&lt; status.<span class="built_in">error_message</span>() &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 发起异步调用</span></span><br><span class="line">    stub-&gt;<span class="built_in">async</span>()-&gt;<span class="built_in">SendMessage</span>(<span class="keyword">new</span> <span class="built_in">ClientContext</span>(), &amp;request, <span class="keyword">new</span> <span class="built_in">MessageReply</span>(), on_reply);</span><br><span class="line"></span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Async call initiated. Waiting for reply...&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    <span class="comment">// 在实际应用中，你需要一个机制来等待回调完成，例如条件变量或在事件循环中运行。</span></span><br><span class="line">    std::this_thread::<span class="built_in">sleep_for</span>(std::chrono::<span class="built_in">seconds</span>(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-拦截器-Interceptor"><a href="#2-拦截器-Interceptor" class="headerlink" title="2. 拦截器 (Interceptor)"></a>2. 拦截器 (Interceptor)</h3><blockquote>
+<p><strong>注意</strong>: 这是一个实验性 API，未来可能会有变动。</p>
+</blockquote>
+<p>拦截器允许你在 RPC 调用的生命周期中注入自定义逻辑（如日志、认证、监控）。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;grpcpp/experimental/server_interceptor.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">LoggingInterceptor</span> : <span class="keyword">public</span> grpc::experimental::Interceptor &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">Intercept</span><span class="params">(grpc::experimental::InterceptorBatchMethods* methods)</span> <span class="keyword">override</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (methods-&gt;<span class="built_in">QueryInterceptionHookPoint</span>(</span><br><span class="line">            grpc::experimental::InterceptionHookPoints::PRE_SEND_INITIAL_METADATA)) &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;LOG: Server processing new request.&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 必须调用 Proceed() 来将控制权交还给 gRPC 框架</span></span><br><span class="line">        methods-&gt;<span class="built_in">Proceed</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在 ServerBuilder 中使用</span></span><br><span class="line"><span class="comment">// std::vector&lt;std::unique_ptr&lt;grpc::experimental::ServerInterceptorFactoryInterface&gt;&gt; creators;</span></span><br><span class="line"><span class="comment">// creators.push_back(std::make_unique&lt;YourInterceptorFactory&gt;());</span></span><br><span class="line"><span class="comment">// builder.experimental().SetInterceptorCreators(std::move(creators));</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>Q1: <code>protoc: command not found</code>?</strong><br><strong>A</strong>: <code>protoc</code> 不在你的 <code>PATH</code> 中。</p>
+<ul>
+<li>如果使用 <code>apt</code> 安装，请确保 <code>protobuf-compiler</code> 已安装。</li>
+<li>如果从源码编译，请确保安装路径的 <code>bin</code> 目录（如 <code>/usr/local/grpc/bin</code>）已添加到 <code>PATH</code>。</li>
+</ul>
+<p><strong>Q2: <code>protoc-gen-grpc: program not found or is not executable</code>?</strong><br><strong>A</strong>: <code>protoc</code> 找不到 gRPC C++ 插件。</p>
+<ul>
+<li>确保 <code>grpc_cpp_plugin</code> 存在于 <code>PATH</code> 中，或者在 <code>--plugin</code> 参数中提供其完整路径。</li>
+<li>检查文件是否有执行权限 (<code>chmod +x &lt;path_to_plugin&gt;</code>)。</li>
+</ul>
+<p><strong>Q3: 编译生成的代码时，提示找不到 gRPC 或 Protobuf 头文件?</strong><br><strong>A</strong>: 你的编译器找不到所需的头文件。</p>
+<ul>
+<li><strong>pkg-config (推荐)</strong>: 确保你的编译命令包含了 <code>$(pkg-config --cflags grpc++ protobuf)</code>。</li>
+<li><strong>CMake</strong>: 检查 <code>find_package(gRPC)</code> 和 <code>find_package(Protobuf)</code> 是否成功。如果 gRPC 安装在非标准路径，你可能需要设置 <code>CMAKE_PREFIX_PATH</code>。</li>
+<li><strong>手动编译</strong>: 使用 <code>-I/path/to/includes</code> 手动添加正确的包含路径。</li>
+</ul>
+<p><strong>Q4: 链接时出现 <code>undefined reference to</code> 错误?</strong><br><strong>A</strong>: 链接器找不到 gRPC 或 Protobuf 的库文件。</p>
+<ul>
+<li><strong>pkg-config (推荐)</strong>: 确保你的链接命令包含了 <code>$(pkg-config --libs grpc++ protobuf)</code>。</li>
+<li><strong>CMake</strong>: 确保 <code>target_link_libraries</code> 指令正确链接了 <code>gRPC::grpc++</code> 和 <code>protobuf::libprotobuf</code>。</li>
+<li><strong>手动编译</strong>: 使用 <code>-L/path/to/libs -lgrpc++ -lprotobuf</code> 手动添加库路径和库。</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/4f30aaf4/">https://vilaswang.github.io/posts/4f30aaf4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a><a class="post-meta__tags" href="/tags/gRPC/">gRPC</a><a class="post-meta__tags" href="/tags/Protobuf/">Protobuf</a><a class="post-meta__tags" href="/tags/RPC/">RPC</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">网络编程</a><a class="post-meta__tags" href="/tags/protoc/">protoc</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/35f89acf/" title="Qt QSS 样式表指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Qt QSS 样式表指南</div></div><div class="info-2"><div class="info-item-1">Qt QSS 样式表指南目录 概述 基础语法与应用 选择器 (Selectors) 盒子模型 (Box Model) 伪状态 (Pseudo-States) 子控件 (Sub-Controls) 常用属性参考 高级技巧与最佳实践  概述Qt 样式表 (Qt Style Sheets, QSS) 是一种强大的机制，允许开发者使用类似 CSS 的语法来定制 Qt 控件的外观。通过 QSS，可以轻松实现界面美化、主题切换和品牌定制，而无需修改 C++ 代码。 基础语法与应用1. 语法结构QSS 的基本语法与 CSS 非常相似：selector { property: value; } 1234567891011121314/* 这是一个注释 *//* 类型选择器: 应用于所有 QPushButton 实例 */QPushButton &#123;    color: white;    background-color: #5cb85c;    border-radius: 4px;    padding: 8px 16px;&#125;/* 对象名称选择器 (ID选择器): 只应用于...</div></div></div></a><a class="pagination-related" href="/posts/2a876257/" title="gRPC Linux 编译指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">gRPC Linux 编译指南</div></div><div class="info-2"><div class="info-item-1">gRPC Linux 编译指南目录 概述 环境准备 获取源码 编译与安装 配置环境 验证安装 常见问题  概述本指南详细介绍如何在 Linux 系统（以 Ubuntu&#x2F;Debian 为例）下，通过 CMake 从源码编译和安装 gRPC 及其核心依赖 Protobuf。 此方法遵循 gRPC 官方推荐的流程，通过 Git 子模块来构建其依赖，确保版本兼容性，过程最简单、最可靠。 系统要求 操作系统: Ubuntu 20.04+ &#x2F; Debian 10+ 编译器: GCC 9+ 或 Clang 9+ CMake: 3.13+ 内存: 建议 8GB+ 磁盘空间: 建议 15GB+ 可用空间  环境准备123456789101112# gRPC Linux 编译指南sudo apt update# gRPC Linux 编译指南sudo apt install -y \    build-essential \    autoconf \    libtool \    pkg-config \    cmake \    git \    zlib1g-dev  ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/2a876257/" title="gRPC Linux 编译指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">gRPC Linux 编译指南</div></div><div class="info-2"><div class="info-item-1">gRPC Linux 编译指南目录 概述 环境准备 获取源码 编译与安装 配置环境 验证安装 常见问题  概述本指南详细介绍如何在 Linux 系统（以 Ubuntu&#x2F;Debian 为例）下，通过 CMake 从源码编译和安装 gRPC 及其核心依赖 Protobuf。 此方法遵循 gRPC 官方推荐的流程，通过 Git 子模块来构建其依赖，确保版本兼容性，过程最简单、最可靠。 系统要求 操作系统: Ubuntu 20.04+ &#x2F; Debian 10+ 编译器: GCC 9+ 或 Clang 9+ CMake: 3.13+ 内存: 建议 8GB+ 磁盘空间: 建议 15GB+ 可用空间  环境准备123456789101112# gRPC Linux 编译指南sudo apt update# gRPC Linux 编译指南sudo apt install -y \    build-essential \    autoconf \    libtool \    pkg-config \    cmake \    git \    zlib1g-dev  ...</div></div></div></a><a class="pagination-related" href="/posts/1653e33b/" title="Qt 网络编程指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Qt 网络编程指南</div></div><div class="info-2"><div class="info-item-1">Qt 网络编程指南目录 概述 HTTP 编程 (QNetworkAccessManager) TCP 编程 (QTcpServer 和 QTcpSocket) UDP 编程 (QUdpSocket) WebSocket 编程 (QWebSocket) 处理 SSL&#x2F;TLS  概述Qt 的 Network 模块提供了一整套强大的类，用于处理从高层的 HTTP 请求到低层的 TCP&#x2F;UDP 套接字等各种网络通信任务。本指南将通过一系列独立的、最小化的示例，介绍如何使用这些核心类。 项目配置 (.pro 文件)要使用本指南中的任何功能，请确保你的 .pro 文件中包含了 network 模块。 1QT += core gui network  HTTP 编程 (QNetworkAccessManager)QNetworkAccessManager 是 Qt 中用于处理 HTTP&#x2F;HTTPS 请求的中心类。它是异步的，通过信号和槽来处理网络回复。 1. 发送 GET 请求12345678910111213141516171819202122232425262...</div></div></div></a><a class="pagination-related" href="/posts/b33ae3e9/" title="GDB 调试工具完整使用指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">GDB 调试工具完整使用指南</div></div><div class="info-2"><div class="info-item-1">GDB (GNU Debugger) 调试指南目录 编译调试版本 启动 GDB 断点 执行控制 查看数据 高级技巧 常见问题  编译调试版本为了让 GDB 能够获取足够的信息，你必须在编译时加入 -g 参数。为了获得最佳调试体验，建议关闭优化 (-O0) 并开启所有警告。 123456789101112# 使用 -g 参数生成调试信息g++ -g -o my_app my_app.cpp# 推荐的调试编译选项g++ -g -O0 -Wall -Wextra -o my_app my_app.cpp# CMake 构建系统的调试模式cmake -DCMAKE_BUILD_TYPE=Debug .make# 禁用某些优化但保留调试信息g++ -g -O1 -fno-omit-frame-pointer -o my_app my_app.cpp  启动 GDB1234567891011121314# 1. 调试可执行文件gdb ./my_app# 2. 附加到正在运行的进程 (需要进程ID)gdb -p &lt;pid&gt;# 3. 调试程序崩溃产生的核心转储文件 (core dum...</div></div></div></a><a class="pagination-related" href="/posts/6d91761d/" title="Qt 国际化指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Qt 国际化指南</div></div><div class="info-2"><div class="info-item-1">Qt 国际化指南目录 概述：Qt 的 i18n 工作流程 第一步：在代码中标记待翻译文本 第二步：配置项目 (.pro) 文件 第三步：使用工具生成和翻译 第四步：在应用程序中加载翻译 第五步：实现动态语言切换 处理数字、日期和货币的本地化  概述：Qt 的 i18n 工作流程国际化 (i18n) 是指让你的应用程序能够适应不同语言和地区的过程。Qt 提供了一套强大而直接的工具链来完成这项工作，其核心流程如下：  包裹 (Wrap): 在你的 C++ 源代码中，将所有需要被翻译的用户界面字符串用 tr() 函数包裹起来。 更新 (Update): 使用 Qt 的命令行工具 lupdate 扫描你的项目文件，它会找到所有被 tr() 包裹的字符串，并生成或更新 .ts (Translation Source) 格式的翻译源文件。 翻译 (Translate): 使用 Qt 提供的图形化工具 Qt Linguist 打开 .ts 文件，然后由翻译人员逐条填写目标语言的译文。 发布 (Release): 使用 Qt 的命令行工具 lrelease 将翻译完成的 .ts 文件编译成紧凑的...</div></div></div></a><a class="pagination-related" href="/posts/9b28b992/" title="Qt 框架概述"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-09-21</div><div class="info-item-2">Qt 框架概述</div></div><div class="info-2"><div class="info-item-1">Qt 框架概述📚 知识库概述本知识库提供了Qt框架的完整学习资源，涵盖了从基础入门到高级应用的全方位技术指南。所有文档都遵循统一的标准，包含完整的代码示例和最佳实践。 🗂️ 文档分类结构🚀 核心特性 (Core-Features) Qt Model-View 架构指南 Model-View-Delegate 模式详解 自定义 Model 和 Delegate 使用 ProxyModel 实现排序和过滤   Qt 多线程编程指南 QThread 的正确使用模式 (Worker-Object) 线程同步与 QtConcurrent 并发框架   Qt 国际化 (i18n) 指南 使用 tr、lupdate、lrelease 和 QTranslator 的标准工作流程 动态语言切换与 QLocale 本地化   Qt 单元测试指南 Qt Test 框架、数据驱动测试与 GUI 测试 模拟对象 (Mocking) 与持续集成    🎨 GUI编程 (GUI) QPainter 完整指南 2D图形绘制、文本渲染、图像处理 渐变、变换与高级特效 自定义控件开发实例   QSS 样式表...</div></div></div></a><a class="pagination-related" href="/posts/7ef87112/" title="Jsoncpp Linux 使用指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Jsoncpp Linux 使用指南</div></div><div class="info-2"><div class="info-item-1">Jsoncpp Linux 使用指南目录 方式一：使用包管理器安装 方式二：从源码编译 (推荐) API 核心用法 编译与运行 项目集成 (Makefile &amp; CMake) 常见问题  方式一：使用包管理器安装这是最快的方式，但库版本可能较旧。 1234567# Jsoncpp Linux 使用指南# Jsoncpp Linux 使用指南sudo apt updatesudo apt install -y libjsoncpp-dev pkg-config# Jsoncpp Linux 使用指南pkg-config --modversion jsoncpp  方式二：从源码编译 (推荐)获取最新版本和完整控制权的推荐方式。 1234567891011121314151617# Jsoncpp Linux 使用指南sudo apt install -y git cmake build-essential# Jsoncpp Linux 使用指南git clone https://github.com/open-source-parsers/jsoncpp.gitcd jso...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#gRPC-C-%E5%BC%80%E5%8F%91%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">gRPC C++ 开发指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gRPC-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.</span> <span class="toc-text">gRPC 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%89%B9%E6%80%A7"><span class="toc-number">1.2.1.</span> <span class="toc-text">核心特性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">1.3.</span> <span class="toc-text">环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E9%A1%B9-A-%E4%BD%BF%E7%94%A8%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8-%E5%BF%AB%E9%80%9F%E5%85%A5%E9%97%A8"><span class="toc-number">1.3.1.</span> <span class="toc-text">选项 A: 使用包管理器 (快速入门)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%89%E9%A1%B9-B-%E4%BB%8E%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91-%E6%8E%A8%E8%8D%90"><span class="toc-number">1.3.2.</span> <span class="toc-text">选项 B: 从源码编译 (推荐)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AE%9A%E4%B9%89%E6%9C%8D%E5%8A%A1-proto"><span class="toc-number">1.4.</span> <span class="toc-text">第一步：定义服务 (.proto)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E7%94%9F%E6%88%90%E4%BB%A3%E7%A0%81-protoc"><span class="toc-number">1.5.</span> <span class="toc-text">第二步：生成代码 (protoc)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%91%BD%E4%BB%A4%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.5.1.</span> <span class="toc-text">1. 命令详解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%89%A7%E8%A1%8C%E7%94%9F%E6%88%90"><span class="toc-number">1.5.2.</span> <span class="toc-text">2. 执行生成</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E8%87%AA%E5%8A%A8%E5%8C%96%E8%84%9A%E6%9C%AC-%E6%8E%A8%E8%8D%90"><span class="toc-number">1.5.3.</span> <span class="toc-text">3. 自动化脚本 (推荐)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E5%AE%9E%E7%8E%B0%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="toc-number">1.6.</span> <span class="toc-text">第三步：实现服务端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E5%AE%9E%E7%8E%B0%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="toc-number">1.7.</span> <span class="toc-text">第四步：实现客户端</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%94%E6%AD%A5%EF%BC%9A%E7%BC%96%E8%AF%91%E4%B8%8E%E8%BF%90%E8%A1%8C"><span class="toc-number">1.8.</span> <span class="toc-text">第五步：编译与运行</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AB%98%E7%BA%A7%E4%B8%BB%E9%A2%98"><span class="toc-number">1.9.</span> <span class="toc-text">高级主题</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E5%BC%82%E6%AD%A5-API"><span class="toc-number">1.9.1.</span> <span class="toc-text">1. 异步 API</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%8B%A6%E6%88%AA%E5%99%A8-Interceptor"><span class="toc-number">1.9.2.</span> <span class="toc-text">2. 拦截器 (Interceptor)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.10.</span> <span class="toc-text">常见问题</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解 文档创建时间: 2025-12-18最后更新: 2025-12-18标签: github, mcp, gemini-cli, claude-code, http, stdio, ai-tools  📑 目录 1. MCP传输方式对比 2. Gemini CLI 的 MCP 配置 3. Claude Cod">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">
+<meta property="og:url" content="https://vilaswang.github.io/posts/mcp-github-config/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解 文档创建时间: 2025-12-18最后更新: 2025-12-18标签: github, mcp, gemini-cli, claude-code, http, stdio, ai-tools  📑 目录 1. MCP传输方式对比 2. Gemini CLI 的 MCP 配置 3. Claude Cod">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-18T01:09:23.000Z">
+<meta property="article:modified_time" content="2025-12-18T01:22:09.016Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="技术文档">
+<meta property="article:tag" content="指南">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解",
+  "url": "https://vilaswang.github.io/posts/mcp-github-config/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-18T01:09:23.000Z",
+  "dateModified": "2025-12-18T01:22:09.016Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/mcp-github-config/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-18T01:22:09.016Z" title="更新于 2025-12-18 09:22:09">2025-12-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Gemini-CLI-和-Claude-Code-中配置-GitHub-MCP-服务器详解"><a href="#Gemini-CLI-和-Claude-Code-中配置-GitHub-MCP-服务器详解" class="headerlink" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解"></a>Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</h1><blockquote>
+<p><strong>文档创建时间</strong>: 2025-12-18<br><strong>最后更新</strong>: 2025-12-18<br><strong>标签</strong>: <code>github</code>, <code>mcp</code>, <code>gemini-cli</code>, <code>claude-code</code>, <code>http</code>, <code>stdio</code>, <code>ai-tools</code></p>
+</blockquote>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#1-mcp%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94">1. MCP传输方式对比</a></li>
+<li><a href="#2-gemini-cli-%E7%9A%84-mcp-%E9%85%8D%E7%BD%AE">2. Gemini CLI 的 MCP 配置</a></li>
+<li><a href="#3-claude-code-%E7%9A%84-mcp-%E9%85%8D%E7%BD%AE">3. Claude Code 的 MCP 配置</a></li>
+<li><a href="#4-%E5%AE%9E%E7%8E%B0%E5%B7%AE%E5%BC%82%E8%AF%A6%E8%A7%A3">4. 实现差异详解</a></li>
+<li><a href="#5-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE">5. 最佳实践建议</a></li>
+<li><a href="#6-%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4">6. 故障排除</a></li>
+<li><a href="#7-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96">7. 性能优化</a></li>
+<li><a href="#8-%E6%80%BB%E7%BB%93">8. 总结</a></li>
+</ul>
+<hr>
+<h2 id="1-📖-MCP传输方式对比"><a href="#1-📖-MCP传输方式对比" class="headerlink" title="1. 📖 MCP传输方式对比"></a>1. 📖 MCP传输方式对比</h2><h2 id="MCP传输方式对比"><a href="#MCP传输方式对比" class="headerlink" title="MCP传输方式对比"></a>MCP传输方式对比</h2><h3 id="HTTP-vs-stdio-传输方式"><a href="#HTTP-vs-stdio-传输方式" class="headerlink" title="HTTP vs stdio 传输方式"></a>HTTP vs stdio 传输方式</h3><table>
+<thead>
+<tr>
+<th>特性</th>
+<th>HTTP传输</th>
+<th>stdio传输</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>实现复杂度</strong></td>
+<td>相对简单</td>
+<td>较简单</td>
+</tr>
+<tr>
+<td><strong>调试便利性</strong></td>
+<td>容易调试（可用curl等工具）</td>
+<td>调试较困难</td>
+</tr>
+<tr>
+<td><strong>跨平台性</strong></td>
+<td>优秀</td>
+<td>需考虑换行符问题</td>
+</tr>
+<tr>
+<td><strong>安全考虑</strong></td>
+<td>需要处理认证</td>
+<td>通过stdin&#x2F;stdout通信</td>
+</tr>
+<tr>
+<td><strong>性能</strong></td>
+<td>有网络开销</td>
+<td>直接进程通信</td>
+</tr>
+<tr>
+<td><strong>扩展性</strong></td>
+<td>易于集群部署</td>
+<td>单进程限制</td>
+</tr>
+</tbody></table>
+<h2 id="一、Gemini-CLI-的-MCP-配置"><a href="#一、Gemini-CLI-的-MCP-配置" class="headerlink" title="一、Gemini CLI 的 MCP 配置"></a>一、Gemini CLI 的 MCP 配置</h2><h3 id="1-1-HTTP方式配置"><a href="#1-1-HTTP方式配置" class="headerlink" title="1.1 HTTP方式配置"></a>1.1 HTTP方式配置</h3><p>HTTP方式适合已经实现了REST API的MCP服务器：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;selectedAuthType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vertex-ai&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;theme&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GitHub&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;github-http&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8080/mcp&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;headers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;Authorization&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Bearer $&#123;GITHUB_TOKEN&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;Content-Type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;application/json&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-stdio方式配置"><a href="#1-2-stdio方式配置" class="headerlink" title="1.2 stdio方式配置"></a>1.2 stdio方式配置</h3><p>stdio方式适合直接命令行启动的MCP服务器：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;selectedAuthType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vertex-ai&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;theme&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GitHub&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;github-stdio&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stdio&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;-y&quot;</span><span class="punctuation">,</span> <span class="string">&quot;@modelcontextprotocol/server-github&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;GITHUB_PERSONAL_ACCESS_TOKEN&#125;&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-混合配置示例"><a href="#1-3-混合配置示例" class="headerlink" title="1.3 混合配置示例"></a>1.3 混合配置示例</h3><p>同时支持两种传输方式：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;selectedAuthType&quot;</span><span class="punctuation">:</span> <span class="string">&quot;vertex-ai&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;theme&quot;</span><span class="punctuation">:</span> <span class="string">&quot;GitHub&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stdio&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;-y&quot;</span><span class="punctuation">,</span> <span class="string">&quot;@modelcontextprotocol/server-github&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;GITHUB_PERSONAL_ACCESS_TOKEN&#125;&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github-fallback&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://localhost:8080/github-mcp&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;headers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;Authorization&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Bearer $&#123;GITHUB_TOKEN&#125;&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="二、Claude-Code-的-MCP-配置"><a href="#二、Claude-Code-的-MCP-配置" class="headerlink" title="二、Claude Code 的 MCP 配置"></a>二、Claude Code 的 MCP 配置</h2><h3 id="2-1-配置文件位置"><a href="#2-1-配置文件位置" class="headerlink" title="2.1 配置文件位置"></a>2.1 配置文件位置</h3><p>Claude Code支持多个配置文件位置：</p>
+<ul>
+<li>用户级配置：<code>~/.claude/claude_desktop_config.json</code></li>
+<li>项目级配置：<code>.claude/claude_desktop_config.json</code></li>
+<li>临时配置：<code>./mcp.json</code></li>
+</ul>
+<h3 id="2-2-HTTP方式配置"><a href="#2-2-HTTP方式配置" class="headerlink" title="2.2 HTTP方式配置"></a>2.2 HTTP方式配置</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;github-api&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;https://api.github.com/mcp&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;headers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;Authorization&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Bearer $&#123;GITHUB_TOKEN&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;X-GitHub-API-Version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2022-11-28&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-3-stdio方式配置"><a href="#2-3-stdio方式配置" class="headerlink" title="2.3 stdio方式配置"></a>2.3 stdio方式配置</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;github-cli&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;-y&quot;</span><span class="punctuation">,</span> <span class="string">&quot;@modelcontextprotocol/server-github&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;GITHUB_PERSONAL_ACCESS_TOKEN&#125;&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-使用CLI命令添加MCP"><a href="#2-4-使用CLI命令添加MCP" class="headerlink" title="2.4 使用CLI命令添加MCP"></a>2.4 使用CLI命令添加MCP</h3><p>Claude Code提供了便捷的CLI命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 添加HTTP类型的MCP服务器</span></span><br><span class="line">claude mcp add --transport http \</span><br><span class="line">  --name github-api \</span><br><span class="line">  --url https://api.github.com/mcp \</span><br><span class="line">  --<span class="built_in">env</span> GITHUB_TOKEN=<span class="string">&quot;<span class="variable">$&#123;GITHUB_TOKEN&#125;</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加stdio类型的MCP服务器</span></span><br><span class="line">claude mcp add --transport stdio \</span><br><span class="line">  --name github-cli \</span><br><span class="line">  --<span class="built_in">command</span> npx \</span><br><span class="line">  --args <span class="string">&quot;-y&quot;</span> <span class="string">&quot;@modelcontextprotocol/server-github&quot;</span> \</span><br><span class="line">  --<span class="built_in">env</span> GITHUB_PERSONAL_ACCESS_TOKEN=<span class="string">&quot;<span class="variable">$&#123;GITHUB_PERSONAL_ACCESS_TOKEN&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="三、实现差异详解"><a href="#三、实现差异详解" class="headerlink" title="三、实现差异详解"></a>三、实现差异详解</h2><h3 id="3-1-服务器端实现"><a href="#3-1-服务器端实现" class="headerlink" title="3.1 服务器端实现"></a>3.1 服务器端实现</h3><h4 id="HTTP服务器示例"><a href="#HTTP服务器示例" class="headerlink" title="HTTP服务器示例"></a>HTTP服务器示例</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># github_mcp_http_server.py</span></span><br><span class="line"><span class="keyword">from</span> http.server <span class="keyword">import</span> HTTPServer, BaseHTTPRequestHandler</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> subprocess</span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">GitHubMCPHandler</span>(<span class="title class_ inherited__">BaseHTTPRequestHandler</span>):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">do_POST</span>(<span class="params">self</span>):</span><br><span class="line">        content_length = <span class="built_in">int</span>(<span class="variable language_">self</span>.headers[<span class="string">&#x27;Content-Length&#x27;</span>])</span><br><span class="line">        post_data = <span class="variable language_">self</span>.rfile.read(content_length)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 处理MCP请求</span></span><br><span class="line">        response = <span class="variable language_">self</span>.handle_mcp_request(json.loads(post_data))</span><br><span class="line"></span><br><span class="line">        <span class="variable language_">self</span>.send_response(<span class="number">200</span>)</span><br><span class="line">        <span class="variable language_">self</span>.send_header(<span class="string">&#x27;Content-type&#x27;</span>, <span class="string">&#x27;application/json&#x27;</span>)</span><br><span class="line">        <span class="variable language_">self</span>.end_headers()</span><br><span class="line">        <span class="variable language_">self</span>.wfile.write(json.dumps(response).encode())</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">handle_mcp_request</span>(<span class="params">self, request</span>):</span><br><span class="line">    <span class="comment"># 实现MCP协议逻辑</span></span><br><span class="line">    <span class="keyword">if</span> request.get(<span class="string">&#x27;method&#x27;</span>) == <span class="string">&#x27;tools/list&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> &#123;<span class="string">&#x27;tools&#x27;</span>: list_available_tools()&#125;</span><br><span class="line">    <span class="keyword">elif</span> request.get(<span class="string">&#x27;method&#x27;</span>) == <span class="string">&#x27;tools/call&#x27;</span>:</span><br><span class="line">        <span class="keyword">return</span> execute_tool_call(request)</span><br><span class="line">    <span class="keyword">return</span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    server = HTTPServer((<span class="string">&#x27;localhost&#x27;</span>, <span class="number">8080</span>), GitHubMCPHandler)</span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
+
+<h4 id="stdio服务器示例"><a href="#stdio服务器示例" class="headerlink" title="stdio服务器示例"></a>stdio服务器示例</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># github_mcp_stdio_server.py</span></span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"><span class="keyword">import</span> json</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">main</span>():</span><br><span class="line">    <span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            line = sys.stdin.readline()</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> line:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">            request = json.loads(line.strip())</span><br><span class="line">            response = handle_mcp_request(request)</span><br><span class="line"></span><br><span class="line">            <span class="built_in">print</span>(json.dumps(response))</span><br><span class="line">            sys.stdout.flush()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</span><br><span class="line">            error_response = &#123;</span><br><span class="line">                <span class="string">&#x27;error&#x27;</span>: &#123;</span><br><span class="line">                    <span class="string">&#x27;code&#x27;</span>: -<span class="number">32603</span>,</span><br><span class="line">                    <span class="string">&#x27;message&#x27;</span>: <span class="built_in">str</span>(e)</span><br><span class="line">                &#125;</span><br><span class="line">            <span class="built_in">print</span>(json.dumps(error_response))</span><br><span class="line">            sys.stdout.flush()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    main()</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-认证处理差异"><a href="#3-2-认证处理差异" class="headerlink" title="3.2 认证处理差异"></a>3.2 认证处理差异</h3><h4 id="HTTP认证"><a href="#HTTP认证" class="headerlink" title="HTTP认证"></a>HTTP认证</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;headers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Authorization&quot;</span><span class="punctuation">:</span> <span class="string">&quot;Bearer $&#123;GITHUB_TOKEN&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;X-API-Key&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;API_KEY&#125;&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="stdio认证"><a href="#stdio认证" class="headerlink" title="stdio认证"></a>stdio认证</h4><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;GITHUB_PERSONAL_ACCESS_TOKEN&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;API_KEY&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;API_KEY&#125;&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="四、最佳实践建议"><a href="#四、最佳实践建议" class="headerlink" title="四、最佳实践建议"></a>四、最佳实践建议</h2><h3 id="4-1-选择传输方式的考虑因素"><a href="#4-1-选择传输方式的考虑因素" class="headerlink" title="4.1 选择传输方式的考虑因素"></a>4.1 选择传输方式的考虑因素</h3><ol>
+<li><strong>开发阶段</strong>：使用stdio，便于调试</li>
+<li><strong>生产环境</strong>：使用HTTP，便于监控和扩展</li>
+<li><strong>网络环境</strong>：受限环境可能需要stdio</li>
+<li><strong>性能要求</strong>：高频调用使用stdio</li>
+</ol>
+<h3 id="4-2-错误处理策略"><a href="#4-2-错误处理策略" class="headerlink" title="4.2 错误处理策略"></a>4.2 错误处理策略</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;mcpServers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;stdio&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;command&quot;</span><span class="punctuation">:</span> <span class="string">&quot;npx&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;args&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;-y&quot;</span><span class="punctuation">,</span> <span class="string">&quot;@modelcontextprotocol/server-github&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;env&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;GITHUB_PERSONAL_ACCESS_TOKEN&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;NODE_ENV&quot;</span><span class="punctuation">:</span> <span class="string">&quot;production&quot;</span></span><br><span class="line">      <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;retries&quot;</span><span class="punctuation">:</span> <span class="number">3</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;timeout&quot;</span><span class="punctuation">:</span> <span class="number">30000</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github-backup&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;url&quot;</span><span class="punctuation">:</span> <span class="string">&quot;http://backup-server:8080/mcp&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;fallback&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="4-3-安全考虑"><a href="#4-3-安全考虑" class="headerlink" title="4.3 安全考虑"></a>4.3 安全考虑</h3><ol>
+<li><p><strong>令牌管理</strong>：</p>
+<ul>
+<li>使用环境变量，避免硬编码</li>
+<li>定期轮换访问令牌</li>
+<li>使用最小权限原则</li>
+</ul>
+</li>
+<li><p><strong>网络安全</strong>：</p>
+<ul>
+<li>HTTP方式使用HTTPS</li>
+<li>验证服务器证书</li>
+<li>限制访问来源</li>
+</ul>
+</li>
+<li><p><strong>数据保护</strong>：</p>
+<ul>
+<li>敏感数据脱敏</li>
+<li>日志记录控制</li>
+<li>临时文件清理</li>
+</ul>
+</li>
+</ol>
+<h2 id="五、故障排除"><a href="#五、故障排除" class="headerlink" title="五、故障排除"></a>五、故障排除</h2><h3 id="5-1-常见问题"><a href="#5-1-常见问题" class="headerlink" title="5.1 常见问题"></a>5.1 常见问题</h3><ol>
+<li><p><strong>连接超时</strong></p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;timeout&quot;</span><span class="punctuation">:</span> <span class="number">60000</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;retries&quot;</span><span class="punctuation">:</span> <span class="number">5</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;retryDelay&quot;</span><span class="punctuation">:</span> <span class="number">1000</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>认证失败</strong></p>
+<ul>
+<li>检查环境变量设置</li>
+<li>验证令牌有效性</li>
+<li>确认权限配置</li>
+</ul>
+</li>
+<li><p><strong>通信错误</strong></p>
+<ul>
+<li>stdio：检查换行符（\n vs \r\n）</li>
+<li>HTTP：检查Content-Type头</li>
+</ul>
+</li>
+</ol>
+<h3 id="5-2-调试技巧"><a href="#5-2-调试技巧" class="headerlink" title="5.2 调试技巧"></a>5.2 调试技巧</h3><h4 id="HTTP方式调试"><a href="#HTTP方式调试" class="headerlink" title="HTTP方式调试"></a>HTTP方式调试</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 测试连接</span></span><br><span class="line">curl -X POST http://localhost:8080/mcp \</span><br><span class="line">  -H <span class="string">&quot;Content-Type: application/json&quot;</span> \</span><br><span class="line">  -H <span class="string">&quot;Authorization: Bearer <span class="variable">$GITHUB_TOKEN</span>&quot;</span> \</span><br><span class="line">  -d <span class="string">&#x27;&#123;&quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;tools/list&quot;&#125;&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="stdio方式调试"><a href="#stdio方式调试" class="headerlink" title="stdio方式调试"></a>stdio方式调试</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 手动测试</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;&#123;&quot;jsonrpc&quot;: &quot;2.0&quot;, &quot;method&quot;: &quot;tools/list&quot;&#125;&#x27;</span> | npx -y @modelcontextprotocol/server-github</span><br></pre></td></tr></table></figure>
+
+<h2 id="六、性能优化"><a href="#六、性能优化" class="headerlink" title="六、性能优化"></a>六、性能优化</h2><h3 id="6-1-HTTP优化"><a href="#6-1-HTTP优化" class="headerlink" title="6.1 HTTP优化"></a>6.1 HTTP优化</h3><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;headers&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;Connection&quot;</span><span class="punctuation">:</span> <span class="string">&quot;keep-alive&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;Keep-Alive&quot;</span><span class="punctuation">:</span> <span class="string">&quot;timeout=60, max=100&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;timeout&quot;</span><span class="punctuation">:</span> <span class="number">30000</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-stdio优化"><a href="#6-2-stdio优化" class="headerlink" title="6.2 stdio优化"></a>6.2 stdio优化</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 批量处理请求</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">batch_process_requests</span>(<span class="params">requests</span>):</span><br><span class="line">    results = []</span><br><span class="line">    <span class="keyword">for</span> request <span class="keyword">in</span> requests:</span><br><span class="line">        results.append(handle_request(request))</span><br><span class="line">    <span class="keyword">return</span> results</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、总结"><a href="#七、总结" class="headerlink" title="七、总结"></a>七、总结</h2><p>HTTP和stdio两种传输方式各有优势：</p>
+<ul>
+<li><strong>HTTP</strong>：易于调试、扩展性好、适合分布式部署</li>
+<li><strong>stdio</strong>：性能高、实现简单、适合本地开发</li>
+</ul>
+<p>根据实际需求选择合适的传输方式，并做好错误处理和安全防护。通过合理的配置和优化，可以在Gemini CLI和Claude Code中稳定地使用GitHub MCP服务器，提升开发效率。</p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://modelcontextprotocol.io/">Model Context Protocol官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://ai.google.dev/gemini-api/docs/cli">Gemini CLI文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.anthropic.com/claude/docs/claude-for-developers">Claude Code文档</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/mcp-github-config/">https://vilaswang.github.io/posts/mcp-github-config/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/">技术文档</a><a class="post-meta__tags" href="/tags/%E6%8C%87%E5%8D%97/">指南</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Gemini CLI 在国内网络环境下的完整配置指南</div></div><div class="info-2"><div class="info-item-1">Gemini CLI 在国内网络环境下的完整配置指南 文档创建时间: 2025-12-18最后更新: 2025-12-18标签: gemini-cli, proxy, vpn, network, ai-tools, 跨域访问  📑 目录 1. 概述 2. 系统要求 3. 环境准备 4. Gemini CLI 安装配置 5. 代理配置 6. 认证流程 7. 常见问题与解决方案 8. 最佳实践 9. 验证测试 10. 总结   1. 📖 概述本文档提供了一套完整的 Gemini CLI 在国内网络环境下的配置解决方案，通过代理服务和 VPN 组合，实现稳定的 Google 服务访问。 2. ⚙️ 系统要求系统要求基础环境   组件 最低版本 推荐版本 验证方法    Node.js v18.x v20.x+ node --version   npm v9.x v10.x+ npm --version   操作系统 Windows 10+ Windows 11&#x2F;macOS&#x2F;Linux 系统信息   网络环境代理服务要求   要求项 规格 说明    协议支持 ✅...</div></div></div></a><a class="pagination-related" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Antigravity 登录认证完整解决方案（非TUN方法）</div></div><div class="info-2"><div class="info-item-1"> 系统架构：Windows 10&#x2F;11 + Clash Proxy + Proxifier + Microsoft Edge 协议支持：SOCKS5 代理 + OAuth 2.0 认证 适用场景：国内网络环境 + 第三方服务认证 文档版本：v2.0.0 最后更新：2025-12-17   📋 目录 概述 环境准备 配置步骤 故障排除 核心验证测试   📖 概述1.1 解决方案背景Antigravity 是一款基于云原生的开发平台，采用 OAuth 2.0 标准进行用户认证。由于国内网络环境的网络限制，直接访问 Google 认证服务存在技术壁垒，需要通过专业的代理架构实现认证链路的打通。 1.2 核心要求 Google 账号归属地必须为美国 - Antigravity 认证的硬性要求 代理节点必须为美国地区 - 确保与账号归属地匹配 企业网络环境兼容 - 适应企业防火墙和网络安全策略  1.3 技术架构1234567891011121314┌─────────────────┐    ┌─────────────────┐    ┌─────────────────...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/b71a62b0/" title="PostgreSQL C++ Windows 安装指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">PostgreSQL C++ Windows 安装指南</div></div><div class="info-2"><div class="info-item-1">PostgreSQL C++ Windows 安装指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: postgresql, c, windows, development, database, libpq  📑 目录 1. 概述 2. 系统组件 3. PostgreSQL 安装 3.1 下载安装包 3.2 运行安装程序   4. C 开发环境配置 4.1 包含头文件配置 4.2 链接库配置 4.3 运行时依赖配置   5. 验证与测试 6. 常见问题解决 7. 高级配置   1. 📖 概述本指南详细说明如何在 Windows 系统上配置 PostgreSQL 的 C 语言开发环境，包括服务器安装、客户端库配置和开发环境设置。 🎯 配置目标 ✅ 安装 PostgreSQL 数据库服务器 ✅ 配置 C 语言客户端库 (libpq) ✅ 设置开发环境和编译选项 ✅ 创建可运行的 C 数据库应用程序  🏗️ 系统架构12345678910111213graph TD    A[C Application] --&gt; B[libpq Client...</div></div></div></a><a class="pagination-related" href="/posts/95bf2167/" title="C++ Web 代理设计架构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">C++ Web 代理设计架构</div></div><div class="info-2"><div class="info-item-1">C++ Web 代理设计架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: agents, cpp, web-development, specialization, ai-assistants, claude-code  📑 目录 1. 概述 2. 设计原则 3. Agent 架构 4. 核心团队 Agents 4.1 Project Architect Agent 4.2 API Designer Agent 4.3 Core Logic Developer Agent 4.4 Web Service Integrator Agent 4.5 Build &amp; Dependency Expert Agent 4.6 QA Specialist Agent 4.7 Deployment Operator Agent   5. 协作流程 6. 使用指南 7. 扩展和维护   1. 📖 概述本指南详细说明如何为 C++ Web 项目创建专门化的 AI Agent 团队，每个 Agent 都具有特定的职责和专业能力，通过协同工作完成从设计到部署...</div></div></div></a><a class="pagination-related" href="/posts/361d35d7/" title="Claude MCP 配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Claude MCP 配置指南</div></div><div class="info-2"><div class="info-item-1">Claude MCP 配置指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: claude-code, mcp, model-context-protocol, productivity, automation  📑 目录 1. MCP 概述 2. 必装 MCP 服务器 3. 推荐组合 4. 配置步骤 5. Top 15 MCP 服务器 6. 故障排除   1. 📖 MCP 概述MCP (Model Context Protocol) 是 Claude Code 的扩展协议，允许 AI 助手直接控制各种工具和服务。 🎯 MCP 优势 ✅ 扩展能力 - 大幅扩展 Claude 的功能范围 ✅ 自动化 - 实现复杂的自动化工作流 ✅ 集成性 - 连接各种第三方服务和工具 ✅ 实时性 - 获取最新的 API 文档和代码示例   2. ⭐ 必装 MCP 服务器2.1 🌐 Playwright MCP - 浏览器自动化功能: 让 Claude 直接控制浏览器进行测试、截图、数据爬取 12345# Claude MCP 配置指南claude mcp ad...</div></div></div></a><a class="pagination-related" href="/posts/445c44cb/" title="Graphviz 流程图指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Graphviz 流程图指南</div></div><div class="info-2"><div class="info-item-1">Graphviz 流程图指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: graphviz, flowchart, diagram, visualization, documentation  📑 目录 1. 概述 2. 环境准备 3. 基本使用 4. 输出格式 5. 常见用例 6. 高级配置   1. 📖 概述Graphviz 是一个开源的图形可视化软件，特别适合生成各种流程图、架构图和关系图。 🎯 主要用途 ✅ 流程图生成 ✅ 系统架构图 ✅ 类关系图 ✅ 依赖关系图 ✅ 状态机图   2. 🔧 环境准备2.1 安装依赖12345678# Graphviz 流程图指南pip install graphviz# Graphviz 流程图指南conda install python-graphviz# Graphviz 流程图指南sudo apt-get install graphviz  2.2 验证安装123456import graphviz# Graphviz 流程图指南dot = graphviz.Digraph(comment=...</div></div></div></a><a class="pagination-related" href="/posts/ab2eaca1/" title="认证系统架构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">认证系统架构</div></div><div class="info-2"><div class="info-item-1">认证系统架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: authentication, authorization, jwt, oauth, security, api  📑 目录 1. 认证方式概述 2. 本地认证流程 2.1 注册流程 2.2 登录流程 2.3 Token 验证流程   3. Google OAuth 认证流程 3.1 配置 3.2 认证流程 3.3 会话管理   4. 安全特性 4.1 速率限制 4.2 CORS 配置 4.3 错误处理   5. 中间件链 6. 环境配置   1. 认证方式概述系统支持两种主要的认证方式：  🔑 本地用户名密码认证（JWT Token） 🌐 Google OAuth 2.0 认证  12345678graph LR    A[用户] --&gt; B[认证选择]    B --&gt; C[本地认证]    B --&gt; D[OAuth认证]    C --&gt; E[JWT Token]    D --&gt; F[Google授权]    E --&gt; G[访问API] ...</div></div></div></a><a class="pagination-related" href="/posts/eed6fb04/" title="文件管理 API 规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">文件管理 API 规范</div></div><div class="info-2"><div class="info-item-1">文件管理 API 规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: api, rest, file-management, authentication, swagger  📑 目录 1. 基础信息 2. 认证与授权 3. 文件管理 4. 文件支持 5. 错误处理 6. 安全机制 7. 速率限制 8. OpenAPI 规范   1. 📋 基础信息   项目 说明    Base URL /api/v1   协议 HTTPS   数据格式 JSON   认证方式 JWT Bearer Token   API 版本 v1.0   🔐 认证请求格式1234GET /api/v1/files/list HTTP/1.1Host: your-domain.comAuthorization: Bearer &lt;jwt_token&gt;Content-Type: application/json   2. 🔐 认证与授权2.1 👤 用户注册1234567891011121314sequenceDiagram    particip...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Gemini-CLI-%E5%92%8C-Claude-Code-%E4%B8%AD%E9%85%8D%E7%BD%AE-GitHub-MCP-%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.</span> <span class="toc-text">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">📑 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%F0%9F%93%96-MCP%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94"><span class="toc-number">1.2.</span> <span class="toc-text">1. 📖 MCP传输方式对比</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#MCP%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F%E5%AF%B9%E6%AF%94"><span class="toc-number">1.3.</span> <span class="toc-text">MCP传输方式对比</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-vs-stdio-%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F"><span class="toc-number">1.3.1.</span> <span class="toc-text">HTTP vs stdio 传输方式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Gemini-CLI-%E7%9A%84-MCP-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.</span> <span class="toc-text">一、Gemini CLI 的 MCP 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-HTTP%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.1.</span> <span class="toc-text">1.1 HTTP方式配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-stdio%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE"><span class="toc-number">1.4.2.</span> <span class="toc-text">1.2 stdio方式配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%B7%B7%E5%90%88%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.4.3.</span> <span class="toc-text">1.3 混合配置示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Claude-Code-%E7%9A%84-MCP-%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.</span> <span class="toc-text">二、Claude Code 的 MCP 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BD%8D%E7%BD%AE"><span class="toc-number">1.5.1.</span> <span class="toc-text">2.1 配置文件位置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-HTTP%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.2.</span> <span class="toc-text">2.2 HTTP方式配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-stdio%E6%96%B9%E5%BC%8F%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.3.</span> <span class="toc-text">2.3 stdio方式配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-%E4%BD%BF%E7%94%A8CLI%E5%91%BD%E4%BB%A4%E6%B7%BB%E5%8A%A0MCP"><span class="toc-number">1.5.4.</span> <span class="toc-text">2.4 使用CLI命令添加MCP</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%9E%E7%8E%B0%E5%B7%AE%E5%BC%82%E8%AF%A6%E8%A7%A3"><span class="toc-number">1.6.</span> <span class="toc-text">三、实现差异详解</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AB%AF%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.6.1.</span> <span class="toc-text">3.1 服务器端实现</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.6.1.1.</span> <span class="toc-text">HTTP服务器示例</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stdio%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.6.1.2.</span> <span class="toc-text">stdio服务器示例</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E8%AE%A4%E8%AF%81%E5%A4%84%E7%90%86%E5%B7%AE%E5%BC%82"><span class="toc-number">1.6.2.</span> <span class="toc-text">3.2 认证处理差异</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP%E8%AE%A4%E8%AF%81"><span class="toc-number">1.6.2.1.</span> <span class="toc-text">HTTP认证</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stdio%E8%AE%A4%E8%AF%81"><span class="toc-number">1.6.2.2.</span> <span class="toc-text">stdio认证</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.7.</span> <span class="toc-text">四、最佳实践建议</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E9%80%89%E6%8B%A9%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F%E7%9A%84%E8%80%83%E8%99%91%E5%9B%A0%E7%B4%A0"><span class="toc-number">1.7.1.</span> <span class="toc-text">4.1 选择传输方式的考虑因素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E7%AD%96%E7%95%A5"><span class="toc-number">1.7.2.</span> <span class="toc-text">4.2 错误处理策略</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E5%AE%89%E5%85%A8%E8%80%83%E8%99%91"><span class="toc-number">1.7.3.</span> <span class="toc-text">4.3 安全考虑</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4"><span class="toc-number">1.8.</span> <span class="toc-text">五、故障排除</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.8.1.</span> <span class="toc-text">5.1 常见问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E8%B0%83%E8%AF%95%E6%8A%80%E5%B7%A7"><span class="toc-number">1.8.2.</span> <span class="toc-text">5.2 调试技巧</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#HTTP%E6%96%B9%E5%BC%8F%E8%B0%83%E8%AF%95"><span class="toc-number">1.8.2.1.</span> <span class="toc-text">HTTP方式调试</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#stdio%E6%96%B9%E5%BC%8F%E8%B0%83%E8%AF%95"><span class="toc-number">1.8.2.2.</span> <span class="toc-text">stdio方式调试</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">1.9.</span> <span class="toc-text">六、性能优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-HTTP%E4%BC%98%E5%8C%96"><span class="toc-number">1.9.1.</span> <span class="toc-text">6.1 HTTP优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-stdio%E4%BC%98%E5%8C%96"><span class="toc-number">1.9.2.</span> <span class="toc-text">6.2 stdio优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">1.10.</span> <span class="toc-text">七、总结</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.11.</span> <span class="toc-text">参考资料</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

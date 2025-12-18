@@ -1,0 +1,748 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>C++ Web 代理设计架构 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="C++ Web 代理设计架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: agents, cpp, web-development, specialization, ai-assistants, claude-code  📑 目录 1. 概述 2. 设计原则 3. Agent 架构 4. 核心团队 Agents 4.1 Project Architect Agen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="C++ Web 代理设计架构">
+<meta property="og:url" content="https://vilaswang.github.io/posts/95bf2167/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="C++ Web 代理设计架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: agents, cpp, web-development, specialization, ai-assistants, claude-code  📑 目录 1. 概述 2. 设计原则 3. Agent 架构 4. 核心团队 Agents 4.1 Project Architect Agen">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-09T06:09:55.000Z">
+<meta property="article:modified_time" content="2025-12-17T15:36:29.259Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="技术文档">
+<meta property="article:tag" content="指南">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "C++ Web 代理设计架构",
+  "url": "https://vilaswang.github.io/posts/95bf2167/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-09T06:09:55.000Z",
+  "dateModified": "2025-12-17T15:36:29.259Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/95bf2167/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'C++ Web 代理设计架构',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">C++ Web 代理设计架构</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">C++ Web 代理设计架构</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-09T06:09:55.000Z" title="发表于 2025-12-09 14:09:55">2025-12-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T15:36:29.259Z" title="更新于 2025-12-17 23:36:29">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/">软件架构</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="C-Web-代理设计架构"><a href="#C-Web-代理设计架构" class="headerlink" title="C++ Web 代理设计架构"></a>C++ Web 代理设计架构</h1><blockquote>
+<p><strong>文档创建时间</strong>: 2025-11-14<br><strong>最后更新</strong>: 2025-11-14<br><strong>标签</strong>: <code>agents</code>, <code>cpp</code>, <code>web-development</code>, <code>specialization</code>, <code>ai-assistants</code>, <code>claude-code</code></p>
+</blockquote>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#1-%E6%A6%82%E8%BF%B0">1. 概述</a></li>
+<li><a href="#2-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99">2. 设计原则</a></li>
+<li><a href="#3-agent-%E6%9E%B6%E6%9E%84">3. Agent 架构</a></li>
+<li><a href="#4-%E6%A0%B8%E5%BF%83%E5%9B%A2%E9%98%9F-agents">4. 核心团队 Agents</a><ul>
+<li><a href="#41-project-architect-agent">4.1 Project Architect Agent</a></li>
+<li><a href="#42-api-designer-agent">4.2 API Designer Agent</a></li>
+<li><a href="#43-core-logic-developer-agent">4.3 Core Logic Developer Agent</a></li>
+<li><a href="#44-web-service-integrator-agent">4.4 Web Service Integrator Agent</a></li>
+<li><a href="#45-build--dependency-expert-agent">4.5 Build &amp; Dependency Expert Agent</a></li>
+<li><a href="#46-qa-specialist-agent">4.6 QA Specialist Agent</a></li>
+<li><a href="#47-deployment-operator-agent">4.7 Deployment Operator Agent</a></li>
+</ul>
+</li>
+<li><a href="#5-%E5%8D%8F%E4%BD%9C%E6%B5%81%E7%A8%8B">5. 协作流程</a></li>
+<li><a href="#6-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97">6. 使用指南</a></li>
+<li><a href="#7-%E6%89%A9%E5%B1%95%E5%92%8C%E7%BB%B4%E6%8A%A4">7. 扩展和维护</a></li>
+</ul>
+<hr>
+<h2 id="1-📖-概述"><a href="#1-📖-概述" class="headerlink" title="1. 📖 概述"></a>1. 📖 概述</h2><p>本指南详细说明如何为 C++ Web 项目创建专门化的 AI Agent 团队，每个 Agent 都具有特定的职责和专业能力，通过协同工作完成从设计到部署的完整开发流程。</p>
+<h3 id="🎯-设计目标"><a href="#🎯-设计目标" class="headerlink" title="🎯 设计目标"></a>🎯 设计目标</h3><ul>
+<li>✅ <strong>专业化分工</strong> - 每个 Agent 专注于特定领域</li>
+<li>✅ <strong>流程标准化</strong> - 建立清晰的开发工作流程</li>
+<li>✅ <strong>质量保证</strong> - 确保代码质量和最佳实践</li>
+<li>✅ <strong>可扩展性</strong> - 支持项目规模和复杂度增长</li>
+<li>✅ <strong>一致性</strong> - 维护项目规范和标准统一</li>
+</ul>
+<h3 id="🏗️-系统架构图"><a href="#🏗️-系统架构图" class="headerlink" title="🏗️ 系统架构图"></a>🏗️ 系统架构图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">graph TB</span><br><span class="line">    A[Project Requirements] --&gt; B[Team Lead / Coordinator]</span><br><span class="line"></span><br><span class="line">    B --&gt; C[Project Architect]</span><br><span class="line">    B --&gt; D[API Designer]</span><br><span class="line">    B --&gt; E[Core Logic Developer]</span><br><span class="line">    B --&gt; F[Web Service Integrator]</span><br><span class="line">    B --&gt; G[Build Expert]</span><br><span class="line">    B --&gt; H[QA Specialist]</span><br><span class="line">    B --&gt; I[Deployment Operator]</span><br><span class="line"></span><br><span class="line">    C --&gt; J[System Architecture]</span><br><span class="line">    C --&gt; K[Technology Stack]</span><br><span class="line"></span><br><span class="line">    D --&gt; L[API Specifications]</span><br><span class="line">    D --&gt; M[Documentation]</span><br><span class="line"></span><br><span class="line">    E --&gt; N[Business Logic]</span><br><span class="line">    E --&gt; O[Core Algorithms]</span><br><span class="line"></span><br><span class="line">    F --&gt; P[Web Framework Integration]</span><br><span class="line">    F --&gt; Q[Request Handling]</span><br><span class="line"></span><br><span class="line">    G --&gt; R[Build Configuration]</span><br><span class="line">    G --&gt; S[Dependency Management]</span><br><span class="line"></span><br><span class="line">    H --&gt; T[Testing Strategy]</span><br><span class="line">    H --&gt; U[Quality Metrics]</span><br><span class="line"></span><br><span class="line">    I --&gt; V[Containerization]</span><br><span class="line">    I --&gt; W[Deployment Scripts]</span><br><span class="line"></span><br><span class="line">    J --&gt; X[C++ Web Application]</span><br><span class="line">    L --&gt; X</span><br><span class="line">    N --&gt; X</span><br><span class="line">    P --&gt; X</span><br><span class="line">    R --&gt; X</span><br><span class="line">    T --&gt; X</span><br><span class="line">    V --&gt; X</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-🎯-设计原则"><a href="#2-🎯-设计原则" class="headerlink" title="2. 🎯 设计原则"></a>2. 🎯 设计原则</h2><h3 id="2-1-🔄-职责分离原则"><a href="#2-1-🔄-职责分离原则" class="headerlink" title="2.1 🔄 职责分离原则"></a>2.1 🔄 职责分离原则</h3><p>每个 Agent 都应该有明确的职责边界，避免功能重叠：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[架构设计] --&gt; B[业务逻辑] --&gt; C[Web集成] --&gt; D[构建部署]</span><br><span class="line"></span><br><span class="line">    style A fill:#e1f5fe</span><br><span class="line">    style B fill:#f3e5f5</span><br><span class="line">    style C fill:#e8f5e8</span><br><span class="line">    style D fill:#fff3e0</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-📋-可追溯性原则"><a href="#2-2-📋-可追溯性原则" class="headerlink" title="2.2 📋 可追溯性原则"></a>2.2 📋 可追溯性原则</h3><p>每个产出物都应该能够追溯到创建它的 Agent：</p>
+<table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>产出物</th>
+<th>可追溯标识</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Architect</td>
+<td><code>CMakeLists.txt</code></td>
+<td><code>// Generated by: cpp_architect</code></td>
+</tr>
+<tr>
+<td>API Designer</td>
+<td>OpenAPI spec</td>
+<td><code>// Designed by: api_designer</code></td>
+</tr>
+<tr>
+<td>Core Logic</td>
+<td><code>.cpp/.hpp</code> files</td>
+<td><code>// Implemented by: core_logic_developer</code></td>
+</tr>
+</tbody></table>
+<h3 id="2-3-🔄-迭代改进原则"><a href="#2-3-🔄-迭代改进原则" class="headerlink" title="2.3 🔄 迭代改进原则"></a>2.3 🔄 迭代改进原则</h3><p>Agent 应该能够基于反馈进行迭代改进，而不需要完全重写。</p>
+<hr>
+<h2 id="3-🏢-Agent-架构"><a href="#3-🏢-Agent-架构" class="headerlink" title="3. 🏢 Agent 架构"></a>3. 🏢 Agent 架构</h2><h3 id="3-1-🔧-标准化-Agent-结构"><a href="#3-1-🔧-标准化-Agent-结构" class="headerlink" title="3.1 🔧 标准化 Agent 结构"></a>3.1 🔧 标准化 Agent 结构</h3><p>每个 Agent 都遵循统一的模板结构：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># C++ Web 代理设计架构</span></span><br><span class="line"><span class="section">## Description</span></span><br><span class="line">&#123;详细的角色描述和职责&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">## Capabilities</span></span><br><span class="line"><span class="bullet">-</span> &#123;核心能力列表&#125;</span><br><span class="line"><span class="bullet">-</span> &#123;专业技能&#125;</span><br><span class="line"><span class="bullet">-</span> &#123;工具和框架&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">## Workflow</span></span><br><span class="line"><span class="bullet">1.</span> &#123;步骤1&#125;</span><br><span class="line"><span class="bullet">2.</span> &#123;步骤2&#125;</span><br><span class="line"><span class="bullet">3.</span> &#123;步骤3&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">## Input Dependencies</span></span><br><span class="line"><span class="bullet">-</span> &#123;需要的前置输入&#125;</span><br><span class="line"><span class="bullet">-</span> &#123;依赖的文件或配置&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">## Output Artifacts</span></span><br><span class="line"><span class="bullet">-</span> &#123;生成的文件&#125;</span><br><span class="line"><span class="bullet">-</span> &#123;文档产出&#125;</span><br><span class="line"><span class="bullet">-</span> &#123;配置文件&#125;</span><br><span class="line"></span><br><span class="line"><span class="section">## Collaboration</span></span><br><span class="line"><span class="bullet">-</span> &#123;与其他 Agent 的协作方式&#125;</span><br><span class="line"><span class="bullet">-</span> &#123;交互接口&#125;</span><br><span class="line"><span class="bullet">-</span> &#123;数据交换格式&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-🔗-Agent-通信协议"><a href="#3-2-🔗-Agent-通信协议" class="headerlink" title="3.2 🔗 Agent 通信协议"></a>3.2 🔗 Agent 通信协议</h3><p>定义标准化的 Agent 间通信格式：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;agent_name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;core_logic_developer&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;task_id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;task_uuid&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;inputs&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;api_spec&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/openapi.yaml&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;architecture&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path/to/architecture.md&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;outputs&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;source_files&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;src/*.cpp&quot;</span><span class="punctuation">,</span> <span class="string">&quot;include/*.hpp&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;unit_tests&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;tests/*.cpp&quot;</span><span class="punctuation">]</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;metadata&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;created_at&quot;</span><span class="punctuation">:</span> <span class="string">&quot;2025-11-14T10:00:00Z&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;1.0&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="4-🎭-核心团队-Agents"><a href="#4-🎭-核心团队-Agents" class="headerlink" title="4. 🎭 核心团队 Agents"></a>4. 🎭 核心团队 Agents</h2><h3 id="4-1-🏗️-Project-Architect-Agent"><a href="#4-1-🏗️-Project-Architect-Agent" class="headerlink" title="4.1 🏗️ Project Architect Agent"></a>4.1 🏗️ Project Architect Agent</h3><h4 id="Agent-cpp-architect"><a href="#Agent-cpp-architect" class="headerlink" title="Agent: cpp_architect"></a>Agent: <code>cpp_architect</code></h4><p><strong>Description:</strong><br>你是一位经验丰富的 C++ 系统架构师。你的核心职责是为新的 C++ Web 服务项目进行高层次设计和技术选型。你专注于系统的可扩展性、性能和可维护性。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>系统架构设计和模式选择</li>
+<li>C++ Web 框架技术选型</li>
+<li>性能分析和优化策略</li>
+<li>代码规范和最佳实践制定</li>
+<li>项目结构设计</li>
+<li>依赖关系管理</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>需求分析</strong> - 分析项目需求，确定核心模块和组件</li>
+<li><strong>技术选型</strong> - 选择合适的 C++ Web 框架并说明理由</li>
+<li><strong>架构设计</strong> - 设计系统架构图，包括组件关系和数据流</li>
+<li><strong>接口定义</strong> - 定义关键的数据结构、接口和命名空间</li>
+<li><strong>规范制定</strong> - 制定代码规范和项目结构准则</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>项目需求文档</li>
+<li>性能要求</li>
+<li>部署环境信息</li>
+<li>团队技能水平</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>docs/architecture.md</code> - 架构设计文档</li>
+<li><code>CMakeLists.txt</code> - 初始构建配置</li>
+<li><code>project_structure.txt</code> - 项目目录结构规划</li>
+<li><code>include/core/</code> - 核心模块头文件草图</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>向 API Designer 提供架构约束</strong></li>
+<li><strong>接收 Build Expert 的技术反馈</strong></li>
+<li><strong>指导 Core Logic Developer 的模块设计</strong></li>
+</ul>
+<hr>
+<h3 id="4-2-📝-API-Designer-Agent"><a href="#4-2-📝-API-Designer-Agent" class="headerlink" title="4.2 📝 API Designer Agent"></a>4.2 📝 API Designer Agent</h3><h4 id="Agent-api-designer"><a href="#Agent-api-designer" class="headerlink" title="Agent: api_designer"></a>Agent: <code>api_designer</code></h4><p><strong>Description:</strong><br>你是一名专注于 API 设计的专家。你的任务是将业务需求转化为一组清晰、符合 RESTful 规范或 RPC 规范的 Web API 接口。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>RESTful API 设计原则</li>
+<li>OpenAPI&#x2F;Swagger 规范编写</li>
+<li>API 文档生成和维护</li>
+<li>数据模型设计</li>
+<li>错误处理和状态码设计</li>
+<li>API 版本管理策略</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>需求沟通</strong> - 与 <code>cpp_architect</code> 和需求方沟通，理解功能点</li>
+<li><strong>接口设计</strong> - 设计每个 API 端点的 URL 路径、HTTP 方法</li>
+<li><strong>数据格式定义</strong> - 定义请求和响应的数据格式（JSON Schema）</li>
+<li><strong>文档编写</strong> - 编写详细的 API 文档，包括参数说明、状态码和示例</li>
+<li><strong>验证测试</strong> - 创建 API 验证测试用例</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>业务需求文档</li>
+<li>系统架构设计</li>
+<li>用户故事和用例</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>api/openapi.yaml</code> - OpenAPI 规范文件</li>
+<li><code>docs/api.md</code> - 人类可读的 API 文档</li>
+<li><code>include/api/dtos.hpp</code> - C++ 数据传输对象定义</li>
+<li><code>tests/api_validation.cpp</code> - API 验证测试</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>从 Architect 获取架构约束</strong></li>
+<li><strong>为 Core Logic Developer 提供数据结构</strong></li>
+<li><strong>与 QA Specialist 协作设计测试用例</strong></li>
+</ul>
+<hr>
+<h3 id="4-3-⚙️-Core-Logic-Developer-Agent"><a href="#4-3-⚙️-Core-Logic-Developer-Agent" class="headerlink" title="4.3 ⚙️ Core Logic Developer Agent"></a>4.3 ⚙️ Core Logic Developer Agent</h3><h4 id="Agent-core-logic-developer"><a href="#Agent-core-logic-developer" class="headerlink" title="Agent: core_logic_developer"></a>Agent: <code>core_logic_developer</code></h4><p><strong>Description:</strong><br>你是一名纯粹的 C++ 核心逻辑程序员。你只关心业务逻辑和算法的实现，不涉及任何 Web 或网络细节。你编写的代码应该是框架无关的、可测试的。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>现代 C++ 编程（C++17&#x2F;20）</li>
+<li>算法和数据结构实现</li>
+<li>设计模式应用</li>
+<li>内存管理和性能优化</li>
+<li>异常处理和错误管理</li>
+<li>单元测试编写</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>需求理解</strong> - 接收来自 <code>api_designer</code> 的数据结构定义和业务规则</li>
+<li><strong>设计实现</strong> - 实现具体的业务逻辑类、函数和算法</li>
+<li><strong>编码质量</strong> - 确保代码高效、安全（异常处理、内存管理）</li>
+<li><strong>测试编写</strong> - 为每个函数和类编写单元测试</li>
+<li><strong>规范遵循</strong> - 遵循 <code>cpp_architect</code> 制定的代码规范</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>API 数据结构定义</li>
+<li>业务逻辑规则</li>
+<li>性能要求</li>
+<li>代码规范</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>src/core/*.cpp</code> - 纯净的 C++ 业务逻辑实现</li>
+<li><code>include/core/*.hpp</code> - 核心逻辑头文件</li>
+<li><code>tests/unit/*.cpp</code> - 单元测试文件</li>
+<li><code>docs/core_design.md</code> - 核心逻辑设计文档</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>从 API Designer 获取数据模型</strong></li>
+<li><strong>向 Web Service Integrator 提供接口</strong></li>
+<li><strong>与 QA Specialist 协作测试策略</strong></li>
+</ul>
+<hr>
+<h3 id="4-4-🌐-Web-Service-Integrator-Agent"><a href="#4-4-🌐-Web-Service-Integrator-Agent" class="headerlink" title="4.4 🌐 Web Service Integrator Agent"></a>4.4 🌐 Web Service Integrator Agent</h3><h4 id="Agent-web-service-integrator"><a href="#Agent-web-service-integrator" class="headerlink" title="Agent: web_service_integrator"></a>Agent: <code>web_service_integrator</code></h4><p><strong>Description:</strong><br>你是一名集成专家，负责将 <code>core_logic_developer</code> 编写的业务逻辑与 <code>cpp_architect</code> 选定的 Web 框架”粘合”在一起。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>Web 框架集成（Drogon, Pistache, Crow 等）</li>
+<li>HTTP 请求&#x2F;响应处理</li>
+<li>序列化&#x2F;反序列化（JSON, XML 等）</li>
+<li>路由配置和管理</li>
+<li>中间件开发</li>
+<li>错误处理和日志记录</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>框架准备</strong> - 引入 <code>core_logic_developer</code> 创建的库或代码</li>
+<li><strong>控制器开发</strong> - 使用选定的 Web 框架创建控制器</li>
+<li><strong>请求处理</strong> - 在控制器中处理 HTTP 请求，调用业务逻辑</li>
+<li><strong>响应格式化</strong> - 将业务逻辑结果序列化为 HTTP 响应</li>
+<li><strong>路由配置</strong> - 配置路由，将 URL 映射到对应的控制器</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>选定的 Web 框架</li>
+<li>核心业务逻辑代码</li>
+<li>API 接口定义</li>
+<li>系统架构设计</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>src/web/*.cpp</code> - Web 框架特定的源代码</li>
+<li><code>src/main.cpp</code> - 程序入口文件</li>
+<li><code>config/routes.json</code> - 路由配置文件</li>
+<li><code>docs/integration_guide.md</code> - 集成指南</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>集成 Core Logic Developer 的代码</strong></li>
+<li><strong>实现 API Designer 定义的接口</strong></li>
+<li><strong>使用 Architect 选择的框架</strong></li>
+</ul>
+<hr>
+<h3 id="4-5-🔨-Build-Dependency-Expert-Agent"><a href="#4-5-🔨-Build-Dependency-Expert-Agent" class="headerlink" title="4.5 🔨 Build &amp; Dependency Expert Agent"></a>4.5 🔨 Build &amp; Dependency Expert Agent</h3><h4 id="Agent-build-dependency-expert"><a href="#Agent-build-dependency-expert" class="headerlink" title="Agent: build_dependency_expert"></a>Agent: <code>build_dependency_expert</code></h4><p><strong>Description:</strong><br>你是一名构建系统大师，精通 CMake 和 C++ 依赖管理（如 Conan, vcpkg）。你确保项目可以在不同平台上一键构建。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>CMake 高级配置和优化</li>
+<li>包管理器集成（Conan, vcpkg, Hunter）</li>
+<li>跨平台构建配置</li>
+<li>CI&#x2F;CD 管道设置</li>
+<li>静态分析和代码检查集成</li>
+<li>构建性能优化</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>构建配置</strong> - 维护和优化 <code>CMakeLists.txt</code> 文件</li>
+<li><strong>依赖管理</strong> - 管理项目的所有第三方依赖</li>
+<li><strong>编译配置</strong> - 配置编译选项、警告级别、优化设置</li>
+<li><strong>工具集成</strong> - 设置静态分析或代码格式化工具</li>
+<li><strong>CI&#x2F;CD 配置</strong> - 创建持续集成和部署管道</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>项目架构和依赖需求</li>
+<li>目标平台信息</li>
+<li>团队开发工具链</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>CMakeLists.txt</code> - 完整的构建配置</li>
+<li><code>conanfile.txt</code> - Conan 依赖配置</li>
+<li><code>.github/workflows/</code> - CI&#x2F;CD 配置文件</li>
+<li><code>scripts/build.sh</code> - 构建脚本</li>
+<li><code>docs/build_guide.md</code> - 构建指南</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>支持所有其他 Agent 的构建需求</strong></li>
+<li><strong>优化整个项目的构建流程</strong></li>
+<li><strong>确保跨平台兼容性</strong></li>
+</ul>
+<hr>
+<h3 id="4-6-🔍-QA-Specialist-Agent"><a href="#4-6-🔍-QA-Specialist-Agent" class="headerlink" title="4.6 🔍 QA Specialist Agent"></a>4.6 🔍 QA Specialist Agent</h3><h4 id="Agent-qa-specialist"><a href="#Agent-qa-specialist" class="headerlink" title="Agent: qa_specialist"></a>Agent: <code>qa_specialist</code></h4><p><strong>Description:</strong><br>你是一名一丝不苟的质量保证工程师。你为项目的所有关键部分编写全面的测试用例，并确保代码质量标准得到执行。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>单元测试和集成测试设计</li>
+<li>性能测试和基准测试</li>
+<li>代码覆盖率分析</li>
+<li>静态代码分析</li>
+<li>测试自动化</li>
+<li>质量指标监控</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>测试策略</strong> - 制定全面的测试策略和计划</li>
+<li><strong>单元测试</strong> - 为 <code>core_logic_developer</code> 编写的每个函数和类编写单元测试</li>
+<li><strong>集成测试</strong> - 为 <code>web_service_integrator</code> 创建的 API 端点编写集成测试</li>
+<li><strong>质量检查</strong> - 进行代码覆盖率分析和静态代码分析</li>
+<li><strong>CI 集成</strong> - 确保测试融入 CI&#x2F;CD 流程</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>业务逻辑代码</li>
+<li>API 接口定义</li>
+<li>质量标准和要求</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>tests/unit/*.cpp</code> - 单元测试</li>
+<li><code>tests/integration/*.cpp</code> - 集成测试</li>
+<li><code>tests/performance/*.cpp</code> - 性能测试</li>
+<li><code>.codecov.yml</code> - 代码覆盖率配置</li>
+<li><code>docs/testing_guide.md</code> - 测试指南</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>验证 Core Logic Developer 的代码</strong></li>
+<li><strong>测试 Web Service Integrator 的接口</strong></li>
+<li><strong>确保 Deployment Operator 的部署质量</strong></li>
+</ul>
+<hr>
+<h3 id="4-7-🚀-Deployment-Operator-Agent"><a href="#4-7-🚀-Deployment-Operator-Agent" class="headerlink" title="4.7 🚀 Deployment Operator Agent"></a>4.7 🚀 Deployment Operator Agent</h3><h4 id="Agent-deployment-operator"><a href="#Agent-deployment-operator" class="headerlink" title="Agent: deployment_operator"></a>Agent: <code>deployment_operator</code></h4><p><strong>Description:</strong><br>你是一名 DevOps 工程师，负责将开发完成的服务打包并部署到目标环境，确保生产环境的稳定性和可靠性。</p>
+<p><strong>Capabilities:</strong></p>
+<ul>
+<li>容器化（Docker, Podman）</li>
+<li>容器编排（Docker Compose, Kubernetes）</li>
+<li>配置管理</li>
+<li>监控和日志</li>
+<li>自动化部署脚本</li>
+<li>基础设施即代码</li>
+</ul>
+<p><strong>Workflow:</strong></p>
+<ol>
+<li><strong>容器化</strong> - 编写 <code>Dockerfile</code>，创建服务的容器镜像</li>
+<li><strong>编排配置</strong> - 编写 <code>docker-compose.yml</code> 文件，用于一键部署</li>
+<li><strong>脚本编写</strong> - 编写部署脚本或 CI&#x2F;CD 流水线配置</li>
+<li><strong>配置模板</strong> - 生成生产环境配置文件模板</li>
+<li><strong>监控设置</strong> - 配置监控和日志收集</li>
+</ol>
+<p><strong>Input Dependencies:</strong></p>
+<ul>
+<li>构建好的应用程序</li>
+<li>部署环境信息</li>
+<li>运行时配置需求</li>
+</ul>
+<p><strong>Output Artifacts:</strong></p>
+<ul>
+<li><code>Dockerfile</code> - 容器镜像定义</li>
+<li><code>docker-compose.yml</code> - 服务编排配置</li>
+<li><code>scripts/deploy.sh</code> - 部署脚本</li>
+<li><code>config/production.env</code> - 生产环境配置</li>
+<li><code>docs/deployment_guide.md</code> - 部署指南</li>
+</ul>
+<p><strong>Collaboration:</strong></p>
+<ul>
+<li><strong>打包 Build Expert 的构建产物</strong></li>
+<li><strong>部署 Web Service Integrator 的服务</strong></li>
+<li><strong>配置 QA Specialist 批准的版本</strong></li>
+</ul>
+<hr>
+<h2 id="5-🔄-协作流程"><a href="#5-🔄-协作流程" class="headerlink" title="5. 🔄 协作流程"></a>5. 🔄 协作流程</h2><h3 id="5-1-📋-标准开发流程"><a href="#5-1-📋-标准开发流程" class="headerlink" title="5.1 📋 标准开发流程"></a>5.1 📋 标准开发流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant PM as Project Manager</span><br><span class="line">    participant A as Architect</span><br><span class="line">    participant API as API Designer</span><br><span class="line">    participant CL as Core Logic</span><br><span class="line">    participant WSI as Web Integrator</span><br><span class="line">    participant BE as Build Expert</span><br><span class="line">    participant QA as QA Specialist</span><br><span class="line">    participant DO as Deployment Operator</span><br><span class="line"></span><br><span class="line">    PM-&gt;&gt;A: 项目需求</span><br><span class="line">    A-&gt;&gt;API: 架构约束</span><br><span class="line">    A-&gt;&gt;BE: 技术栈选择</span><br><span class="line">    API-&gt;&gt;CL: API 规范</span><br><span class="line">    CL-&gt;&gt;WSI: 核心逻辑</span><br><span class="line">    WSI-&gt;&gt;BE: 依赖需求</span><br><span class="line">    BE-&gt;&gt;QA: 构建配置</span><br><span class="line">    QA-&gt;&gt;DO: 测试报告</span><br><span class="line">    DO-&gt;&gt;PM: 部署就绪</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-🔄-迭代开发流程"><a href="#5-2-🔄-迭代开发流程" class="headerlink" title="5.2 🔄 迭代开发流程"></a>5.2 🔄 迭代开发流程</h3><ol>
+<li><strong>Sprint Planning</strong> - Architect 和团队确定下一个迭代目标</li>
+<li><strong>API Design</strong> - API Designer 先行设计接口规范</li>
+<li><strong>Parallel Development</strong> - Core Logic 和 Web Integrator 并行开发</li>
+<li><strong>Integration Testing</strong> - QA Specialist 执行集成测试</li>
+<li><strong>Build &amp; Deploy</strong> - Build Expert 和 Deployment Operator 完成构建部署</li>
+</ol>
+<h3 id="5-3-🚨-错误处理流程"><a href="#5-3-🚨-错误处理流程" class="headerlink" title="5.3 🚨 错误处理流程"></a>5.3 🚨 错误处理流程</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[发现错误] --&gt; B&#123;错误类型&#125;</span><br><span class="line">    B --&gt;|构建错误| C[Build Expert]</span><br><span class="line">    B --&gt;|逻辑错误| D[Core Logic Developer]</span><br><span class="line">    B --&gt;|集成错误| E[Web Service Integrator]</span><br><span class="line">    B --&gt;|测试失败| F[QA Specialist]</span><br><span class="line"></span><br><span class="line">    C --&gt; G[修复配置]</span><br><span class="line">    D --&gt; H[修复逻辑]</span><br><span class="line">    E --&gt; I[修复集成]</span><br><span class="line">    F --&gt; J[修复测试]</span><br><span class="line"></span><br><span class="line">    G --&gt; K[重新验证]</span><br><span class="line">    H --&gt; K</span><br><span class="line">    I --&gt; K</span><br><span class="line">    J --&gt; K</span><br><span class="line"></span><br><span class="line">    K --&gt; L[错误解决]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="6-📖-使用指南"><a href="#6-📖-使用指南" class="headerlink" title="6. 📖 使用指南"></a>6. 📖 使用指南</h2><h3 id="6-1-🚀-快速开始"><a href="#6-1-🚀-快速开始" class="headerlink" title="6.1 🚀 快速开始"></a>6.1 🚀 快速开始</h3><h4 id="步骤-1-初始化项目"><a href="#步骤-1-初始化项目" class="headerlink" title="步骤 1: 初始化项目"></a>步骤 1: 初始化项目</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/agents create cpp_architect</span><br><span class="line">&quot;创建一个新的 C++ Web 项目，需要实现用户管理系统，要求高性能和可扩展性&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-2-生成架构"><a href="#步骤-2-生成架构" class="headerlink" title="步骤 2: 生成架构"></a>步骤 2: 生成架构</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/agents create api_designer</span><br><span class="line">&quot;基于架构设计用户管理系统的 API，包括用户注册、登录、信息管理等接口&quot;</span><br></pre></td></tr></table></figure>
+
+<h4 id="步骤-3-实现核心逻辑"><a href="#步骤-3-实现核心逻辑" class="headerlink" title="步骤 3: 实现核心逻辑"></a>步骤 3: 实现核心逻辑</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">/agents create core_logic_developer</span><br><span class="line">&quot;实现用户管理的核心业务逻辑，包括用户验证、密码加密、数据校验等&quot;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-🔧-Agent-管理命令"><a href="#6-2-🔧-Agent-管理命令" class="headerlink" title="6.2 🔧 Agent 管理命令"></a>6.2 🔧 Agent 管理命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># C++ Web 代理设计架构</span></span><br><span class="line">/agents create &lt;agent_name&gt; <span class="string">&quot;&lt;task_description&gt;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># C++ Web 代理设计架构</span></span><br><span class="line">/agents switch &lt;agent_name&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># C++ Web 代理设计架构</span></span><br><span class="line">/agents list</span><br><span class="line"></span><br><span class="line"><span class="comment"># C++ Web 代理设计架构</span></span><br><span class="line">/agents remove &lt;agent_name&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># C++ Web 代理设计架构</span></span><br><span class="line">/agents status &lt;agent_name&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-3-📝-协作最佳实践"><a href="#6-3-📝-协作最佳实践" class="headerlink" title="6.3 📝 协作最佳实践"></a>6.3 📝 协作最佳实践</h3><ol>
+<li><strong>明确依赖关系</strong> - 在每个任务开始前明确依赖的产出物</li>
+<li><strong>版本控制</strong> - 每个 Agent 的产出都应该进行版本管理</li>
+<li><strong>文档同步</strong> - 确保 Agent 间的文档保持同步</li>
+<li><strong>定期同步</strong> - 建立定期的 Agent 同步会议或检查点</li>
+<li><strong>质量门禁</strong> - 每个 Agent 的产出都应该通过质量检查</li>
+</ol>
+<hr>
+<h2 id="7-🔄-扩展和维护"><a href="#7-🔄-扩展和维护" class="headerlink" title="7. 🔄 扩展和维护"></a>7. 🔄 扩展和维护</h2><h3 id="7-1-➕-添加新-Agent"><a href="#7-1-➕-添加新-Agent" class="headerlink" title="7.1 ➕ 添加新 Agent"></a>7.1 ➕ 添加新 Agent</h3><p>当项目需要新的专业能力时，可以添加专门的 Agent：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># C++ Web 代理设计架构</span></span><br><span class="line"><span class="strong">**Description:**</span></span><br><span class="line">你是一名安全专家，专注于确保 C++ Web 应用的安全性。</span><br><span class="line"></span><br><span class="line"><span class="strong">**Capabilities:**</span></span><br><span class="line"><span class="bullet">-</span> 安全漏洞评估</span><br><span class="line"><span class="bullet">-</span> 加密算法实现</span><br><span class="line"><span class="bullet">-</span> 认证和授权机制</span><br><span class="line"><span class="bullet">-</span> 安全编码规范</span><br><span class="line"><span class="bullet">-</span> 渗透测试</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-🔧-Agent-优化"><a href="#7-2-🔧-Agent-优化" class="headerlink" title="7.2 🔧 Agent 优化"></a>7.2 🔧 Agent 优化</h3><p>定期评估和优化现有 Agent：</p>
+<ol>
+<li><strong>性能评估</strong> - 监控 Agent 的工作效率</li>
+<li><strong>质量评估</strong> - 检查 Agent 产出的质量</li>
+<li><strong>能力更新</strong> - 根据新技术更新 Agent 能力</li>
+<li><strong>协作优化</strong> - 改进 Agent 间的协作流程</li>
+</ol>
+<h3 id="7-3-📊-Agent-性能指标"><a href="#7-3-📊-Agent-性能指标" class="headerlink" title="7.3 📊 Agent 性能指标"></a>7.3 📊 Agent 性能指标</h3><table>
+<thead>
+<tr>
+<th>Agent</th>
+<th>关键指标</th>
+<th>目标值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Architect</td>
+<td>架构设计时间</td>
+<td>&lt; 2小时</td>
+</tr>
+<tr>
+<td>API Designer</td>
+<td>API 规范完成率</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>Core Logic</td>
+<td>代码覆盖率</td>
+<td>&gt; 80%</td>
+</tr>
+<tr>
+<td>Web Integrator</td>
+<td>集成成功率</td>
+<td>&gt; 95%</td>
+</tr>
+<tr>
+<td>Build Expert</td>
+<td>构建成功率</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>QA Specialist</td>
+<td>缺陷发现率</td>
+<td>&gt; 90%</td>
+</tr>
+<tr>
+<td>Deployment Operator</td>
+<td>部署成功率</td>
+<td>&gt; 99%</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="📊-总结"><a href="#📊-总结" class="headerlink" title="📊 总结"></a>📊 总结</h2><h3 id="✅-Agent-团队优势"><a href="#✅-Agent-团队优势" class="headerlink" title="✅ Agent 团队优势"></a>✅ Agent 团队优势</h3><ul>
+<li>✅ <strong>专业化分工</strong> - 每个 Agent 专注于特定领域</li>
+<li>✅ <strong>标准化流程</strong> - 建立可重复的开发流程</li>
+<li>✅ <strong>质量保证</strong> - 多层次的质量控制机制</li>
+<li>✅ <strong>可扩展性</strong> - 支持项目规模增长</li>
+<li>✅ <strong>知识传承</strong> - Agent 间共享最佳实践</li>
+</ul>
+<h3 id="🎯-实施建议"><a href="#🎯-实施建议" class="headerlink" title="🎯 实施建议"></a>🎯 实施建议</h3><ol>
+<li><strong>从简单开始</strong> - 先创建核心 Agent，逐步完善</li>
+<li><strong>持续迭代</strong> - 根据项目反馈优化 Agent 设计</li>
+<li><strong>文档驱动</strong> - 保持良好的文档习惯</li>
+<li><strong>工具集成</strong> - 集成现有的开发工具和平台</li>
+<li><strong>团队培训</strong> - 确保团队理解 Agent 协作模式</li>
+</ol>
+<h3 id="📚-扩展资源"><a href="#📚-扩展资源" class="headerlink" title="📚 扩展资源"></a>📚 扩展资源</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.anthropic.com/claude-code/agents">Claude Code Agent 文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/fffaraz/awesome-cpp#web-frameworks">C++ Web 框架比较</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/isocpp/CppCoreGuidelines">现代 C++ 最佳实践</a></li>
+<li><a target="_blank" rel="noopener" href="https://restfulapi.net/">API 设计指南</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>💡 提示</strong>:</p>
+<ul>
+<li>Agent 间的协作需要明确的接口和规范</li>
+<li>定期回顾和优化 Agent 工作流程</li>
+<li>保持 Agent 知识库的更新和维护</li>
+<li>建立有效的质量监控和反馈机制</li>
+</ul>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/95bf2167/">https://vilaswang.github.io/posts/95bf2167/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/">技术文档</a><a class="post-meta__tags" href="/tags/%E6%8C%87%E5%8D%97/">指南</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">VSCode Qt MSVC 配置指南</div></div><div class="info-2"><div class="info-item-1">VSCode Qt MSVC 配置指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: vscode, qt, msvc, cmake, windows, development, cpp  📑 目录 1. 概述 2. 环境准备 3. VS Code 配置 3.1 C&#x2F;C++ 扩展配置 3.2 调试器配置 3.3 构建任务配置 3.4 Qt 可视化调试   4. CMake 配置 5. 环境验证 6. 常见问题解决 7. 完整工作流程   1. 📖 概述本指南详细介绍如何在 Windows 系统上配置 VS Code 进行 Qt C++ 开发，使用 MSVC 编译器和 CMake 构建系统。 🎯 配置目标 ✅ 使用 MSVC 编译器进行 Qt 开发 ✅ VS Code 完整的 IntelliSense 支持 ✅ 集成的调试和构建功能 ✅ 跨平台 CMake 构建系统  🏗️ 系统架构12345678910111213141516graph TB    A[VS Code IDE] --&gt; B[C/C++ Extension]  ...</div></div></div></a><a class="pagination-related" href="/posts/ec4e5506/" title="服务器认证 API 规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">服务器认证 API 规范</div></div><div class="info-2"><div class="info-item-1">服务器认证 API 规范 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: authentication, api, security, jwt, express, nodejs, middleware  📑 目录 1. 概述 2. 认证中间件 3. 认证流程 3.1 注册流程 3.2 登录流程 3.3 Token 验证流程   4. 安全措施 4.1 输入验证 4.2 请求频率限制 4.3 CORS 配置   5. 用户模型 6. 受保护的路由 7. 客户端使用 8. 高级特性 9. 测试与调试   1. 📖 概述本指南详细说明如何实现服务器端的用户认证系统，包括注册、登录、Token 验证以及相关安全措施。 🎯 认证系统特性 ✅ JWT Token 认证 ✅ 密码加密存储 ✅ 请求频率限制 ✅ 输入验证和清理 ✅ CORS 跨域保护 ✅ 错误处理和安全日志  🏗️ 系统架构12345678910graph TD    A[Client Request] --&gt; B[Rate Limiting]    B --&gt; C[Input V...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/ec4e5506/" title="服务器认证 API 规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">服务器认证 API 规范</div></div><div class="info-2"><div class="info-item-1">服务器认证 API 规范 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: authentication, api, security, jwt, express, nodejs, middleware  📑 目录 1. 概述 2. 认证中间件 3. 认证流程 3.1 注册流程 3.2 登录流程 3.3 Token 验证流程   4. 安全措施 4.1 输入验证 4.2 请求频率限制 4.3 CORS 配置   5. 用户模型 6. 受保护的路由 7. 客户端使用 8. 高级特性 9. 测试与调试   1. 📖 概述本指南详细说明如何实现服务器端的用户认证系统，包括注册、登录、Token 验证以及相关安全措施。 🎯 认证系统特性 ✅ JWT Token 认证 ✅ 密码加密存储 ✅ 请求频率限制 ✅ 输入验证和清理 ✅ CORS 跨域保护 ✅ 错误处理和安全日志  🏗️ 系统架构12345678910graph TD    A[Client Request] --&gt; B[Rate Limiting]    B --&gt; C[Input V...</div></div></div></a><a class="pagination-related" href="/posts/6ee89f12/" title="Qt 下载器需求规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Qt 下载器需求规范</div></div><div class="info-2"><div class="info-item-1">Qt 下载器需求规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: qt, downloader, product-requirements, desktop-app, c++  📑 目录 1. 产品概述 2. 用户角色 3. 功能需求 4. 非功能需求 5. 界面设计 6. 数据模型 7. 技术规范 8. 交付要求   1. 🎯 产品概述1.1 产品定位基于 Qt 框架开发的桌面下载管理器，支持多线程并发下载，提供直观的任务管理界面和实时进度监控。 1.2 核心价值 ✅ 批量下载 - 支持多任务并发下载 ✅ 进度监控 - 实时显示下载状态和进度 ✅ 断点续传 - 支持下载中断后继续 ✅ 跨平台 - 支持 Windows、macOS、Linux  1.3 产品架构图12345678910111213141516171819graph TD    A[用户界面] --&gt; B[任务管理器]    B --&gt; C[下载引擎]    C --&gt; D[网络请求层]    B --&gt; E[数据持久化]    B --&...</div></div></div></a><a class="pagination-related" href="/posts/33eb4929/" title="FileZilla 端口转发指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">FileZilla 端口转发指南</div></div><div class="info-2"><div class="info-item-1">FileZilla 端口转发指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: filezilla, ftp, portforwarding, 花生壳, 内网穿透, 远程访问  📑 目录 1. 概述 2. 配置流程图 3. FileZilla Server 配置 4. 花生壳内网穿透 5. FTP 被动模式配置 6. 防火墙设置 7. 连接测试 8. 故障排除   1. 📖 概述本指南详细介绍如何使用 FileZilla Server 搭建 FTP 服务器，并通过花生壳实现外网访问内网文件的完整解决方案。 🎯 配置目标 ✅ 搭建内网 FTP 服务器 ✅ 配置花生壳内网穿透 ✅ 实现外网安全访问 ✅ 支持文件上传下载  🏗️ 系统架构图1234567891011121314flowchart TD    A[外网客户端] --&gt; B[花生壳外网域名]    B --&gt; C[花生壳服务器]    C --&gt; D[内网服务器]    D --&gt; E[FileZilla Server]    E --&gt; F[共享文件夹]...</div></div></div></a><a class="pagination-related" href="/posts/58c0a1f/" title="Drogon Windows 构建指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Drogon Windows 构建指南</div></div><div class="info-2"><div class="info-item-1">Drogon Windows 构建指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: drogon, cpp, windows, source-build, cmake, conan  📑 目录 1. 概述 2. 环境准备 3. 源码下载 4. 依赖安装 5. 编译安装 6. 环境配置 7. 创建新项目 8. 常见问题   1. 📖 概述Drogon 是一个现代化的 C++ Web 框架。本指南介绍如何在 Windows 系统上从源码编译安装 Drogon。 🎯 安装目标 ✅ 从源码编译 Drogon 框架 ✅ 配置开发环境 ✅ 创建第一个 Drogon 项目 ✅ 验证安装成功   2. 🔧 环境准备2.1 必需工具 Visual Studio 2019+ - C++ 编译器 Git - 源码管理 CMake 3.15+ - 构建系统 Conan - C++ 包管理器  2.2 安装 Conan12345# Drogon Windows 构建指南pip install conan# Drogon Windows 构建指南choco insta...</div></div></div></a><a class="pagination-related" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-18</div><div class="info-item-2">Windows 环境下配置 GitHub MCP 服务器完整指南</div></div><div class="info-2"><div class="info-item-1">Windows 环境下配置 GitHub MCP 服务器完整指南 文档创建时间: 2025-12-18最后更新: 2025-12-18标签: github, mcp, windows, powershell, gemini-cli, ai-tools  📑 目录 1. 概述 2. 生成 GitHub PAT 3. 设置环境变量 4. 编辑 Gemini CLI 配置 5. 安装必要的依赖 6. 验证配置 7. 故障排除 8. 最佳实践 9. 总结   1. 📖 概述本文将详细介绍在Windows环境下如何配置GitHub MCP (Model Context Protocol) 服务器，让您可以在Gemini CLI中直接操作GitHub仓库。 2. 🔑 生成 GitHub PAT步骤 1：生成 GitHub PAT按照以下步骤在GitHub创建一个Fine-grained Token（细粒度令牌）： 1.1 访问GitHub设置 登录GitHub账户 点击右上角头像 选择 “Settings”（设置） 在左侧菜单中选择 “Developer settings” 点击 “P...</div></div></div></a><a class="pagination-related" href="/posts/f2ed900f/" title="Web 认证方法指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Web 认证方法指南</div></div><div class="info-2"><div class="info-item-1">Web 认证方法指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: web, authentication, authorization, security, session, jwt, oauth  📑 目录 1. 核心概念 1.1 认证 vs. 授权   2. Session-Cookie 认证 2.1 工作原理 2.2 实现示例 2.3 优缺点   3. Token 认证（JWT） 3.1 工作原理 3.2 实现示例 3.3 优缺点   4. OAuth 认证 4.1 认证流程 4.2 实现示例   5. 方案对比与选择 5.1 对比表 5.2 使用场景     1. 核心概念1.1 🔍 认证 vs. 授权   概念 问题 解决方案 示例    认证 “你是谁？” 验证用户身份 用户名密码登录   授权 “你能做什么？” 验证用户权限 是否允许删除文章   1234567graph LR    A[用户] --&gt; B[认证 Authentication]    B --&gt; C[你是谁？]    B --&gt; D[身份验证] ...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#C-Web-%E4%BB%A3%E7%90%86%E8%AE%BE%E8%AE%A1%E6%9E%B6%E6%9E%84"><span class="toc-number">1.</span> <span class="toc-text">C++ Web 代理设计架构</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">📑 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%F0%9F%93%96-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.</span> <span class="toc-text">1. 📖 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8E%AF-%E8%AE%BE%E8%AE%A1%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.1.</span> <span class="toc-text">🎯 设计目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8F%97%EF%B8%8F-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">1.2.2.</span> <span class="toc-text">🏗️ 系统架构图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%F0%9F%8E%AF-%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99"><span class="toc-number">1.3.</span> <span class="toc-text">2. 🎯 设计原则</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%F0%9F%94%84-%E8%81%8C%E8%B4%A3%E5%88%86%E7%A6%BB%E5%8E%9F%E5%88%99"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1 🔄 职责分离原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%F0%9F%93%8B-%E5%8F%AF%E8%BF%BD%E6%BA%AF%E6%80%A7%E5%8E%9F%E5%88%99"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.2 📋 可追溯性原则</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%F0%9F%94%84-%E8%BF%AD%E4%BB%A3%E6%94%B9%E8%BF%9B%E5%8E%9F%E5%88%99"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.3 🔄 迭代改进原则</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%F0%9F%8F%A2-Agent-%E6%9E%B6%E6%9E%84"><span class="toc-number">1.4.</span> <span class="toc-text">3. 🏢 Agent 架构</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%F0%9F%94%A7-%E6%A0%87%E5%87%86%E5%8C%96-Agent-%E7%BB%93%E6%9E%84"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 🔧 标准化 Agent 结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%F0%9F%94%97-Agent-%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 🔗 Agent 通信协议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%F0%9F%8E%AD-%E6%A0%B8%E5%BF%83%E5%9B%A2%E9%98%9F-Agents"><span class="toc-number">1.5.</span> <span class="toc-text">4. 🎭 核心团队 Agents</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%F0%9F%8F%97%EF%B8%8F-Project-Architect-Agent"><span class="toc-number">1.5.1.</span> <span class="toc-text">4.1 🏗️ Project Architect Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Agent-cpp-architect"><span class="toc-number">1.5.1.1.</span> <span class="toc-text">Agent: cpp_architect</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%F0%9F%93%9D-API-Designer-Agent"><span class="toc-number">1.5.2.</span> <span class="toc-text">4.2 📝 API Designer Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Agent-api-designer"><span class="toc-number">1.5.2.1.</span> <span class="toc-text">Agent: api_designer</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E2%9A%99%EF%B8%8F-Core-Logic-Developer-Agent"><span class="toc-number">1.5.3.</span> <span class="toc-text">4.3 ⚙️ Core Logic Developer Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Agent-core-logic-developer"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">Agent: core_logic_developer</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-4-%F0%9F%8C%90-Web-Service-Integrator-Agent"><span class="toc-number">1.5.4.</span> <span class="toc-text">4.4 🌐 Web Service Integrator Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Agent-web-service-integrator"><span class="toc-number">1.5.4.1.</span> <span class="toc-text">Agent: web_service_integrator</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-5-%F0%9F%94%A8-Build-Dependency-Expert-Agent"><span class="toc-number">1.5.5.</span> <span class="toc-text">4.5 🔨 Build &amp; Dependency Expert Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Agent-build-dependency-expert"><span class="toc-number">1.5.5.1.</span> <span class="toc-text">Agent: build_dependency_expert</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-6-%F0%9F%94%8D-QA-Specialist-Agent"><span class="toc-number">1.5.6.</span> <span class="toc-text">4.6 🔍 QA Specialist Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Agent-qa-specialist"><span class="toc-number">1.5.6.1.</span> <span class="toc-text">Agent: qa_specialist</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-7-%F0%9F%9A%80-Deployment-Operator-Agent"><span class="toc-number">1.5.7.</span> <span class="toc-text">4.7 🚀 Deployment Operator Agent</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Agent-deployment-operator"><span class="toc-number">1.5.7.1.</span> <span class="toc-text">Agent: deployment_operator</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%F0%9F%94%84-%E5%8D%8F%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.</span> <span class="toc-text">5. 🔄 协作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%F0%9F%93%8B-%E6%A0%87%E5%87%86%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.1.</span> <span class="toc-text">5.1 📋 标准开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%F0%9F%94%84-%E8%BF%AD%E4%BB%A3%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.2.</span> <span class="toc-text">5.2 🔄 迭代开发流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%F0%9F%9A%A8-%E9%94%99%E8%AF%AF%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.3.</span> <span class="toc-text">5.3 🚨 错误处理流程</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%F0%9F%93%96-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97"><span class="toc-number">1.7.</span> <span class="toc-text">6. 📖 使用指南</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%F0%9F%9A%80-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="toc-number">1.7.1.</span> <span class="toc-text">6.1 🚀 快速开始</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-1-%E5%88%9D%E5%A7%8B%E5%8C%96%E9%A1%B9%E7%9B%AE"><span class="toc-number">1.7.1.1.</span> <span class="toc-text">步骤 1: 初始化项目</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-2-%E7%94%9F%E6%88%90%E6%9E%B6%E6%9E%84"><span class="toc-number">1.7.1.2.</span> <span class="toc-text">步骤 2: 生成架构</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%AD%A5%E9%AA%A4-3-%E5%AE%9E%E7%8E%B0%E6%A0%B8%E5%BF%83%E9%80%BB%E8%BE%91"><span class="toc-number">1.7.1.3.</span> <span class="toc-text">步骤 3: 实现核心逻辑</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%F0%9F%94%A7-Agent-%E7%AE%A1%E7%90%86%E5%91%BD%E4%BB%A4"><span class="toc-number">1.7.2.</span> <span class="toc-text">6.2 🔧 Agent 管理命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%F0%9F%93%9D-%E5%8D%8F%E4%BD%9C%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5"><span class="toc-number">1.7.3.</span> <span class="toc-text">6.3 📝 协作最佳实践</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%F0%9F%94%84-%E6%89%A9%E5%B1%95%E5%92%8C%E7%BB%B4%E6%8A%A4"><span class="toc-number">1.8.</span> <span class="toc-text">7. 🔄 扩展和维护</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E2%9E%95-%E6%B7%BB%E5%8A%A0%E6%96%B0-Agent"><span class="toc-number">1.8.1.</span> <span class="toc-text">7.1 ➕ 添加新 Agent</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%F0%9F%94%A7-Agent-%E4%BC%98%E5%8C%96"><span class="toc-number">1.8.2.</span> <span class="toc-text">7.2 🔧 Agent 优化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%F0%9F%93%8A-Agent-%E6%80%A7%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-number">1.8.3.</span> <span class="toc-text">7.3 📊 Agent 性能指标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8A-%E6%80%BB%E7%BB%93"><span class="toc-number">1.9.</span> <span class="toc-text">📊 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-Agent-%E5%9B%A2%E9%98%9F%E4%BC%98%E5%8A%BF"><span class="toc-number">1.9.1.</span> <span class="toc-text">✅ Agent 团队优势</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8E%AF-%E5%AE%9E%E6%96%BD%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.9.2.</span> <span class="toc-text">🎯 实施建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%9A-%E6%89%A9%E5%B1%95%E8%B5%84%E6%BA%90"><span class="toc-number">1.9.3.</span> <span class="toc-text">📚 扩展资源</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

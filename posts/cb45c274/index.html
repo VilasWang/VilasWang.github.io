@@ -1,0 +1,369 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>mTLS 证书生成指南 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="mTLS 证书生成指南生成 CA 证书12345678# mTLS 证书生成指南openssl genrsa -aes256 -out ca-key.pem 4096# mTLS 证书生成指南openssl genrsa -out ca-key.pem 4096# mTLS 证书生成指南openssl req -new -x509 -days 3650 -key ca-key.pem -out c">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mTLS 证书生成指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/cb45c274/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="mTLS 证书生成指南生成 CA 证书12345678# mTLS 证书生成指南openssl genrsa -aes256 -out ca-key.pem 4096# mTLS 证书生成指南openssl genrsa -out ca-key.pem 4096# mTLS 证书生成指南openssl req -new -x509 -days 3650 -key ca-key.pem -out c">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-09T06:09:54.000Z">
+<meta property="article:modified_time" content="2025-12-17T15:36:29.302Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="技术文档">
+<meta property="article:tag" content="指南">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "mTLS 证书生成指南",
+  "url": "https://vilaswang.github.io/posts/cb45c274/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-09T06:09:54.000Z",
+  "dateModified": "2025-12-17T15:36:29.302Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/cb45c274/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'mTLS 证书生成指南',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">mTLS 证书生成指南</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">mTLS 证书生成指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-09T06:09:54.000Z" title="发表于 2025-12-09 14:09:54">2025-12-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T15:36:29.302Z" title="更新于 2025-12-17 23:36:29">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Web%E6%9E%B6%E6%9E%84%E5%AE%89%E5%85%A8/">Web架构安全</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="mTLS-证书生成指南"><a href="#mTLS-证书生成指南" class="headerlink" title="mTLS 证书生成指南"></a>mTLS 证书生成指南</h1><h2 id="生成-CA-证书"><a href="#生成-CA-证书" class="headerlink" title="生成 CA 证书"></a>生成 CA 证书</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># mTLS 证书生成指南</span></span><br><span class="line">openssl genrsa -aes256 -out ca-key.pem 4096</span><br><span class="line"></span><br><span class="line"><span class="comment"># mTLS 证书生成指南</span></span><br><span class="line">openssl genrsa -out ca-key.pem 4096</span><br><span class="line"></span><br><span class="line"><span class="comment"># mTLS 证书生成指南</span></span><br><span class="line">openssl req -new -x509 -days 3650 -key ca-key.pem -out ca-crt.pem -sha256</span><br></pre></td></tr></table></figure>
+
+<p><strong>CA 证书生成注意事项：</strong></p>
+<ul>
+<li>Common Name: 输入 CA 名称，如 “My-CA”</li>
+<li>Organization: 输入组织名称</li>
+<li>Country: 输入国家代码，如 “CN”</li>
+<li>有效期建议设置为 10 年 (3650 天)</li>
+</ul>
+<h2 id="生成服务器证书"><a href="#生成服务器证书" class="headerlink" title="生成服务器证书"></a>生成服务器证书</h2><h3 id="1-生成服务器私钥"><a href="#1-生成服务器私钥" class="headerlink" title="1. 生成服务器私钥"></a>1. 生成服务器私钥</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out server-key.pem 2048</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-生成服务器证书签名请求"><a href="#2-生成服务器证书签名请求" class="headerlink" title="2. 生成服务器证书签名请求"></a>2. 生成服务器证书签名请求</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -new -sha256 -key server-key.pem -out server-csr.pem</span><br></pre></td></tr></table></figure>
+
+<p><strong>在提示输入信息时：</strong></p>
+<ul>
+<li><strong>Country Name</strong>: 与 CA 证书相同</li>
+<li><strong>State or Province Name</strong>: 省份名称</li>
+<li><strong>Locality Name</strong>: 城市名称</li>
+<li><strong>Organization Name</strong>: 服务器所属组织</li>
+<li><strong>Organizational Unit Name</strong>: 部门名称（可选）</li>
+<li><strong>Common Name</strong>: <strong>重要！</strong> 必须填写服务器的域名或 IP 地址</li>
+<li><strong>Email Address</strong>: 邮箱地址（可选）</li>
+</ul>
+<h3 id="3-创建服务器证书扩展配置文件"><a href="#3-创建服务器证书扩展配置文件" class="headerlink" title="3. 创建服务器证书扩展配置文件"></a>3. 创建服务器证书扩展配置文件</h3><p>创建 <code>server_cert_ext.cnf</code> 文件：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[server_cert]</span></span><br><span class="line"><span class="attr">basicConstraints</span> = critical, CA:<span class="literal">FALSE</span></span><br><span class="line"><span class="attr">keyUsage</span> = critical, digitalSignature, keyEncipherment</span><br><span class="line"><span class="attr">extendedKeyUsage</span> = serverAuth</span><br><span class="line"><span class="attr">subjectKeyIdentifier</span> = hash</span><br><span class="line"><span class="attr">authorityKeyIdentifier</span> = keyid,issuer</span><br><span class="line"><span class="attr">subjectAltName</span> = @alt_names</span><br><span class="line"></span><br><span class="line"><span class="section">[alt_names]</span></span><br><span class="line"><span class="attr">DNS.1</span> = localhost</span><br><span class="line"><span class="attr">DNS.2</span> = your-domain.com</span><br><span class="line"><span class="attr">IP.1</span> = <span class="number">127.0</span>.<span class="number">0.1</span></span><br><span class="line"><span class="attr">IP.2</span> = your-server-ip</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-生成服务器证书"><a href="#4-生成服务器证书" class="headerlink" title="4. 生成服务器证书"></a>4. 生成服务器证书</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -req -<span class="keyword">in</span> server-csr.pem -CA ca-crt.pem -CAkey ca-key.pem -CAcreateserial -out server-crt.pem -days 365 -sha256 -extfile server_cert_ext.cnf -extensions server_cert</span><br><span class="line"></span><br><span class="line"><span class="comment"># mTLS 证书生成指南</span></span><br><span class="line">openssl verify -CAfile ca-crt.pem server-crt.pem</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-查看证书详情"><a href="#5-查看证书详情" class="headerlink" title="5. 查看证书详情"></a>5. 查看证书详情</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -<span class="keyword">in</span> server-crt.pem -text -noout -purpose</span><br></pre></td></tr></table></figure>
+
+<h2 id="生成客户端证书"><a href="#生成客户端证书" class="headerlink" title="生成客户端证书"></a>生成客户端证书</h2><h3 id="1-生成客户端私钥"><a href="#1-生成客户端私钥" class="headerlink" title="1. 生成客户端私钥"></a>1. 生成客户端私钥</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl genrsa -out client-key.pem 2048</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-生成客户端证书签名请求"><a href="#2-生成客户端证书签名请求" class="headerlink" title="2. 生成客户端证书签名请求"></a>2. 生成客户端证书签名请求</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl req -new -sha256 -key client-key.pem -out client-csr.pem</span><br></pre></td></tr></table></figure>
+
+<p><strong>在提示输入信息时：</strong></p>
+<ul>
+<li><strong>Country Name</strong>: 与 CA 证书相同</li>
+<li><strong>State or Province Name</strong>: 省份名称</li>
+<li><strong>Locality Name</strong>: 城市名称</li>
+<li><strong>Organization Name</strong>: 客户端所属组织</li>
+<li><strong>Organizational Unit Name</strong>: 部门名称（可选）</li>
+<li><strong>Common Name</strong>: 客户端标识名称（用于区分不同客户端）</li>
+<li><strong>Email Address</strong>: 邮箱地址（可选）</li>
+</ul>
+<h3 id="3-创建客户端证书扩展配置文件"><a href="#3-创建客户端证书扩展配置文件" class="headerlink" title="3. 创建客户端证书扩展配置文件"></a>3. 创建客户端证书扩展配置文件</h3><p>创建 <code>client_cert_ext.cnf</code> 文件：</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[client_cert]</span></span><br><span class="line"><span class="attr">basicConstraints</span> = critical, CA:<span class="literal">FALSE</span></span><br><span class="line"><span class="attr">keyUsage</span> = critical, digitalSignature, keyEncipherment</span><br><span class="line"><span class="attr">extendedKeyUsage</span> = clientAuth</span><br><span class="line"><span class="attr">subjectKeyIdentifier</span> = hash</span><br><span class="line"><span class="attr">authorityKeyIdentifier</span> = keyid,issuer</span><br><span class="line"><span class="attr">subjectAltName</span> = @alt_names</span><br><span class="line"></span><br><span class="line"><span class="section">[alt_names]</span></span><br><span class="line"><span class="attr">DNS.1</span> = client</span><br><span class="line"><span class="attr">DNS.2</span> = localhost</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-生成客户端证书"><a href="#4-生成客户端证书" class="headerlink" title="4. 生成客户端证书"></a>4. 生成客户端证书</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -req -<span class="keyword">in</span> client-csr.pem -CA ca-crt.pem -CAkey ca-key.pem -CAcreateserial -out client-crt.pem -days 365 -sha256 -extfile client_cert_ext.cnf -extensions client_cert</span><br><span class="line"></span><br><span class="line"><span class="comment"># mTLS 证书生成指南</span></span><br><span class="line">openssl verify -CAfile ca-crt.pem client-crt.pem</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-查看证书详情-1"><a href="#5-查看证书详情-1" class="headerlink" title="5. 查看证书详情"></a>5. 查看证书详情</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">openssl x509 -<span class="keyword">in</span> client-crt.pem -text -noout -purpose</span><br></pre></td></tr></table></figure>
+
+<h2 id="证书验证测试"><a href="#证书验证测试" class="headerlink" title="证书验证测试"></a>证书验证测试</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># mTLS 证书生成指南</span></span><br><span class="line">openssl s_server -cert server-crt.pem -key server-key.pem -CAfile ca-crt.pem -Verify 1 -port 8443</span><br><span class="line"></span><br><span class="line"><span class="comment"># mTLS 证书生成指南</span></span><br><span class="line">openssl s_client -connect localhost:8443 -cert client-crt.pem -key client-key.pem -CAfile ca-crt.pem</span><br></pre></td></tr></table></figure>
+
+<h2 id="文件说明"><a href="#文件说明" class="headerlink" title="文件说明"></a>文件说明</h2><ul>
+<li><code>ca-key.pem</code>: CA 私钥（妥善保管）</li>
+<li><code>ca-crt.pem</code>: CA 根证书（客户端需要信任此证书）</li>
+<li><code>ca.srl</code>: CA 序列号文件</li>
+<li><code>server-key.pem</code>: 服务器私钥</li>
+<li><code>server-csr.pem</code>: 服务器证书签名请求（可删除）</li>
+<li><code>server-crt.pem</code>: 服务器证书</li>
+<li><code>client-key.pem</code>: 客户端私钥</li>
+<li><code>client-csr.pem</code>: 客户端证书签名请求（可删除）</li>
+<li><code>client-crt.pem</code>: 客户端证书</li>
+</ul>
+<h2 id="安全注意事项"><a href="#安全注意事项" class="headerlink" title="安全注意事项"></a>安全注意事项</h2><ol>
+<li><strong>私钥保护</strong>: 所有 <code>.pem</code> 私钥文件必须严格保护，不要泄露</li>
+<li><strong>证书有效期</strong>: 定期检查和更新即将过期的证书</li>
+<li><strong>Common Name</strong>: 服务器证书的 Common Name 必须与实际访问的域名匹配</li>
+<li><strong>SAN 扩展</strong>: 现代浏览器要求使用 SAN (Subject Alternative Name) 而不是 CN</li>
+<li><strong>密码保护</strong>: 生产环境中建议为私钥设置密码保护</li>
+</ol>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<li><strong>服务器端</strong>: 配置 web 服务器（Nginx、Apache 等）使用 <code>server-crt.pem</code> 和 <code>server-key.pem</code></li>
+<li><strong>客户端</strong>: 配置应用程序使用 <code>client-crt.pem</code> 和 <code>client-key.pem</code> 进行双向认证</li>
+<li><strong>信任链</strong>: 客户端需要将 <code>ca-crt.pem</code> 添加到信任证书存储中</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/cb45c274/">https://vilaswang.github.io/posts/cb45c274/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/">技术文档</a><a class="post-meta__tags" href="/tags/%E6%8C%87%E5%8D%97/">指南</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/eed6fb04/" title="文件管理 API 规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">文件管理 API 规范</div></div><div class="info-2"><div class="info-item-1">文件管理 API 规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: api, rest, file-management, authentication, swagger  📑 目录 1. 基础信息 2. 认证与授权 3. 文件管理 4. 文件支持 5. 错误处理 6. 安全机制 7. 速率限制 8. OpenAPI 规范   1. 📋 基础信息   项目 说明    Base URL /api/v1   协议 HTTPS   数据格式 JSON   认证方式 JWT Bearer Token   API 版本 v1.0   🔐 认证请求格式1234GET /api/v1/files/list HTTP/1.1Host: your-domain.comAuthorization: Bearer &lt;jwt_token&gt;Content-Type: application/json   2. 🔐 认证与授权2.1 👤 用户注册1234567891011121314sequenceDiagram    particip...</div></div></div></a><a class="pagination-related" href="/posts/33eb4929/" title="FileZilla 端口转发指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">FileZilla 端口转发指南</div></div><div class="info-2"><div class="info-item-1">FileZilla 端口转发指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: filezilla, ftp, portforwarding, 花生壳, 内网穿透, 远程访问  📑 目录 1. 概述 2. 配置流程图 3. FileZilla Server 配置 4. 花生壳内网穿透 5. FTP 被动模式配置 6. 防火墙设置 7. 连接测试 8. 故障排除   1. 📖 概述本指南详细介绍如何使用 FileZilla Server 搭建 FTP 服务器，并通过花生壳实现外网访问内网文件的完整解决方案。 🎯 配置目标 ✅ 搭建内网 FTP 服务器 ✅ 配置花生壳内网穿透 ✅ 实现外网安全访问 ✅ 支持文件上传下载  🏗️ 系统架构图1234567891011121314flowchart TD    A[外网客户端] --&gt; B[花生壳外网域名]    B --&gt; C[花生壳服务器]    C --&gt; D[内网服务器]    D --&gt; E[FileZilla Server]    E --&gt; F[共享文件夹]...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/361d35d7/" title="Claude MCP 配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Claude MCP 配置指南</div></div><div class="info-2"><div class="info-item-1">Claude MCP 配置指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: claude-code, mcp, model-context-protocol, productivity, automation  📑 目录 1. MCP 概述 2. 必装 MCP 服务器 3. 推荐组合 4. 配置步骤 5. Top 15 MCP 服务器 6. 故障排除   1. 📖 MCP 概述MCP (Model Context Protocol) 是 Claude Code 的扩展协议，允许 AI 助手直接控制各种工具和服务。 🎯 MCP 优势 ✅ 扩展能力 - 大幅扩展 Claude 的功能范围 ✅ 自动化 - 实现复杂的自动化工作流 ✅ 集成性 - 连接各种第三方服务和工具 ✅ 实时性 - 获取最新的 API 文档和代码示例   2. ⭐ 必装 MCP 服务器2.1 🌐 Playwright MCP - 浏览器自动化功能: 让 Claude 直接控制浏览器进行测试、截图、数据爬取 12345# Claude MCP 配置指南claude mcp ad...</div></div></div></a><a class="pagination-related" href="/posts/95bf2167/" title="C++ Web 代理设计架构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">C++ Web 代理设计架构</div></div><div class="info-2"><div class="info-item-1">C++ Web 代理设计架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: agents, cpp, web-development, specialization, ai-assistants, claude-code  📑 目录 1. 概述 2. 设计原则 3. Agent 架构 4. 核心团队 Agents 4.1 Project Architect Agent 4.2 API Designer Agent 4.3 Core Logic Developer Agent 4.4 Web Service Integrator Agent 4.5 Build &amp; Dependency Expert Agent 4.6 QA Specialist Agent 4.7 Deployment Operator Agent   5. 协作流程 6. 使用指南 7. 扩展和维护   1. 📖 概述本指南详细说明如何为 C++ Web 项目创建专门化的 AI Agent 团队，每个 Agent 都具有特定的职责和专业能力，通过协同工作完成从设计到部署...</div></div></div></a><a class="pagination-related" href="/posts/33eb4929/" title="FileZilla 端口转发指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">FileZilla 端口转发指南</div></div><div class="info-2"><div class="info-item-1">FileZilla 端口转发指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: filezilla, ftp, portforwarding, 花生壳, 内网穿透, 远程访问  📑 目录 1. 概述 2. 配置流程图 3. FileZilla Server 配置 4. 花生壳内网穿透 5. FTP 被动模式配置 6. 防火墙设置 7. 连接测试 8. 故障排除   1. 📖 概述本指南详细介绍如何使用 FileZilla Server 搭建 FTP 服务器，并通过花生壳实现外网访问内网文件的完整解决方案。 🎯 配置目标 ✅ 搭建内网 FTP 服务器 ✅ 配置花生壳内网穿透 ✅ 实现外网安全访问 ✅ 支持文件上传下载  🏗️ 系统架构图1234567891011121314flowchart TD    A[外网客户端] --&gt; B[花生壳外网域名]    B --&gt; C[花生壳服务器]    C --&gt; D[内网服务器]    D --&gt; E[FileZilla Server]    E --&gt; F[共享文件夹]...</div></div></div></a><a class="pagination-related" href="/posts/ab2eaca1/" title="认证系统架构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">认证系统架构</div></div><div class="info-2"><div class="info-item-1">认证系统架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: authentication, authorization, jwt, oauth, security, api  📑 目录 1. 认证方式概述 2. 本地认证流程 2.1 注册流程 2.2 登录流程 2.3 Token 验证流程   3. Google OAuth 认证流程 3.1 配置 3.2 认证流程 3.3 会话管理   4. 安全特性 4.1 速率限制 4.2 CORS 配置 4.3 错误处理   5. 中间件链 6. 环境配置   1. 认证方式概述系统支持两种主要的认证方式：  🔑 本地用户名密码认证（JWT Token） 🌐 Google OAuth 2.0 认证  12345678graph LR    A[用户] --&gt; B[认证选择]    B --&gt; C[本地认证]    B --&gt; D[OAuth认证]    C --&gt; E[JWT Token]    D --&gt; F[Google授权]    E --&gt; G[访问API] ...</div></div></div></a><a class="pagination-related" href="/posts/b71a62b0/" title="PostgreSQL C++ Windows 安装指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">PostgreSQL C++ Windows 安装指南</div></div><div class="info-2"><div class="info-item-1">PostgreSQL C++ Windows 安装指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: postgresql, c, windows, development, database, libpq  📑 目录 1. 概述 2. 系统组件 3. PostgreSQL 安装 3.1 下载安装包 3.2 运行安装程序   4. C 开发环境配置 4.1 包含头文件配置 4.2 链接库配置 4.3 运行时依赖配置   5. 验证与测试 6. 常见问题解决 7. 高级配置   1. 📖 概述本指南详细说明如何在 Windows 系统上配置 PostgreSQL 的 C 语言开发环境，包括服务器安装、客户端库配置和开发环境设置。 🎯 配置目标 ✅ 安装 PostgreSQL 数据库服务器 ✅ 配置 C 语言客户端库 (libpq) ✅ 设置开发环境和编译选项 ✅ 创建可运行的 C 数据库应用程序  🏗️ 系统架构12345678910111213graph TD    A[C Application] --&gt; B[libpq Client...</div></div></div></a><a class="pagination-related" href="/posts/6ee89f12/" title="Qt 下载器需求规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Qt 下载器需求规范</div></div><div class="info-2"><div class="info-item-1">Qt 下载器需求规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: qt, downloader, product-requirements, desktop-app, c++  📑 目录 1. 产品概述 2. 用户角色 3. 功能需求 4. 非功能需求 5. 界面设计 6. 数据模型 7. 技术规范 8. 交付要求   1. 🎯 产品概述1.1 产品定位基于 Qt 框架开发的桌面下载管理器，支持多线程并发下载，提供直观的任务管理界面和实时进度监控。 1.2 核心价值 ✅ 批量下载 - 支持多任务并发下载 ✅ 进度监控 - 实时显示下载状态和进度 ✅ 断点续传 - 支持下载中断后继续 ✅ 跨平台 - 支持 Windows、macOS、Linux  1.3 产品架构图12345678910111213141516171819graph TD    A[用户界面] --&gt; B[任务管理器]    B --&gt; C[下载引擎]    C --&gt; D[网络请求层]    B --&gt; E[数据持久化]    B --&...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mTLS-%E8%AF%81%E4%B9%A6%E7%94%9F%E6%88%90%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">mTLS 证书生成指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90-CA-%E8%AF%81%E4%B9%A6"><span class="toc-number">1.1.</span> <span class="toc-text">生成 CA 证书</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AF%81%E4%B9%A6"><span class="toc-number">1.2.</span> <span class="toc-text">生成服务器证书</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%9F%E6%88%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%A7%81%E9%92%A5"><span class="toc-number">1.2.1.</span> <span class="toc-text">1. 生成服务器私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%9F%E6%88%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AF%81%E4%B9%A6%E7%AD%BE%E5%90%8D%E8%AF%B7%E6%B1%82"><span class="toc-number">1.2.2.</span> <span class="toc-text">2. 生成服务器证书签名请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AF%81%E4%B9%A6%E6%89%A9%E5%B1%95%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.2.3.</span> <span class="toc-text">3. 创建服务器证书扩展配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%94%9F%E6%88%90%E6%9C%8D%E5%8A%A1%E5%99%A8%E8%AF%81%E4%B9%A6"><span class="toc-number">1.2.4.</span> <span class="toc-text">4. 生成服务器证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%9F%A5%E7%9C%8B%E8%AF%81%E4%B9%A6%E8%AF%A6%E6%83%85"><span class="toc-number">1.2.5.</span> <span class="toc-text">5. 查看证书详情</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%94%9F%E6%88%90%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%81%E4%B9%A6"><span class="toc-number">1.3.</span> <span class="toc-text">生成客户端证书</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%94%9F%E6%88%90%E5%AE%A2%E6%88%B7%E7%AB%AF%E7%A7%81%E9%92%A5"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. 生成客户端私钥</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%9F%E6%88%90%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%81%E4%B9%A6%E7%AD%BE%E5%90%8D%E8%AF%B7%E6%B1%82"><span class="toc-number">1.3.2.</span> <span class="toc-text">2. 生成客户端证书签名请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-%E5%88%9B%E5%BB%BA%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%81%E4%B9%A6%E6%89%A9%E5%B1%95%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="toc-number">1.3.3.</span> <span class="toc-text">3. 创建客户端证书扩展配置文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E7%94%9F%E6%88%90%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%AF%81%E4%B9%A6"><span class="toc-number">1.3.4.</span> <span class="toc-text">4. 生成客户端证书</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%9F%A5%E7%9C%8B%E8%AF%81%E4%B9%A6%E8%AF%A6%E6%83%85-1"><span class="toc-number">1.3.5.</span> <span class="toc-text">5. 查看证书详情</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%AF%81%E4%B9%A6%E9%AA%8C%E8%AF%81%E6%B5%8B%E8%AF%95"><span class="toc-number">1.4.</span> <span class="toc-text">证书验证测试</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E8%AF%B4%E6%98%8E"><span class="toc-number">1.5.</span> <span class="toc-text">文件说明</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">1.6.</span> <span class="toc-text">安全注意事项</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.7.</span> <span class="toc-text">使用场景</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

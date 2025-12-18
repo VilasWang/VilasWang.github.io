@@ -1,0 +1,521 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>PostgreSQL C++ Windows 安装指南 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="PostgreSQL C++ Windows 安装指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: postgresql, c, windows, development, database, libpq  📑 目录 1. 概述 2. 系统组件 3. PostgreSQL 安装 3.1 下载安装包 3.2 运行安装程序   4. C 开发环境配置 4.1 包含头文">
+<meta property="og:type" content="article">
+<meta property="og:title" content="PostgreSQL C++ Windows 安装指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/b71a62b0/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="PostgreSQL C++ Windows 安装指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: postgresql, c, windows, development, database, libpq  📑 目录 1. 概述 2. 系统组件 3. PostgreSQL 安装 3.1 下载安装包 3.2 运行安装程序   4. C 开发环境配置 4.1 包含头文">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-09T06:09:56.000Z">
+<meta property="article:modified_time" content="2025-12-17T15:36:29.279Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="技术文档">
+<meta property="article:tag" content="指南">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "PostgreSQL C++ Windows 安装指南",
+  "url": "https://vilaswang.github.io/posts/b71a62b0/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-09T06:09:56.000Z",
+  "dateModified": "2025-12-17T15:36:29.279Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/b71a62b0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'PostgreSQL C++ Windows 安装指南',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">PostgreSQL C++ Windows 安装指南</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">PostgreSQL C++ Windows 安装指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T15:36:29.279Z" title="更新于 2025-12-17 23:36:29">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/">数据库系统</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F/%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93/">关系型数据库</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="PostgreSQL-C-Windows-安装指南"><a href="#PostgreSQL-C-Windows-安装指南" class="headerlink" title="PostgreSQL C++ Windows 安装指南"></a>PostgreSQL C++ Windows 安装指南</h1><blockquote>
+<p><strong>文档创建时间</strong>: 2025-11-14<br><strong>最后更新</strong>: 2025-11-14<br><strong>标签</strong>: <code>postgresql</code>, <code>c</code>, <code>windows</code>, <code>development</code>, <code>database</code>, <code>libpq</code></p>
+</blockquote>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#1-%E6%A6%82%E8%BF%B0">1. 概述</a></li>
+<li><a href="#2-%E7%B3%BB%E7%BB%9F%E7%BB%84%E4%BB%B6">2. 系统组件</a></li>
+<li><a href="#3-postgresql-%E5%AE%89%E8%A3%85">3. PostgreSQL 安装</a><ul>
+<li><a href="#31-%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E5%8C%85">3.1 下载安装包</a></li>
+<li><a href="#32-%E8%BF%90%E8%A1%8C%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F">3.2 运行安装程序</a></li>
+</ul>
+</li>
+<li><a href="#4-c-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE">4. C 开发环境配置</a><ul>
+<li><a href="#41-%E5%8C%85%E5%90%AB%E5%A4%B4%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE">4.1 包含头文件配置</a></li>
+<li><a href="#42-%E9%93%BE%E6%8E%A5%E5%BA%93%E9%85%8D%E7%BD%AE">4.2 链接库配置</a></li>
+<li><a href="#43-%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96%E9%85%8D%E7%BD%AE">4.3 运行时依赖配置</a></li>
+</ul>
+</li>
+<li><a href="#5-%E9%AA%8C%E8%AF%81%E4%B8%8E%E6%B5%8B%E8%AF%95">5. 验证与测试</a></li>
+<li><a href="#6-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3">6. 常见问题解决</a></li>
+<li><a href="#7-%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE">7. 高级配置</a></li>
+</ul>
+<hr>
+<h2 id="1-📖-概述"><a href="#1-📖-概述" class="headerlink" title="1. 📖 概述"></a>1. 📖 概述</h2><p>本指南详细说明如何在 Windows 系统上配置 PostgreSQL 的 C 语言开发环境，包括服务器安装、客户端库配置和开发环境设置。</p>
+<h3 id="🎯-配置目标"><a href="#🎯-配置目标" class="headerlink" title="🎯 配置目标"></a>🎯 配置目标</h3><ul>
+<li>✅ 安装 PostgreSQL 数据库服务器</li>
+<li>✅ 配置 C 语言客户端库 (libpq)</li>
+<li>✅ 设置开发环境和编译选项</li>
+<li>✅ 创建可运行的 C 数据库应用程序</li>
+</ul>
+<h3 id="🏗️-系统架构"><a href="#🏗️-系统架构" class="headerlink" title="🏗️ 系统架构"></a>🏗️ 系统架构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[C Application] --&gt; B[libpq Client Library]</span><br><span class="line">    B --&gt; C[PostgreSQL Server]</span><br><span class="line">    C --&gt; D[Database Files]</span><br><span class="line"></span><br><span class="line">    E[Visual Studio] --&gt; F[Project Configuration]</span><br><span class="line">    F --&gt; G[Include Directories]</span><br><span class="line">    F --&gt; H[Library Directories]</span><br><span class="line">    F --&gt; I[Dependencies]</span><br><span class="line"></span><br><span class="line">    G --&gt; J[postgresql/include]</span><br><span class="line">    H --&gt; K[postgresql/lib]</span><br><span class="line">    I --&gt; L[libpq.lib]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-🔧-系统组件"><a href="#2-🔧-系统组件" class="headerlink" title="2. 🔧 系统组件"></a>2. 🔧 系统组件</h2><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>主要作用</th>
+<th>获取与说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>PostgreSQL 服务器</strong></td>
+<td>提供数据库服务核心，包含运行实例所需的所有程序</td>
+<td>从官网下载安装包，通常自动安装</td>
+</tr>
+<tr>
+<td><strong>C客户端库 (libpq)</strong></td>
+<td>C程序连接和操作PostgreSQL数据库的主要库，包含头文件和链接库</td>
+<td><strong>安装时必须勾选 “PostgreSQL C Libraries (libpq)”</strong></td>
+</tr>
+<tr>
+<td><strong>Command Line Tools</strong></td>
+<td>提供 <code>psql</code> 等命令行工具，用于数据库管理和调试</td>
+<td>推荐安装，便于开发和测试</td>
+</tr>
+<tr>
+<td><strong>pgAdmin</strong></td>
+<td>图形化管理工具，可视化管理数据库</td>
+<td>可选安装，便于日常管理</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="3-💾-PostgreSQL-安装"><a href="#3-💾-PostgreSQL-安装" class="headerlink" title="3. 💾 PostgreSQL 安装"></a>3. 💾 PostgreSQL 安装</h2><h3 id="3-1-🌐-下载安装包"><a href="#3-1-🌐-下载安装包" class="headerlink" title="3.1 🌐 下载安装包"></a>3.1 🌐 下载安装包</h3><p>访问 <a target="_blank" rel="noopener" href="https://www.postgresql.org/download/windows/">PostgreSQL官网下载页面</a>：</p>
+<p><strong>推荐版本选择</strong>：</p>
+<ul>
+<li><strong>最新稳定版</strong>: PostgreSQL 16.x</li>
+<li><strong>架构</strong>: x64 (64位)</li>
+<li><strong>安装包格式</strong>: Windows exe 安装程序</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[访问官网] --&gt; B[选择Windows版本]</span><br><span class="line">    B --&gt; C[下载安装包]</span><br><span class="line">    C --&gt; D[运行安装程序]</span><br><span class="line">    D --&gt; E[配置组件选择]</span><br><span class="line">    E --&gt; F[完成安装]</span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-⚙️-运行安装程序"><a href="#3-2-⚙️-运行安装程序" class="headerlink" title="3.2 ⚙️ 运行安装程序"></a>3.2 ⚙️ 运行安装程序</h3><ol>
+<li><p><strong>启动安装程序</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以管理员权限运行</span></span><br><span class="line">postgresql-16.1-1-windows-x64.exe</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>组件选择界面</strong></p>
+<p><strong>关键步骤</strong>：在 <strong>“Select Components”</strong> 界面，请确保勾选以下选项：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">✅ PostgreSQL Server                    (必须)</span><br><span class="line">✅ Command Line Tools                  (推荐)</span><br><span class="line">✅ PostgreSQL C Libraries (libpq)     (必须)</span><br><span class="line">✅ pgAdmin 4                          (可选)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>重要配置项</strong></p>
+<table>
+<thead>
+<tr>
+<th>配置项</th>
+<th>推荐设置</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>安装目录</strong></td>
+<td><code>C:\Program Files\PostgreSQL\16</code></td>
+<td>默认路径，避免包含空格或中文</td>
+</tr>
+<tr>
+<td><strong>数据目录</strong></td>
+<td><code>C:\Program Files\PostgreSQL\16\data</code></td>
+<td>数据库存储位置</td>
+</tr>
+<tr>
+<td><strong>超级用户密码</strong></td>
+<td>强密码</td>
+<td>记住postgres用户密码</td>
+</tr>
+<tr>
+<td><strong>端口</strong></td>
+<td><code>5432</code></td>
+<td>默认端口，确保未被占用</td>
+</tr>
+<tr>
+<td><strong>区域设置</strong></td>
+<td><code>Chinese (Simplified), China</code></td>
+<td>或根据需要选择</td>
+</tr>
+</tbody></table>
+</li>
+<li><p><strong>安装完成验证</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查服务状态</span></span><br><span class="line">services.msc  <span class="comment"># 查看postgresql服务是否运行</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 测试连接</span></span><br><span class="line">psql -U postgres -h localhost</span><br></pre></td></tr></table></figure></li>
+</ol>
+<hr>
+<h2 id="4-🛠️-C-开发环境配置"><a href="#4-🛠️-C-开发环境配置" class="headerlink" title="4. 🛠️ C 开发环境配置"></a>4. 🛠️ C 开发环境配置</h2><p>安装完成后，PostgreSQL 通常位于 <code>C:\Program Files\PostgreSQL\16</code> 目录。</p>
+<h3 id="4-1-📁-包含头文件配置"><a href="#4-1-📁-包含头文件配置" class="headerlink" title="4.1 📁 包含头文件配置"></a>4.1 📁 包含头文件配置</h3><p><strong>头文件路径</strong>: <code>C:\Program Files\PostgreSQL\16\include</code></p>
+<p><strong>关键头文件</strong>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;libpq-fe.h&gt;</span>          <span class="comment">// 主要的客户端接口</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;libpq/libpq-fs.h&gt;</span>    <span class="comment">// 大对象支持</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;postgres_ext.h&gt;</span>      <span class="comment">// PostgreSQL 扩展定义</span></span></span><br></pre></td></tr></table></figure>
+
+<p><strong>Visual Studio 配置</strong>:</p>
+<ol>
+<li>右键项目 → 属性</li>
+<li><strong>配置属性</strong> → <strong>C&#x2F;C++</strong> → <strong>常规</strong></li>
+<li><strong>附加包含目录</strong> 添加：<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files\PostgreSQL\16\include</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4-2-🔗-链接库配置"><a href="#4-2-🔗-链接库配置" class="headerlink" title="4.2 🔗 链接库配置"></a>4.2 🔗 链接库配置</h3><p><strong>库文件路径</strong>: <code>C:\Program Files\PostgreSQL\16\lib</code></p>
+<p><strong>主要库文件</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">libpq.lib        // 主要的客户端库</span><br><span class="line">ws2_32.lib       // Windows Socket 库</span><br><span class="line">advapi32.lib     // Windows API 库</span><br></pre></td></tr></table></figure>
+
+<p><strong>Visual Studio 配置</strong>:</p>
+<ol>
+<li><p><strong>配置属性</strong> → <strong>链接器</strong> → <strong>常规</strong></p>
+</li>
+<li><p><strong>附加库目录</strong> 添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Program Files\PostgreSQL\16\lib</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><strong>配置属性</strong> → <strong>链接器</strong> → <strong>输入</strong></p>
+</li>
+<li><p><strong>附加依赖项</strong> 添加：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">libpq.lib;ws2_32.lib;advapi32.lib;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="4-3-🔄-运行时依赖配置"><a href="#4-3-🔄-运行时依赖配置" class="headerlink" title="4.3 🔄 运行时依赖配置"></a>4.3 🔄 运行时依赖配置</h3><p><strong>DLL 文件</strong>: <code>C:\Program Files\PostgreSQL\16\bin\libpq.dll</code></p>
+<p><strong>配置方法 (三选一)</strong>:</p>
+<h4 id="方法一：环境变量配置-推荐"><a href="#方法一：环境变量配置-推荐" class="headerlink" title="方法一：环境变量配置 (推荐)"></a>方法一：环境变量配置 (推荐)</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># PostgreSQL C++ Windows 安装指南</span><br><span class="line">setx <span class="built_in">PATH</span> &quot;<span class="variable">%PATH%</span>;C:\Program Files\PostgreSQL\<span class="number">16</span>\bin&quot;</span><br><span class="line"></span><br><span class="line"># PostgreSQL C++ Windows 安装指南</span><br><span class="line"># PostgreSQL C++ Windows 安装指南</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法二：项目配置"><a href="#方法二：项目配置" class="headerlink" title="方法二：项目配置"></a>方法二：项目配置</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># PostgreSQL C++ Windows 安装指南</span><br><span class="line"><span class="built_in">set</span> <span class="built_in">PATH</span>=C:\Program Files\PostgreSQL\<span class="number">16</span>\bin;<span class="variable">%PATH%</span></span><br><span class="line">your_app.exe</span><br></pre></td></tr></table></figure>
+
+<h4 id="方法三：复制-DLL"><a href="#方法三：复制-DLL" class="headerlink" title="方法三：复制 DLL"></a>方法三：复制 DLL</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># PostgreSQL C++ Windows 安装指南</span><br><span class="line"><span class="built_in">copy</span> &quot;C:\Program Files\PostgreSQL\<span class="number">16</span>\bin\libpq.dll&quot; &quot;your_project_dir\Debug\&quot;</span><br><span class="line"><span class="built_in">copy</span> &quot;C:\Program Files\PostgreSQL\<span class="number">16</span>\bin\libpq.dll&quot; &quot;your_project_dir\Release\&quot;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-🧪-验证与测试"><a href="#5-🧪-验证与测试" class="headerlink" title="5. 🧪 验证与测试"></a>5. 🧪 验证与测试</h2><h3 id="5-1-📄-测试程序"><a href="#5-1-📄-测试程序" class="headerlink" title="5.1 📄 测试程序"></a>5.1 📄 测试程序</h3><p>创建测试文件 <code>test_pgsql.c</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;libpq-fe.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span> &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;🐘 PostgreSQL C Development Environment Test\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;=============================================\n\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1. 检查 libpq 版本</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;📋 libpq Library Information:\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;   Version: %s\n&quot;</span>, PQlibVersion());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 连接字符串</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span> *conninfo = <span class="string">&quot;host=localhost port=5432 dbname=postgres user=postgres password=your_password&quot;</span>;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n🔌 Attempting to connect to PostgreSQL...\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 建立连接</span></span><br><span class="line">    PGconn *conn = PQconnectdb(conninfo);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (PQstatus(conn) != CONNECTION_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;❌ Connection failed: %s\n&quot;</span>, PQerrorMessage(conn));</span><br><span class="line">        PQfinish(conn);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;✅ Connection established successfully!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 获取服务器信息</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n📊 Server Information:\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;   Host: %s\n&quot;</span>, PQhost(conn));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;   Port: %s\n&quot;</span>, PQport(conn));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;   Database: %s\n&quot;</span>, PQdb(conn));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;   User: %s\n&quot;</span>, PQuser(conn));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5. 执行简单查询</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n🔍 Executing test query...\n&quot;</span>);</span><br><span class="line">    PGresult *res = PQexec(conn, <span class="string">&quot;SELECT version() as version, current_database() as database&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (PQresultStatus(res) != PGRES_TUPLES_OK) &#123;</span><br><span class="line">        <span class="built_in">fprintf</span>(<span class="built_in">stderr</span>, <span class="string">&quot;❌ Query failed: %s\n&quot;</span>, PQerrorMessage(conn));</span><br><span class="line">        PQclear(res);</span><br><span class="line">        PQfinish(conn);</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6. 显示查询结果</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;✅ Query executed successfully!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;📋 Query Results:\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> rows = PQntuples(res);</span><br><span class="line">    <span class="type">int</span> cols = PQnfields(res);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; rows; i++) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; cols; j++) &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;   %s: %s\n&quot;</span>, PQfname(res, j), PQgetvalue(res, i, j));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 7. 清理资源</span></span><br><span class="line">    PQclear(res);</span><br><span class="line">    PQfinish(conn);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;\n🎉 All tests completed successfully!\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;🚀 Your PostgreSQL C development environment is ready!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-🔨-编译命令"><a href="#5-2-🔨-编译命令" class="headerlink" title="5.2 🔨 编译命令"></a>5.2 🔨 编译命令</h3><h4 id="Visual-Studio-编译"><a href="#Visual-Studio-编译" class="headerlink" title="Visual Studio 编译"></a>Visual Studio 编译</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line">msbuild YourProject.vcxproj /p:Configuration=Debug</span><br></pre></td></tr></table></figure>
+
+<h4 id="命令行编译-cl-exe"><a href="#命令行编译-cl-exe" class="headerlink" title="命令行编译 (cl.exe)"></a>命令行编译 (cl.exe)</h4><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># PostgreSQL C++ Windows 安装指南</span><br><span class="line">&quot;C:\Program Files (x86)\Microsoft Visual Studio\<span class="number">2019</span>\Enterprise\VC\Auxiliary\Build\vcvars64.bat&quot;</span><br><span class="line"></span><br><span class="line"># PostgreSQL C++ Windows 安装指南</span><br><span class="line">cl /EHsc /I&quot;C:\Program Files\PostgreSQL\<span class="number">16</span>\include&quot; ^</span><br><span class="line">   test_pgsql.c /link ^</span><br><span class="line">   /LIBPATH:&quot;C:\Program Files\PostgreSQL\<span class="number">16</span>\lib&quot; ^</span><br><span class="line">   libpq.lib ws2_32.lib advapi32.lib</span><br></pre></td></tr></table></figure>
+
+<h4 id="GCC-MinGW-编译"><a href="#GCC-MinGW-编译" class="headerlink" title="GCC (MinGW) 编译"></a>GCC (MinGW) 编译</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">gcc -o test_pgsql test_pgsql.c ^</span><br><span class="line">   -I<span class="string">&quot;C:\Program Files\PostgreSQL\16\include&quot;</span> ^</span><br><span class="line">   -L<span class="string">&quot;C:\Program Files\PostgreSQL\16\lib&quot;</span> ^</span><br><span class="line">   -lpq -lws2_32 -ladvapi32</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-✅-预期输出"><a href="#5-3-✅-预期输出" class="headerlink" title="5.3 ✅ 预期输出"></a>5.3 ✅ 预期输出</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">🐘 PostgreSQL C Development Environment Test</span><br><span class="line">=============================================</span><br><span class="line"></span><br><span class="line">📋 libpq Library Information:</span><br><span class="line">   Version: 160001</span><br><span class="line"></span><br><span class="line">🔌 Attempting to connect to PostgreSQL...</span><br><span class="line">✅ Connection established successfully!</span><br><span class="line"></span><br><span class="line">📊 Server Information:</span><br><span class="line">   Host: localhost</span><br><span class="line">   Port: 5432</span><br><span class="line">   Database: postgres</span><br><span class="line">   User: postgres</span><br><span class="line"></span><br><span class="line">🔍 Executing test query...</span><br><span class="line">✅ Query executed successfully!</span><br><span class="line">📋 Query Results:</span><br><span class="line">   version: PostgreSQL 16.1, compiled by Visual C++ build 1938, 64-bit</span><br><span class="line">   database: postgres</span><br><span class="line"></span><br><span class="line">🎉 All tests completed successfully!</span><br><span class="line">🚀 Your PostgreSQL C development environment is ready!</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="6-🔧-常见问题解决"><a href="#6-🔧-常见问题解决" class="headerlink" title="6. 🔧 常见问题解决"></a>6. 🔧 常见问题解决</h2><h3 id="6-1-❌-编译错误"><a href="#6-1-❌-编译错误" class="headerlink" title="6.1 ❌ 编译错误"></a>6.1 ❌ 编译错误</h3><h4 id="错误-无法打开源文件-libpq-fe-h"><a href="#错误-无法打开源文件-libpq-fe-h" class="headerlink" title="错误: 无法打开源文件: &#39;libpq-fe.h&#39;"></a>错误: <code>无法打开源文件: &#39;libpq-fe.h&#39;</code></h4><p><strong>解决方案</strong>:</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="string">&quot;C:/Program Files/PostgreSQL/16/include&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h4 id="错误-无法解析的外部符号-PQconnectdb"><a href="#错误-无法解析的外部符号-PQconnectdb" class="headerlink" title="错误: 无法解析的外部符号 _PQconnectdb"></a>错误: <code>无法解析的外部符号 _PQconnectdb</code></h4><p><strong>解决方案</strong>:</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="keyword">link_directories</span>(<span class="string">&quot;C:/Program Files/PostgreSQL/16/lib&quot;</span>)</span><br><span class="line"><span class="keyword">target_link_libraries</span>(your_target libpq ws2_32 advapi32)</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-❌-运行时错误"><a href="#6-2-❌-运行时错误" class="headerlink" title="6.2 ❌ 运行时错误"></a>6.2 ❌ 运行时错误</h3><h4 id="错误-无法启动此程序，因为计算机中缺少-libpq-dll"><a href="#错误-无法启动此程序，因为计算机中缺少-libpq-dll" class="headerlink" title="错误: 无法启动此程序，因为计算机中缺少 libpq.dll"></a>错误: <code>无法启动此程序，因为计算机中缺少 libpq.dll</code></h4><p><strong>解决方案</strong>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[缺少 libpq.dll] --&gt; B&#123;解决方案&#125;</span><br><span class="line">    B --&gt; C[添加 PATH 环境变量]</span><br><span class="line">    B --&gt; D[复制 DLL 到程序目录]</span><br><span class="line">    B --&gt; E[使用 Visual Studio 调试环境]</span><br><span class="line"></span><br><span class="line">    C --&gt; F[系统属性 → 环境变量 → PATH]</span><br><span class="line">    D --&gt; G[复制到 Debug/Release 文件夹]</span><br><span class="line">    E --&gt; H[项目属性 → 调试 → 环境]</span><br></pre></td></tr></table></figure>
+
+<h4 id="错误-connection-to-server-at-localhost-1-port-5432-failed"><a href="#错误-connection-to-server-at-localhost-1-port-5432-failed" class="headerlink" title="错误: connection to server at &quot;localhost&quot; (::1), port 5432 failed"></a>错误: <code>connection to server at &quot;localhost&quot; (::1), port 5432 failed</code></h4><p><strong>解决方案</strong>:</p>
+<ol>
+<li>检查 PostgreSQL 服务是否启动</li>
+<li>验证端口和主机配置</li>
+<li>检查防火墙设置</li>
+</ol>
+<h3 id="6-3-❌-权限问题"><a href="#6-3-❌-权限问题" class="headerlink" title="6.3 ❌ 权限问题"></a>6.3 ❌ 权限问题</h3><h4 id="错误-FATAL-password-authentication-failed-for-user-postgres"><a href="#错误-FATAL-password-authentication-failed-for-user-postgres" class="headerlink" title="错误: FATAL: password authentication failed for user &quot;postgres&quot;"></a>错误: <code>FATAL: password authentication failed for user &quot;postgres&quot;</code></h4><p><strong>解决方案</strong>:</p>
+<ol>
+<li>确认密码正确</li>
+<li>检查 <code>pg_hba.conf</code> 认证配置</li>
+<li>重置 postgres 用户密码</li>
+</ol>
+<hr>
+<h2 id="7-🚀-高级配置"><a href="#7-🚀-高级配置" class="headerlink" title="7. 🚀 高级配置"></a>7. 🚀 高级配置</h2><h3 id="7-1-📝-CMake-配置示例"><a href="#7-1-📝-CMake-配置示例" class="headerlink" title="7.1 📝 CMake 配置示例"></a>7.1 📝 CMake 配置示例</h3><p>创建 <code>CMakeLists.txt</code>:</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.10</span>)</span><br><span class="line"><span class="keyword">project</span>(PostgreSQLCTest)</span><br><span class="line"></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_STANDARD <span class="number">99</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="keyword">find_package</span>(PostgreSQL REQUIRED)</span><br><span class="line"></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;PostgreSQL_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="keyword">add_executable</span>(test_pgsql test_pgsql.c)</span><br><span class="line"></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(test_pgsql <span class="variable">$&#123;PostgreSQL_LIBRARIES&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="keyword">if</span>(WIN32)</span><br><span class="line">    <span class="keyword">target_link_libraries</span>(test_pgsql ws2_32 advapi32)</span><br><span class="line"><span class="keyword">endif</span>()</span><br><span class="line"></span><br><span class="line"><span class="comment"># PostgreSQL C++ Windows 安装指南</span></span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PostgreSQL version: $&#123;PostgreSQL_VERSION&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PostgreSQL include dir: $&#123;PostgreSQL_INCLUDE_DIRS&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">message</span>(STATUS <span class="string">&quot;PostgreSQL libraries: $&#123;PostgreSQL_LIBRARIES&#125;&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-2-🔒-安全连接配置"><a href="#7-2-🔒-安全连接配置" class="headerlink" title="7.2 🔒 安全连接配置"></a>7.2 🔒 安全连接配置</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SSL 连接示例</span></span><br><span class="line"><span class="type">const</span> <span class="type">char</span> *conninfo = <span class="string">&quot;host=localhost &quot;</span></span><br><span class="line">                      <span class="string">&quot;port=5432 &quot;</span></span><br><span class="line">                      <span class="string">&quot;dbname=postgres &quot;</span></span><br><span class="line">                      <span class="string">&quot;user=postgres &quot;</span></span><br><span class="line">                      <span class="string">&quot;password=your_password &quot;</span></span><br><span class="line">                      <span class="string">&quot;sslmode=require &quot;</span></span><br><span class="line">                      <span class="string">&quot;sslcert=client.crt &quot;</span></span><br><span class="line">                      <span class="string">&quot;sslkey=client.key&quot;</span>;</span><br><span class="line"></span><br><span class="line">PGconn *conn = PQconnectdb(conninfo);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 检查 SSL 状态</span></span><br><span class="line"><span class="keyword">if</span> (PQsslInUse(conn)) &#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;✅ SSL connection established\n&quot;</span>);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;   SSL Protocol: %s\n&quot;</span>, PQsslAttribute(conn, <span class="string">&quot;protocol&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-📊-性能优化配置"><a href="#7-3-📊-性能优化配置" class="headerlink" title="7.3 📊 性能优化配置"></a>7.3 📊 性能优化配置</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 连接池配置示例</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX_CONNECTIONS 10</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    PGconn *connections[MAX_CONNECTIONS];</span><br><span class="line">    <span class="type">int</span> available[MAX_CONNECTIONS];</span><br><span class="line">    <span class="type">int</span> count;</span><br><span class="line">&#125; ConnectionPool;</span><br><span class="line"></span><br><span class="line">ConnectionPool* <span class="title function_">create_pool</span><span class="params">(<span class="type">const</span> <span class="type">char</span>* conninfo)</span> &#123;</span><br><span class="line">    ConnectionPool *pool = <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(ConnectionPool));</span><br><span class="line">    pool-&gt;count = MAX_CONNECTIONS;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; MAX_CONNECTIONS; i++) &#123;</span><br><span class="line">        pool-&gt;connections[i] = PQconnectdb(conninfo);</span><br><span class="line">        pool-&gt;available[i] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> pool;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PGconn* <span class="title function_">get_connection</span><span class="params">(ConnectionPool *pool)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; pool-&gt;count; i++) &#123;</span><br><span class="line">        <span class="keyword">if</span> (pool-&gt;available[i]) &#123;</span><br><span class="line">            pool-&gt;available[i] = <span class="number">0</span>;</span><br><span class="line">            <span class="keyword">return</span> pool-&gt;connections[i];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>; <span class="comment">// 所有连接都在使用中</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="📊-总结"><a href="#📊-总结" class="headerlink" title="📊 总结"></a>📊 总结</h2><h3 id="✅-配置完成检查清单"><a href="#✅-配置完成检查清单" class="headerlink" title="✅ 配置完成检查清单"></a>✅ 配置完成检查清单</h3><ul>
+<li><input checked="" disabled="" type="checkbox"> PostgreSQL 服务器安装完成</li>
+<li><input checked="" disabled="" type="checkbox"> C 客户端库 (libpq) 安装完成</li>
+<li><input checked="" disabled="" type="checkbox"> 开发环境配置正确</li>
+<li><input checked="" disabled="" type="checkbox"> 测试程序编译运行成功</li>
+<li><input checked="" disabled="" type="checkbox"> 基本数据库操作正常工作</li>
+<li><input checked="" disabled="" type="checkbox"> 错误处理机制完善</li>
+</ul>
+<h3 id="🎯-下一步建议"><a href="#🎯-下一步建议" class="headerlink" title="🎯 下一步建议"></a>🎯 下一步建议</h3><ol>
+<li><strong>学习 libpq API</strong>：掌握连接管理、查询执行、结果处理</li>
+<li><strong>实现连接池</strong>：提高应用程序性能</li>
+<li><strong>异步编程</strong>：使用非阻塞操作提升响应性</li>
+<li><strong>错误处理</strong>：完善异常情况和资源清理</li>
+<li><strong>事务管理</strong>：确保数据一致性</li>
+</ol>
+<h3 id="📚-推荐资源"><a href="#📚-推荐资源" class="headerlink" title="📚 推荐资源"></a>📚 推荐资源</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://www.postgresql.org/docs/current/libpq.html">PostgreSQL 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.postgresql.org/docs/current/libpq-C.html">libpq C API 参考</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.postgresqltutorial.com/">PostgreSQL 教程</a></li>
+<li><a target="_blank" rel="noopener" href="https://isocpp.org/">C 数据库编程最佳实践</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>💡 提示</strong>:</p>
+<ul>
+<li>首次配置可能需要一些时间，请耐心按照步骤操作</li>
+<li>生产环境中请使用 SSL 连接和强密码</li>
+<li>定期备份数据库和配置文件</li>
+<li>监控数据库性能和连接状态</li>
+</ul>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/b71a62b0/">https://vilaswang.github.io/posts/b71a62b0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/">技术文档</a><a class="post-meta__tags" href="/tags/%E6%8C%87%E5%8D%97/">指南</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/f2ed900f/" title="Web 认证方法指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Web 认证方法指南</div></div><div class="info-2"><div class="info-item-1">Web 认证方法指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: web, authentication, authorization, security, session, jwt, oauth  📑 目录 1. 核心概念 1.1 认证 vs. 授权   2. Session-Cookie 认证 2.1 工作原理 2.2 实现示例 2.3 优缺点   3. Token 认证（JWT） 3.1 工作原理 3.2 实现示例 3.3 优缺点   4. OAuth 认证 4.1 认证流程 4.2 实现示例   5. 方案对比与选择 5.1 对比表 5.2 使用场景     1. 核心概念1.1 🔍 认证 vs. 授权   概念 问题 解决方案 示例    认证 “你是谁？” 验证用户身份 用户名密码登录   授权 “你能做什么？” 验证用户权限 是否允许删除文章   1234567graph LR    A[用户] --&gt; B[认证 Authentication]    B --&gt; C[你是谁？]    B --&gt; D[身份验证] ...</div></div></div></a><a class="pagination-related" href="/posts/15251b3b/" title="MariaDB C++ Windows 安装指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">MariaDB C++ Windows 安装指南</div></div><div class="info-2"><div class="info-item-1">MariaDB C++ Windows 安装指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: mariadb, cpp, windows, development, database, connector  📑 目录 1. 概述 2. 安装 MariaDB 服务器 2.1 获取安装程序 2.2 运行安装向导 2.3 验证安装   3. 安装 MariaDB 连接器 3.1 Connector&#x2F;C++ 3.2 Connector&#x2F;C 3.3 配置环境变量   4. 配置 Visual Studio 项目 4.1 包含头文件目录 4.2 配置库文件目录 4.3 指定依赖的库文件 4.4 拷贝 DLL 文件   5. 编写测试代码 6. 常见问题和解决方案 7. 高级配置   1. 📖 概述在Windows下进行C++开发并使用MariaDB，主要涉及MariaDB服务器端的安装、开发库的配置，以及在你的C++项目中正确连接和使用这些库。 🎯 目标 ✅ 安装 MariaDB 服务器 ✅ 配置 C++ 开发环境 ✅ 创建可运行的 ...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/cb45c274/" title="mTLS 证书生成指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">mTLS 证书生成指南</div></div><div class="info-2"><div class="info-item-1">mTLS 证书生成指南生成 CA 证书12345678# mTLS 证书生成指南openssl genrsa -aes256 -out ca-key.pem 4096# mTLS 证书生成指南openssl genrsa -out ca-key.pem 4096# mTLS 证书生成指南openssl req -new -x509 -days 3650 -key ca-key.pem -out ca-crt.pem -sha256  CA 证书生成注意事项：  Common Name: 输入 CA 名称，如 “My-CA” Organization: 输入组织名称 Country: 输入国家代码，如 “CN” 有效期建议设置为 10 年 (3650 天)  生成服务器证书1. 生成服务器私钥1openssl genrsa -out server-key.pem 2048  2. 生成服务器证书签名请求1openssl req -new -sha256 -key server-key.pem -out server-csr.pem  在提示输入信息时：  Country Name:...</div></div></div></a><a class="pagination-related" href="/posts/f2ed900f/" title="Web 认证方法指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Web 认证方法指南</div></div><div class="info-2"><div class="info-item-1">Web 认证方法指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: web, authentication, authorization, security, session, jwt, oauth  📑 目录 1. 核心概念 1.1 认证 vs. 授权   2. Session-Cookie 认证 2.1 工作原理 2.2 实现示例 2.3 优缺点   3. Token 认证（JWT） 3.1 工作原理 3.2 实现示例 3.3 优缺点   4. OAuth 认证 4.1 认证流程 4.2 实现示例   5. 方案对比与选择 5.1 对比表 5.2 使用场景     1. 核心概念1.1 🔍 认证 vs. 授权   概念 问题 解决方案 示例    认证 “你是谁？” 验证用户身份 用户名密码登录   授权 “你能做什么？” 验证用户权限 是否允许删除文章   1234567graph LR    A[用户] --&gt; B[认证 Authentication]    B --&gt; C[你是谁？]    B --&gt; D[身份验证] ...</div></div></div></a><a class="pagination-related" href="/posts/eed6fb04/" title="文件管理 API 规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">文件管理 API 规范</div></div><div class="info-2"><div class="info-item-1">文件管理 API 规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: api, rest, file-management, authentication, swagger  📑 目录 1. 基础信息 2. 认证与授权 3. 文件管理 4. 文件支持 5. 错误处理 6. 安全机制 7. 速率限制 8. OpenAPI 规范   1. 📋 基础信息   项目 说明    Base URL /api/v1   协议 HTTPS   数据格式 JSON   认证方式 JWT Bearer Token   API 版本 v1.0   🔐 认证请求格式1234GET /api/v1/files/list HTTP/1.1Host: your-domain.comAuthorization: Bearer &lt;jwt_token&gt;Content-Type: application/json   2. 🔐 认证与授权2.1 👤 用户注册1234567891011121314sequenceDiagram    particip...</div></div></div></a><a class="pagination-related" href="/posts/445c44cb/" title="Graphviz 流程图指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Graphviz 流程图指南</div></div><div class="info-2"><div class="info-item-1">Graphviz 流程图指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: graphviz, flowchart, diagram, visualization, documentation  📑 目录 1. 概述 2. 环境准备 3. 基本使用 4. 输出格式 5. 常见用例 6. 高级配置   1. 📖 概述Graphviz 是一个开源的图形可视化软件，特别适合生成各种流程图、架构图和关系图。 🎯 主要用途 ✅ 流程图生成 ✅ 系统架构图 ✅ 类关系图 ✅ 依赖关系图 ✅ 状态机图   2. 🔧 环境准备2.1 安装依赖12345678# Graphviz 流程图指南pip install graphviz# Graphviz 流程图指南conda install python-graphviz# Graphviz 流程图指南sudo apt-get install graphviz  2.2 验证安装123456import graphviz# Graphviz 流程图指南dot = graphviz.Digraph(comment=...</div></div></div></a><a class="pagination-related" href="/posts/ab2eaca1/" title="认证系统架构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">认证系统架构</div></div><div class="info-2"><div class="info-item-1">认证系统架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: authentication, authorization, jwt, oauth, security, api  📑 目录 1. 认证方式概述 2. 本地认证流程 2.1 注册流程 2.2 登录流程 2.3 Token 验证流程   3. Google OAuth 认证流程 3.1 配置 3.2 认证流程 3.3 会话管理   4. 安全特性 4.1 速率限制 4.2 CORS 配置 4.3 错误处理   5. 中间件链 6. 环境配置   1. 认证方式概述系统支持两种主要的认证方式：  🔑 本地用户名密码认证（JWT Token） 🌐 Google OAuth 2.0 认证  12345678graph LR    A[用户] --&gt; B[认证选择]    B --&gt; C[本地认证]    B --&gt; D[OAuth认证]    C --&gt; E[JWT Token]    D --&gt; F[Google授权]    E --&gt; G[访问API] ...</div></div></div></a><a class="pagination-related" href="/posts/6ee89f12/" title="Qt 下载器需求规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Qt 下载器需求规范</div></div><div class="info-2"><div class="info-item-1">Qt 下载器需求规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: qt, downloader, product-requirements, desktop-app, c++  📑 目录 1. 产品概述 2. 用户角色 3. 功能需求 4. 非功能需求 5. 界面设计 6. 数据模型 7. 技术规范 8. 交付要求   1. 🎯 产品概述1.1 产品定位基于 Qt 框架开发的桌面下载管理器，支持多线程并发下载，提供直观的任务管理界面和实时进度监控。 1.2 核心价值 ✅ 批量下载 - 支持多任务并发下载 ✅ 进度监控 - 实时显示下载状态和进度 ✅ 断点续传 - 支持下载中断后继续 ✅ 跨平台 - 支持 Windows、macOS、Linux  1.3 产品架构图12345678910111213141516171819graph TD    A[用户界面] --&gt; B[任务管理器]    B --&gt; C[下载引擎]    C --&gt; D[网络请求层]    B --&gt; E[数据持久化]    B --&...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#PostgreSQL-C-Windows-%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">PostgreSQL C++ Windows 安装指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">📑 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%F0%9F%93%96-%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.</span> <span class="toc-text">1. 📖 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8E%AF-%E9%85%8D%E7%BD%AE%E7%9B%AE%E6%A0%87"><span class="toc-number">1.2.1.</span> <span class="toc-text">🎯 配置目标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8F%97%EF%B8%8F-%E7%B3%BB%E7%BB%9F%E6%9E%B6%E6%9E%84"><span class="toc-number">1.2.2.</span> <span class="toc-text">🏗️ 系统架构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%F0%9F%94%A7-%E7%B3%BB%E7%BB%9F%E7%BB%84%E4%BB%B6"><span class="toc-number">1.3.</span> <span class="toc-text">2. 🔧 系统组件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%F0%9F%92%BE-PostgreSQL-%E5%AE%89%E8%A3%85"><span class="toc-number">1.4.</span> <span class="toc-text">3. 💾 PostgreSQL 安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%F0%9F%8C%90-%E4%B8%8B%E8%BD%BD%E5%AE%89%E8%A3%85%E5%8C%85"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 🌐 下载安装包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E2%9A%99%EF%B8%8F-%E8%BF%90%E8%A1%8C%E5%AE%89%E8%A3%85%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 ⚙️ 运行安装程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%F0%9F%9B%A0%EF%B8%8F-C-%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.</span> <span class="toc-text">4. 🛠️ C 开发环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%F0%9F%93%81-%E5%8C%85%E5%90%AB%E5%A4%B4%E6%96%87%E4%BB%B6%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.1.</span> <span class="toc-text">4.1 📁 包含头文件配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%F0%9F%94%97-%E9%93%BE%E6%8E%A5%E5%BA%93%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.2.</span> <span class="toc-text">4.2 🔗 链接库配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%F0%9F%94%84-%E8%BF%90%E8%A1%8C%E6%97%B6%E4%BE%9D%E8%B5%96%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.3.</span> <span class="toc-text">4.3 🔄 运行时依赖配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9A%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E9%85%8D%E7%BD%AE-%E6%8E%A8%E8%8D%90"><span class="toc-number">1.5.3.1.</span> <span class="toc-text">方法一：环境变量配置 (推荐)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E9%A1%B9%E7%9B%AE%E9%85%8D%E7%BD%AE"><span class="toc-number">1.5.3.2.</span> <span class="toc-text">方法二：项目配置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E5%A4%8D%E5%88%B6-DLL"><span class="toc-number">1.5.3.3.</span> <span class="toc-text">方法三：复制 DLL</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%F0%9F%A7%AA-%E9%AA%8C%E8%AF%81%E4%B8%8E%E6%B5%8B%E8%AF%95"><span class="toc-number">1.6.</span> <span class="toc-text">5. 🧪 验证与测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%F0%9F%93%84-%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.6.1.</span> <span class="toc-text">5.1 📄 测试程序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%F0%9F%94%A8-%E7%BC%96%E8%AF%91%E5%91%BD%E4%BB%A4"><span class="toc-number">1.6.2.</span> <span class="toc-text">5.2 🔨 编译命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Visual-Studio-%E7%BC%96%E8%AF%91"><span class="toc-number">1.6.2.1.</span> <span class="toc-text">Visual Studio 编译</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%BC%96%E8%AF%91-cl-exe"><span class="toc-number">1.6.2.2.</span> <span class="toc-text">命令行编译 (cl.exe)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#GCC-MinGW-%E7%BC%96%E8%AF%91"><span class="toc-number">1.6.2.3.</span> <span class="toc-text">GCC (MinGW) 编译</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E2%9C%85-%E9%A2%84%E6%9C%9F%E8%BE%93%E5%87%BA"><span class="toc-number">1.6.3.</span> <span class="toc-text">5.3 ✅ 预期输出</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%F0%9F%94%A7-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E8%A7%A3%E5%86%B3"><span class="toc-number">1.7.</span> <span class="toc-text">6. 🔧 常见问题解决</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E2%9D%8C-%E7%BC%96%E8%AF%91%E9%94%99%E8%AF%AF"><span class="toc-number">1.7.1.</span> <span class="toc-text">6.1 ❌ 编译错误</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%99%E8%AF%AF-%E6%97%A0%E6%B3%95%E6%89%93%E5%BC%80%E6%BA%90%E6%96%87%E4%BB%B6-libpq-fe-h"><span class="toc-number">1.7.1.1.</span> <span class="toc-text">错误: 无法打开源文件: &#39;libpq-fe.h&#39;</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%99%E8%AF%AF-%E6%97%A0%E6%B3%95%E8%A7%A3%E6%9E%90%E7%9A%84%E5%A4%96%E9%83%A8%E7%AC%A6%E5%8F%B7-PQconnectdb"><span class="toc-number">1.7.1.2.</span> <span class="toc-text">错误: 无法解析的外部符号 _PQconnectdb</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E2%9D%8C-%E8%BF%90%E8%A1%8C%E6%97%B6%E9%94%99%E8%AF%AF"><span class="toc-number">1.7.2.</span> <span class="toc-text">6.2 ❌ 运行时错误</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%99%E8%AF%AF-%E6%97%A0%E6%B3%95%E5%90%AF%E5%8A%A8%E6%AD%A4%E7%A8%8B%E5%BA%8F%EF%BC%8C%E5%9B%A0%E4%B8%BA%E8%AE%A1%E7%AE%97%E6%9C%BA%E4%B8%AD%E7%BC%BA%E5%B0%91-libpq-dll"><span class="toc-number">1.7.2.1.</span> <span class="toc-text">错误: 无法启动此程序，因为计算机中缺少 libpq.dll</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%99%E8%AF%AF-connection-to-server-at-localhost-1-port-5432-failed"><span class="toc-number">1.7.2.2.</span> <span class="toc-text">错误: connection to server at &quot;localhost&quot; (::1), port 5432 failed</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E2%9D%8C-%E6%9D%83%E9%99%90%E9%97%AE%E9%A2%98"><span class="toc-number">1.7.3.</span> <span class="toc-text">6.3 ❌ 权限问题</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E9%94%99%E8%AF%AF-FATAL-password-authentication-failed-for-user-postgres"><span class="toc-number">1.7.3.1.</span> <span class="toc-text">错误: FATAL: password authentication failed for user &quot;postgres&quot;</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%F0%9F%9A%80-%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE"><span class="toc-number">1.8.</span> <span class="toc-text">7. 🚀 高级配置</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%F0%9F%93%9D-CMake-%E9%85%8D%E7%BD%AE%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.8.1.</span> <span class="toc-text">7.1 📝 CMake 配置示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%F0%9F%94%92-%E5%AE%89%E5%85%A8%E8%BF%9E%E6%8E%A5%E9%85%8D%E7%BD%AE"><span class="toc-number">1.8.2.</span> <span class="toc-text">7.2 🔒 安全连接配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%F0%9F%93%8A-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE"><span class="toc-number">1.8.3.</span> <span class="toc-text">7.3 📊 性能优化配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8A-%E6%80%BB%E7%BB%93"><span class="toc-number">1.9.</span> <span class="toc-text">📊 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E2%9C%85-%E9%85%8D%E7%BD%AE%E5%AE%8C%E6%88%90%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="toc-number">1.9.1.</span> <span class="toc-text">✅ 配置完成检查清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%8E%AF-%E4%B8%8B%E4%B8%80%E6%AD%A5%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.9.2.</span> <span class="toc-text">🎯 下一步建议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%F0%9F%93%9A-%E6%8E%A8%E8%8D%90%E8%B5%84%E6%BA%90"><span class="toc-number">1.9.3.</span> <span class="toc-text">📚 推荐资源</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

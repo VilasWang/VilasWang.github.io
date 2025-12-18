@@ -1,0 +1,381 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>宝塔面板安装指南 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="宝塔面板安装指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/251711d2/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-04T05:13:25.000Z">
+<meta property="article:modified_time" content="2025-12-17T15:36:29.285Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="Web面板">
+<meta property="article:tag" content="aaPanel">
+<meta property="article:tag" content="宝塔面板">
+<meta property="article:tag" content="服务器管理">
+<meta property="article:tag" content="系统管理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "宝塔面板安装指南",
+  "url": "https://vilaswang.github.io/posts/251711d2/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-04T05:13:25.000Z",
+  "dateModified": "2025-12-17T15:36:29.285Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/251711d2/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '宝塔面板安装指南',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">宝塔面板安装指南</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">宝塔面板安装指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-04T05:13:25.000Z" title="发表于 2025-12-04 13:13:25">2025-12-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T15:36:29.285Z" title="更新于 2025-12-17 23:36:29">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E4%B8%8EDevOps/">云服务与DevOps</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%91%E6%9C%8D%E5%8A%A1%E4%B8%8EDevOps/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86%E9%9D%A2%E6%9D%BF/">服务器管理面板</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="宝塔面板安装指南"><a href="#宝塔面板安装指南" class="headerlink" title="宝塔面板安装指南"></a>宝塔面板安装指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E9%87%8D%E8%A6%81%E5%AE%89%E5%85%A8%E9%A1%BB%E7%9F%A5">重要：安全须知</a></li>
+<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87">第一步：环境准备</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E6%89%A7%E8%A1%8C%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC">第二步：执行安装脚本</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E5%88%9D%E5%A7%8B%E9%85%8D%E7%BD%AE">第三步：初始配置</a></li>
+<li><a href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E4%BD%BF%E7%94%A8">核心功能使用</a></li>
+<li><a href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4">常用命令</a></li>
+<li><a href="#%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5">问题排查</a></li>
+</ul>
+<h2 id="重要：安全须知"><a href="#重要：安全须知" class="headerlink" title="重要：安全须知"></a>重要：安全须知</h2><p>宝塔面板是一个拥有高权限的服务器管理工具，其安全性至关重要。请务必遵循以下基础安全实践：</p>
+<ul>
+<li><strong>修改默认信息</strong>: <strong>立即</strong>修改默认的 8888 端口、默认的用户名和密码。</li>
+<li><strong>使用强密码</strong>: 为面板和数据库设置复杂的、无规律的密码。</li>
+<li><strong>开启面板 SSL</strong>: 为你的面板访问地址开启 HTTPS，防止登录信息在传输过程中被窃取。</li>
+<li><strong>定期更新</strong>: 及时将宝塔面板更新到最新版本，以获取最新的安全补丁。</li>
+<li><strong>配置防火墙</strong>: 只开放必要的端口，关闭不使用的端口。</li>
+<li><strong>定期备份</strong>: 养成定期备份网站文件和数据库的好习惯。</li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>宝塔面板（BT Panel）是一款简单易用的服务器运维管理面板，支持 Linux 和 Windows。它通过 Web 图形化界面，极大地简化了服务器的日常管理工作，如环境部署、网站创建、数据库管理、文件管理和安全监控等。</p>
+<p><strong>国际版</strong>: 宝塔面板有对应的国际版，名为 <strong>aaPanel</strong>。对于非中文用户，推荐使用 aaPanel，其官网为 <code>aapanel.com</code>。本指南以中文版的宝塔面板为例。</p>
+<h2 id="第一步：环境准备"><a href="#第一步：环境准备" class="headerlink" title="第一步：环境准备"></a>第一步：环境准备</h2><h3 id="1-系统要求"><a href="#1-系统要求" class="headerlink" title="1. 系统要求"></a>1. 系统要求</h3><ul>
+<li><strong>操作系统</strong>: CentOS 7.1+, Ubuntu 16.04+, Debian 9.0+</li>
+<li><strong>内存</strong>: 建议 1GB 以上。</li>
+<li><strong>磁盘空间</strong>: 建议 10GB 以上可用空间。</li>
+<li><strong>要求</strong>: 一个纯净的、未安装过其他 Web 服务器软件（如 Nginx, Apache）的操作系统。</li>
+</ul>
+<h3 id="2-开放端口"><a href="#2-开放端口" class="headerlink" title="2. 开放端口"></a>2. 开放端口</h3><p>在安装前，请确保你的服务器提供商的安全组（或防火墙）已开放以下端口：</p>
+<ul>
+<li><strong>8888</strong>: 宝塔面板默认端口</li>
+<li><strong>80</strong>: HTTP</li>
+<li><strong>443</strong>: HTTPS</li>
+<li><strong>22</strong>: SSH</li>
+<li><strong>21</strong>: FTP (如果需要)</li>
+<li><strong>3306</strong>: MySQL (如果需要远程访问)</li>
+</ul>
+<h2 id="第二步：执行安装脚本"><a href="#第二步：执行安装脚本" class="headerlink" title="第二步：执行安装脚本"></a>第二步：执行安装脚本</h2><p>使用 root 或 sudo 权限登录你的服务器终端。</p>
+<h3 id="Ubuntu-Debian-安装命令"><a href="#Ubuntu-Debian-安装命令" class="headerlink" title="Ubuntu&#x2F;Debian 安装命令"></a>Ubuntu&#x2F;Debian 安装命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget -O install.sh http://download.bt.cn/install/install-ubuntu_6.0.sh &amp;&amp; <span class="built_in">sudo</span> bash install.sh ed8484bec</span><br></pre></td></tr></table></figure>
+
+<h3 id="CentOS-安装命令"><a href="#CentOS-安装命令" class="headerlink" title="CentOS 安装命令"></a>CentOS 安装命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yum install -y wget &amp;&amp; wget -O install.sh http://download.bt.cn/install/install_6.0.sh &amp;&amp; sh install.sh ed8484bec</span><br></pre></td></tr></table></figure>
+
+<p>安装脚本会自动完成所有环境配置。安装成功后，终端会显示你的<strong>面板登录地址、用户名和密码</strong>。<strong>请务必立即复制并保存这些信息！</strong></p>
+<h2 id="第三步：初始配置"><a href="#第三步：初始配置" class="headerlink" title="第三步：初始配置"></a>第三步：初始配置</h2><ol>
+<li><strong>登录面板</strong>: 使用上一步获取的地址、用户名和密码，在浏览器中打开并登录宝塔面板。</li>
+<li><strong>安装套件</strong>: 首次登录时，面板会推荐你安装一个 Web 环境套件，最常见的是 <strong>LNMP</strong> (Linux + Nginx + MySQL + PHP) 或 <strong>LAMP</strong> (Linux + Apache + MySQL + PHP)。根据你的需求选择一个并一键安装。</li>
+<li><strong>修改安全信息</strong>:<ul>
+<li>进入左侧菜单的“面板设置”。</li>
+<li><strong>修改面板端口</strong>: 将默认的 8888 修改为一个不常用的端口。</li>
+<li><strong>修改面板用户和密码</strong>: 设置一个强密码。</li>
+<li><strong>开启面板 SSL</strong>: 为你的面板域名（可以是 IP）申请一个 Let’s Encrypt 证书或粘贴你自己的证书，强制使用 HTTPS 访问。</li>
+</ul>
+</li>
+</ol>
+<h2 id="核心功能使用"><a href="#核心功能使用" class="headerlink" title="核心功能使用"></a>核心功能使用</h2><h3 id="网站管理"><a href="#网站管理" class="headerlink" title="网站管理"></a>网站管理</h3><ul>
+<li><strong>添加站点</strong>: 在“网站”菜单中，输入你的域名，选择 PHP 版本，创建数据库，即可快速创建一个网站。</li>
+<li><strong>配置 SSL</strong>: 在站点的“设置”中，可以一键申请和部署 Let’s Encrypt 的免费 SSL 证书，并开启强制 HTTPS。</li>
+</ul>
+<h3 id="数据库管理"><a href="#数据库管理" class="headerlink" title="数据库管理"></a>数据库管理</h3><ul>
+<li><strong>创建数据库</strong>: 在“数据库”菜单中，可以快速创建数据库和用户，并管理权限。</li>
+<li><strong>备份与恢复</strong>: 支持对数据库进行手动或定时的备份，并可以从备份中恢复。</li>
+<li><strong>phpMyAdmin</strong>: 面板内置了 phpMyAdmin，方便进行图形化的数据库管理。</li>
+</ul>
+<h3 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a>文件管理</h3><ul>
+<li>提供一个功能强大的在线文件管理器，可以进行上传、下载、压缩、解压、在线编辑等操作。</li>
+</ul>
+<h3 id="监控"><a href="#监控" class="headerlink" title="监控"></a>监控</h3><ul>
+<li>在“监控”菜单中，可以直观地看到服务器的 CPU、内存、磁盘和网络负载的实时和历史图表。</li>
+</ul>
+<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><p>宝塔面板提供了一个方便的命令行工具 <code>bt</code>。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 宝塔面板安装指南</span></span><br><span class="line"><span class="built_in">sudo</span> bt start       <span class="comment"># 启动面板</span></span><br><span class="line"><span class="built_in">sudo</span> bt stop        <span class="comment"># 停止面板</span></span><br><span class="line"><span class="built_in">sudo</span> bt restart     <span class="comment"># 重启面板</span></span><br><span class="line"><span class="built_in">sudo</span> bt status      <span class="comment"># 查看面板状态</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 宝塔面板安装指南</span></span><br><span class="line"><span class="built_in">sudo</span> bt 1           <span class="comment"># 修改面板端口</span></span><br><span class="line"><span class="built_in">sudo</span> bt 5           <span class="comment"># 修改面板密码</span></span><br><span class="line"><span class="built_in">sudo</span> bt 6           <span class="comment"># 修改面板用户名</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 宝塔面板安装指南</span></span><br><span class="line"><span class="built_in">sudo</span> bt default     <span class="comment"># 查看默认登录信息</span></span><br><span class="line"><span class="built_in">sudo</span> bt clean       <span class="comment"># 清理面板缓存</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="问题排查"><a href="#问题排查" class="headerlink" title="问题排查"></a>问题排查</h2><p><strong>Q1: 安装完成后无法访问面板地址?</strong><br><strong>A</strong>:</p>
+<ol>
+<li><strong>检查服务状态</strong>: 运行 <code>sudo bt status</code> 或 <code>sudo systemctl status bt</code> 确认面板服务是否在运行。</li>
+<li><strong>检查防火墙</strong>: 确认你的云服务器<strong>安全组</strong>和服务器内部的<strong>防火墙</strong>（如 <code>ufw</code>, <code>firewalld</code>）都已放行了你的面板端口。</li>
+<li><strong>检查端口占用</strong>: 使用 <code>sudo netstat -tlnp | grep &lt;你的端口号&gt;</code> 检查端口是否被其他程序占用。</li>
+</ol>
+<p><strong>Q2: 忘记了登录信息?</strong><br><strong>A</strong>: 登录服务器终端，运行 <code>sudo bt default</code> 即可查看当前的登录地址、用户名和密码。</p>
+<p><strong>Q3: 网站无法访问，提示 502 或其他错误?</strong><br><strong>A</strong>:</p>
+<ol>
+<li>登录宝塔面板，检查“网站”-&gt;“设置”中的配置是否正确。</li>
+<li>检查对应的 Web 服务器（Nginx&#x2F;Apache）和 PHP 的服务状态是否正常。</li>
+<li>在“文件”中查看对应网站的日志文件，分析具体的错误原因。</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/251711d2/">https://vilaswang.github.io/posts/251711d2/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Linux/">Linux</a><a class="post-meta__tags" href="/tags/%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF/">宝塔面板</a><a class="post-meta__tags" href="/tags/aaPanel/">aaPanel</a><a class="post-meta__tags" href="/tags/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%AE%A1%E7%90%86/">服务器管理</a><a class="post-meta__tags" href="/tags/Web%E9%9D%A2%E6%9D%BF/">Web面板</a><a class="post-meta__tags" href="/tags/%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86/">系统管理</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/e0946359/" title="Ubuntu CPP 开发环境配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Ubuntu CPP 开发环境配置指南</div></div><div class="info-2"><div class="info-item-1">Ubuntu CPP 开发环境配置指南目录 概述 第一步：系统更新和基础工具安装 第二步：安装编译器工具链 第三步：安装构建工具 第四步：安装调试工具 第五步：安装常用开发库 第六步：配置 IDE 和编辑器 第七步：验证开发环境 第八步：配置环境变量 附录：常用命令速查 常见问题  概述本文档提供了在 Ubuntu 22.04 LTS 系统上搭建完整 C++ 开发环境的详细步骤。无论您是 C++ 初学者还是有经验的开发者，都可以按照本指南快速配置一个功能完整的开发环境。 主要组件 编译器: GCC&#x2F;G++ (支持 C++11&#x2F;14&#x2F;17&#x2F;20) 构建系统: CMake, Make 调试器: GDB 包管理: apt, vcpkg IDE: Visual Studio Code (可选) 版本控制: Git  第一步：系统更新和基础工具安装1. 更新系统包12345678# Ubuntu CPP 开发环境配置指南sudo apt update# Ubuntu CPP 开发环境配置指南sudo apt upgrade -y# Ubuntu CP...</div></div></div></a><a class="pagination-related" href="/posts/d7f169a4/" title="Web 服务器监控指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Web 服务器监控指南</div></div><div class="info-2"><div class="info-item-1">Web 服务器监控指南目录 概述 第一部分：连接与健康检查 第二部分：性能与负载测试 第三部分：安全扫描与测试 第四部分：实时系统监控 第五部分：日志分析  概述本指南提供了一系列常用的命令行工具，用于测试、诊断和监控任何 Web 服务器（如 Nginx, Apache 等）的健康状况、性能和安全性。 第一部分：连接与健康检查这些工具用于快速验证服务器是否在线、端口是否开放以及服务是否正常响应。 curl一个强大的 URL 传输工具，用于发送各种网络请求。 12345678# Web 服务器监控指南curl -I http://your_domain.com# Web 服务器监控指南curl -I -L http://your_domain.com# Web 服务器监控指南curl -v https://your_domain.com  telnet &#x2F; nc (Netcat)用于测试特定端口是否可以建立 TCP 连接。 123456# Web 服务器监控指南telnet your_domain.com 80# Web 服务器监控指南nc -zv your_domain...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/d7364a6b/" title="Linux CLI 参考手册"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Linux CLI 参考手册</div></div><div class="info-2"><div class="info-item-1">Linux CLI 参考手册目录 文件和目录操作 文本处理 系统管理 网络操作 用户与权限 进程管理 包管理 文件压缩与归档 系统监控与性能分析  文件和目录操作导航与查看 pwd: 显示当前工作目录。 ls -la: 列出所有文件和目录（包括隐藏的），显示详细信息。 ls -lh: 以人类可读的格式显示文件大小 (K, M, G)。 cd /path/to/dir: 切换到指定目录。 cd ..: 切换到上一级目录。 cd ~ 或 cd: 切换到当前用户的主目录。 cd -: 切换到上一个工作目录。  创建与删除 touch file.txt: 创建一个空文件或更新文件的时间戳。 mkdir new_dir: 创建一个新目录。 mkdir -p path/to/new_dir: 递归创建多级目录。 rm file.txt: 删除一个文件（会提示）。 rm -f file.txt: 强制删除一个文件。 rm -r my_dir: 递归删除一个目录及其所有内容。 rm -rf my_dir: 强制递归删除一个目录（危险命令，请谨慎使用）。  复制与移动 cp source.txt ...</div></div></div></a><a class="pagination-related" href="/posts/7ef87112/" title="Jsoncpp Linux 使用指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Jsoncpp Linux 使用指南</div></div><div class="info-2"><div class="info-item-1">Jsoncpp Linux 使用指南目录 方式一：使用包管理器安装 方式二：从源码编译 (推荐) API 核心用法 编译与运行 项目集成 (Makefile &amp; CMake) 常见问题  方式一：使用包管理器安装这是最快的方式，但库版本可能较旧。 1234567# Jsoncpp Linux 使用指南# Jsoncpp Linux 使用指南sudo apt updatesudo apt install -y libjsoncpp-dev pkg-config# Jsoncpp Linux 使用指南pkg-config --modversion jsoncpp  方式二：从源码编译 (推荐)获取最新版本和完整控制权的推荐方式。 1234567891011121314151617# Jsoncpp Linux 使用指南sudo apt install -y git cmake build-essential# Jsoncpp Linux 使用指南git clone https://github.com/open-source-parsers/jsoncpp.gitcd jso...</div></div></div></a><a class="pagination-related" href="/posts/20b20a6b/" title="Boost Linux 编译指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Boost Linux 编译指南</div></div><div class="info-2"><div class="info-item-1">Boost Linux 编译指南目录 方式一：使用包管理器安装 方式二：从源码编译 (推荐) 编译后配置 测试验证 编译选项详解 项目集成 (Makefile &amp; CMake) 常见问题  方式一：使用包管理器安装这是最简单的方式，但版本可能不是最新的。 12345678910# Boost Linux 编译指南# Boost Linux 编译指南sudo apt-cache search libboost# Boost Linux 编译指南# Boost Linux 编译指南sudo apt install libboost-all-dev# Boost Linux 编译指南dpkg -s libboost-dev | grep Version  方式二：从源码编译 (推荐)这种方式可以让你完全控制 Boost 的版本、编译选项和安装路径。 1. 安装依赖123# Boost Linux 编译指南sudo apt updatesudo apt install -y build-essential g++ python3-dev autotools-dev libicu-...</div></div></div></a><a class="pagination-related" href="/posts/2a876257/" title="gRPC Linux 编译指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">gRPC Linux 编译指南</div></div><div class="info-2"><div class="info-item-1">gRPC Linux 编译指南目录 概述 环境准备 获取源码 编译与安装 配置环境 验证安装 常见问题  概述本指南详细介绍如何在 Linux 系统（以 Ubuntu&#x2F;Debian 为例）下，通过 CMake 从源码编译和安装 gRPC 及其核心依赖 Protobuf。 此方法遵循 gRPC 官方推荐的流程，通过 Git 子模块来构建其依赖，确保版本兼容性，过程最简单、最可靠。 系统要求 操作系统: Ubuntu 20.04+ &#x2F; Debian 10+ 编译器: GCC 9+ 或 Clang 9+ CMake: 3.13+ 内存: 建议 8GB+ 磁盘空间: 建议 15GB+ 可用空间  环境准备123456789101112# gRPC Linux 编译指南sudo apt update# gRPC Linux 编译指南sudo apt install -y \    build-essential \    autoconf \    libtool \    pkg-config \    cmake \    git \    zlib1g-dev  ...</div></div></div></a><a class="pagination-related" href="/posts/4beba163/" title="Docker 部署指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Docker 部署指南</div></div><div class="info-2"><div class="info-item-1">Docker 部署指南概述Docker容器化部署是现代应用部署的标准方式，本文详细介绍如何使用Docker进行应用容器化部署。 Docker基础概念什么是DockerDocker是一个开源的容器化平台，可以将应用和依赖打包成轻量级、可移植的容器。 核心组件 Docker Engine: 容器运行时 Docker Compose: 多容器应用编排 Docker Registry: 镜像仓库  安装DockerUbuntu安装123456789101112131415# Docker 部署指南sudo apt-get update# Docker 部署指南sudo apt-get install apt-transport-https ca-certificates curl gnupg lsb-release# Docker 部署指南curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg...</div></div></div></a><a class="pagination-related" href="/posts/cf6de084/" title="Linux atop 监控工具使用指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Linux atop 监控工具使用指南</div></div><div class="info-2"><div class="info-item-1">Linux atop 监控工具使用指南目录 概述 第一步：安装 atop 第二步：安装 netatop 网络监控模块 (可选) 第三步：配置 atop 服务 第四步：使用 atop 第五步：分析历史日志 附录：监控字段说明 常见问题  概述atop 是一个高级的、可交互的 Linux 系统性能监控工具。与 top、htop 等工具相比，atop 最强大的特性是它能够记录历史性能数据，并允许你像播放视频一样“回放”系统在过去某个时间点的状态，极大地便利了问题排查和性能分析。 主要特性 全面监控: 监控 CPU、内存、交换空间、磁盘 I&#x2F;O、网络以及各个进程的资源使用情况。 历史记录: 默认以10分钟为间隔，将系统快照记录到日志文件中，并保留28天。 进程级详情: 记录每个进程的资源使用、状态、退出码等详细信息。 高亮显示: 对过载的系统资源使用不同颜色高亮显示，一目了然。  第一步：安装 atopUbuntu&#x2F;Debian12345678# Linux atop 监控工具使用指南sudo apt update# Linux atop 监控工具使用指南sudo a...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%AE%9D%E5%A1%94%E9%9D%A2%E6%9D%BF%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">宝塔面板安装指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%87%8D%E8%A6%81%EF%BC%9A%E5%AE%89%E5%85%A8%E9%A1%BB%E7%9F%A5"><span class="toc-number">1.2.</span> <span class="toc-text">重要：安全须知</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.3.</span> <span class="toc-text">概述</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.4.</span> <span class="toc-text">第一步：环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%B3%BB%E7%BB%9F%E8%A6%81%E6%B1%82"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 系统要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%BC%80%E6%94%BE%E7%AB%AF%E5%8F%A3"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. 开放端口</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E6%89%A7%E8%A1%8C%E5%AE%89%E8%A3%85%E8%84%9A%E6%9C%AC"><span class="toc-number">1.5.</span> <span class="toc-text">第二步：执行安装脚本</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Ubuntu-Debian-%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4"><span class="toc-number">1.5.1.</span> <span class="toc-text">Ubuntu&#x2F;Debian 安装命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CentOS-%E5%AE%89%E8%A3%85%E5%91%BD%E4%BB%A4"><span class="toc-number">1.5.2.</span> <span class="toc-text">CentOS 安装命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E5%88%9D%E5%A7%8B%E9%85%8D%E7%BD%AE"><span class="toc-number">1.6.</span> <span class="toc-text">第三步：初始配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD%E4%BD%BF%E7%94%A8"><span class="toc-number">1.7.</span> <span class="toc-text">核心功能使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BD%91%E7%AB%99%E7%AE%A1%E7%90%86"><span class="toc-number">1.7.1.</span> <span class="toc-text">网站管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AE%A1%E7%90%86"><span class="toc-number">1.7.2.</span> <span class="toc-text">数据库管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="toc-number">1.7.3.</span> <span class="toc-text">文件管理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%91%E6%8E%A7"><span class="toc-number">1.7.4.</span> <span class="toc-text">监控</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.8.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="toc-number">1.9.</span> <span class="toc-text">问题排查</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

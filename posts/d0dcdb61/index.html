@@ -1,0 +1,344 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Apache Ubuntu 反向代理指南 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Apache Ubuntu 反向代理指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/d0dcdb61/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="详细的技术安装与配置指南，提供从零开始的完整部署流程，包含环境检查、依赖安装、参数配置、测试验证等关键步骤。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-04T05:13:24.000Z">
+<meta property="article:modified_time" content="2025-12-17T15:36:29.295Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="Apache">
+<meta property="article:tag" content="HTTPD">
+<meta property="article:tag" content="HTTPS">
+<meta property="article:tag" content="Let&#39;s Encrypt">
+<meta property="article:tag" content="SSL">
+<meta property="article:tag" content="Ubuntu">
+<meta property="article:tag" content="反向代理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Apache Ubuntu 反向代理指南",
+  "url": "https://vilaswang.github.io/posts/d0dcdb61/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-04T05:13:24.000Z",
+  "dateModified": "2025-12-17T15:36:29.295Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/d0dcdb61/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Apache Ubuntu 反向代理指南',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">Apache Ubuntu 反向代理指南</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Apache Ubuntu 反向代理指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-04T05:13:24.000Z" title="发表于 2025-12-04 13:13:24">2025-12-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T15:36:29.295Z" title="更新于 2025-12-17 23:36:29">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/">后端服务架构</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%90%8E%E7%AB%AF%E6%9C%8D%E5%8A%A1%E6%9E%B6%E6%9E%84/Web%E6%9C%8D%E5%8A%A1%E5%99%A8%E9%85%8D%E7%BD%AE/">Web服务器配置</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Apache-Ubuntu-反向代理指南"><a href="#Apache-Ubuntu-反向代理指南" class="headerlink" title="Apache Ubuntu 反向代理指南"></a>Apache Ubuntu 反向代理指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%E5%AE%89%E8%A3%85-apache">第一步：安装 Apache</a></li>
+<li><a href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%E8%AE%BE%E7%BD%AE%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA-virtual-host">第二步：设置虚拟主机 (Virtual Host)</a></li>
+<li><a href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86">第三步：配置反向代理</a></li>
+<li><a href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%E4%BD%BF%E7%94%A8-certbot-%E9%85%8D%E7%BD%AE-https">第四步：使用 Certbot 配置 HTTPS</a></li>
+<li><a href="#%E9%99%84%E5%BD%95%E6%80%A7%E8%83%BD%E4%B8%8E%E5%AE%89%E5%85%A8%E4%BC%98%E5%8C%96">附录：性能与安全优化</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98">常见问题</a></li>
+</ul>
+<h2 id="第一步：安装-Apache"><a href="#第一步：安装-Apache" class="headerlink" title="第一步：安装 Apache"></a>第一步：安装 Apache</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> apt update</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> apt install apache2</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> ufw allow <span class="string">&#x27;Apache Full&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl status apache2</span><br></pre></td></tr></table></figure>
+<p>安装完成后，通过浏览器访问 <code>http://&lt;你的服务器IP&gt;</code>，应能看到 Apache 的默认欢迎页面。</p>
+<h2 id="第二步：设置虚拟主机-Virtual-Host"><a href="#第二步：设置虚拟主机-Virtual-Host" class="headerlink" title="第二步：设置虚拟主机 (Virtual Host)"></a>第二步：设置虚拟主机 (Virtual Host)</h2><p>虚拟主机允许你在同一台服务器上托管多个网站。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">mkdir</span> -p /var/www/your_domain.com/html</span><br><span class="line"><span class="built_in">sudo</span> <span class="built_in">chown</span> -R <span class="variable">$USER</span>:<span class="variable">$USER</span> /var/www/your_domain.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> nano /etc/apache2/sites-available/your_domain.com.conf</span><br></pre></td></tr></table></figure>
+
+<p>将以下基础配置粘贴进去。这会告诉 Apache 在哪里找到网站文件，并设置域名。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;VirtualHost *<span class="number">:80</span>&gt;</span></span><br><span class="line">    <span class="attribute">ServerAdmin</span> webmaster@localhost</span><br><span class="line">    <span class="attribute">ServerName</span> your_domain.com</span><br><span class="line">    <span class="attribute">ServerAlias</span> www.your_domain.com</span><br><span class="line"></span><br><span class="line">    <span class="attribute">DocumentRoot</span> /var/www/your_domain.com/html</span><br><span class="line"></span><br><span class="line">    <span class="attribute">ErrorLog</span> <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/error.log</span><br><span class="line">    <span class="attribute">CustomLog</span> <span class="variable">$&#123;APACHE_LOG_DIR&#125;</span>/access.log combined</span><br><span class="line"><span class="section">&lt;/VirtualHost&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> a2ensite your_domain.com.conf</span><br><span class="line"><span class="built_in">sudo</span> a2enmod rewrite</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> apache2ctl configtest</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart apache2</span><br></pre></td></tr></table></figure>
+
+<h2 id="第三步：配置反向代理"><a href="#第三步：配置反向代理" class="headerlink" title="第三步：配置反向代理"></a>第三步：配置反向代理</h2><p>反向代理允许 Apache 接收请求，然后将其转发到后端的另一个服务（例如一个 Node.js 或 Java 应用）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> a2enmod proxy</span><br><span class="line"><span class="built_in">sudo</span> a2enmod proxy_http</span><br><span class="line"><span class="built_in">sudo</span> a2enmod proxy_balancer</span><br><span class="line"><span class="built_in">sudo</span> a2enmod lbmethod_byrequests</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> systemctl restart apache2</span><br></pre></td></tr></table></figure>
+
+<p>现在，编辑你的站点配置文件 <code>sudo nano /etc/apache2/sites-available/your_domain.com.conf</code>，并修改它以包含 <code>ProxyPass</code>。</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;VirtualHost *<span class="number">:80</span>&gt;</span></span><br><span class="line">    <span class="attribute">ServerName</span> your_domain.com</span><br><span class="line">    <span class="attribute">ServerAlias</span> www.your_domain.com</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 将所有请求转发到运行在 8080 端口的后端应用</span></span><br><span class="line">    <span class="attribute">ProxyPreserveHost</span> <span class="literal">On</span></span><br><span class="line">    <span class="attribute">ProxyPass</span> / http://<span class="number">127.0.0.1:8080</span>/</span><br><span class="line">    <span class="attribute">ProxyPassReverse</span> / http://<span class="number">127.0.0.1:8080</span>/</span><br><span class="line"><span class="section">&lt;/VirtualHost&gt;</span></span><br></pre></td></tr></table></figure>
+<p>再次重启 Apache 后，所有到 <code>your_domain.com</code> 的请求都会被转发到 <code>localhost:8080</code>。</p>
+<h2 id="第四步：使用-Certbot-配置-HTTPS"><a href="#第四步：使用-Certbot-配置-HTTPS" class="headerlink" title="第四步：使用 Certbot 配置 HTTPS"></a>第四步：使用 Certbot 配置 HTTPS</h2><p>Let’s Encrypt 提供免费的 SSL 证书，<code>certbot</code> 是其官方推荐的客户端。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> apt install certbot python3-certbot-apache</span><br><span class="line"></span><br><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> certbot --apache -d your_domain.com -d www.your_domain.com</span><br></pre></td></tr></table></figure>
+<p>在安装过程中，Certbot 会询问你是否要将所有 HTTP 请求自动重定向到 HTTPS，推荐选择“Redirect”。</p>
+<p>完成后，你的配置文件会被自动更新，类似于：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;VirtualHost *<span class="number">:443</span>&gt;</span></span><br><span class="line">    <span class="attribute">ServerName</span> your_domain.com</span><br><span class="line">    <span class="comment"># ... 其他配置 ...</span></span><br><span class="line"></span><br><span class="line">    <span class="attribute">SSLEngine</span> <span class="literal">on</span></span><br><span class="line">    <span class="attribute">SSLCertificateFile</span> /etc/letsencrypt/live/your_domain.com/fullchain.pem</span><br><span class="line">    <span class="attribute">SSLCertificateKeyFile</span> /etc/letsencrypt/live/your_domain.com/privkey.pem</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- SSL/TLS 安全增强配置 ---</span></span><br><span class="line">    <span class="comment"># 推荐只使用 TLS 1.2 和 1.3，禁用过时的、不安全的协议</span></span><br><span class="line">    <span class="attribute">SSLProtocol</span> <span class="literal">all</span> -SSLv3 -TLSv1 -TLSv1.<span class="number">1</span></span><br><span class="line">    <span class="comment"># 一个现代且安全的加密套件列表</span></span><br><span class="line">    <span class="attribute">SSLCipherSuite</span> ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256</span><br><span class="line">    <span class="attribute">SSLHonorCipherOrder</span> <span class="literal">on</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># ... 反向代理配置 ...</span></span><br><span class="line">    <span class="attribute">ProxyPass</span> / http://<span class="number">127.0.0.1:8080</span>/</span><br><span class="line">    <span class="attribute">ProxyPassReverse</span> / http://<span class="number">127.0.0.1:8080</span>/</span><br><span class="line"><span class="section">&lt;/VirtualHost&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="section">&lt;VirtualHost *<span class="number">:80</span>&gt;</span></span><br><span class="line">    <span class="comment"># ... Certbot 自动生成的重定向到 HTTPS 的配置 ...</span></span><br><span class="line"><span class="section">&lt;/VirtualHost&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="附录：性能与安全优化"><a href="#附录：性能与安全优化" class="headerlink" title="附录：性能与安全优化"></a>附录：性能与安全优化</h2><h3 id="启用-Gzip-Deflate-压缩"><a href="#启用-Gzip-Deflate-压缩" class="headerlink" title="启用 Gzip&#x2F;Deflate 压缩"></a>启用 Gzip&#x2F;Deflate 压缩</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Apache Ubuntu 反向代理指南</span></span><br><span class="line"><span class="built_in">sudo</span> a2enmod deflate</span><br><span class="line"><span class="built_in">sudo</span> systemctl restart apache2</span><br></pre></td></tr></table></figure>
+<p>在 <code>/etc/apache2/apache2.conf</code> 中添加配置：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;IfModule mod_deflate.c&gt;</span></span><br><span class="line">    <span class="attribute">AddOutputFilterByType</span> DEFLATE text/html text/plain text/xml text/css application/javascript</span><br><span class="line"><span class="section">&lt;/IfModule&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="添加安全头"><a href="#添加安全头" class="headerlink" title="添加安全头"></a>添加安全头</h3><p>在你的 HTTPS (<code>*:443</code>) VirtualHost 配置中添加：</p>
+<figure class="highlight apache"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">&lt;IfModule mod_headers.c&gt;</span></span><br><span class="line">    <span class="comment"># HSTS (HTTP Strict Transport Security): 强制客户端在指定时间内只能通过 HTTPS 访问</span></span><br><span class="line">    <span class="attribute">Header</span> always set Strict-Transport-Security <span class="string">&quot;max-age=15768000; includeSubDomains&quot;</span></span><br><span class="line">    <span class="comment"># X-Frame-Options: 防止点击劫持攻击</span></span><br><span class="line">    <span class="attribute">Header</span> always set X-Frame-Options <span class="string">&quot;SAMEORIGIN&quot;</span></span><br><span class="line">    <span class="comment"># X-Content-Type-Options: 防止 MIME 类型嗅探攻击</span></span><br><span class="line">    <span class="attribute">Header</span> always set X-Content-Type-Options <span class="string">&quot;nosniff&quot;</span></span><br><span class="line"><span class="section">&lt;/IfModule&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="隐藏服务器信息"><a href="#隐藏服务器信息" class="headerlink" title="隐藏服务器信息"></a>隐藏服务器信息</h3><p>在 <code>/etc/apache2/conf-enabled/security.conf</code> 中，确保设置为：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ServerTokens Prod</span><br><span class="line">ServerSignature Off</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见问题"><a href="#常见问题" class="headerlink" title="常见问题"></a>常见问题</h2><p><strong>Q: 503 Service Unavailable 错误?</strong><br><strong>A</strong>: 这通常意味着 Apache 无法连接到你的后端应用，但代理模块已启用。请检查：</p>
+<ol>
+<li>你的后端应用是否正在运行。</li>
+<li><code>ProxyPass</code> 指令中的地址和端口是否正确。</li>
+</ol>
+<p><strong>Q: 重启 Apache 失败?</strong><br><strong>A</strong>: 运行 <code>sudo apache2ctl configtest</code> 来检查配置文件的语法错误。常见的错误包括模块未启用（如 <code>proxy_http</code>）或拼写错误。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/d0dcdb61/">https://vilaswang.github.io/posts/d0dcdb61/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Ubuntu/">Ubuntu</a><a class="post-meta__tags" href="/tags/Apache/">Apache</a><a class="post-meta__tags" href="/tags/HTTPD/">HTTPD</a><a class="post-meta__tags" href="/tags/%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86/">反向代理</a><a class="post-meta__tags" href="/tags/HTTPS/">HTTPS</a><a class="post-meta__tags" href="/tags/SSL/">SSL</a><a class="post-meta__tags" href="/tags/Let-s-Encrypt/">Let's Encrypt</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/f0a1549f/" title="Redis Hiredis Linux 安装指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Redis Hiredis Linux 安装指南</div></div><div class="info-2"><div class="info-item-1">Redis Hiredis Linux 安装指南目录 概述 第一步：安装和配置 Redis 服务 第二步：安装 hiredis 客户端库 第三步：搭建 C++ 项目 (CMake) 第四步：编写 RedisClient 封装类 第五步：编写主程序并测试 常见问题 最佳实践  概述本指南将介绍如何在 Linux (Ubuntu&#x2F;Debian) 环境下，为 C++ 项目配置 Redis 开发环境。我们将使用 hiredis 这个官方推荐的、轻量级的 C 语言客户端库。 第一步：安装和配置 Redis 服务1. 安装 Redis 服务器123# Redis Hiredis Linux 安装指南sudo apt updatesudo apt install -y redis-server  2. 配置 Redis为了安全和远程访问，建议修改配置文件。 12# Redis Hiredis Linux 安装指南sudo nano /etc/redis/redis.conf 找到并修改以下几行： 12345678# Redis Hiredis Linux 安装指南bind 0.0.0...</div></div></div></a><a class="pagination-related" href="/posts/e2f925a8/" title="MySQL Windows 安装指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">MySQL Windows 安装指南</div></div><div class="info-2"><div class="info-item-1">MySQL Windows 安装指南目录 概述 第一步：下载与解压 第二步：配置 my.ini 文件 第三步：初始化与安装服务 第四步：服务管理与登录 用户与权限管理 备份与恢复 常见问题与故障排除  概述本指南详细介绍如何在 Windows 操作系统上，通过官方的 ZIP 压缩包手动安装、配置 MySQL，并将其注册为 Windows 服务。这种方式让你可以完全控制 MySQL 的安装位置和配置。 第一步：下载与解压 下载 MySQL Community Server:访问官方下载页面：https://dev.mysql.com/downloads/mysql/选择 “Windows (x86, 64-bit), ZIP Archive” 版本进行下载。  解压文件:将下载的 ZIP 文件解压到一个你选择的稳定路径，例如 C:\mysql。路径中最好不要包含中文或空格。 解压后的目录结构大致如下： 12345&lt;Your-MySQL-Path&gt;\├── bin\          # 可执行文件 (mysqld, mysql, mysqldump 等)├── incl...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/ebeb0722/" title="Nginx Ubuntu 反向代理指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Nginx Ubuntu 反向代理指南</div></div><div class="info-2"><div class="info-item-1">Nginx Ubuntu 反向代理指南目录 第一步：安装 Nginx 第二步：设置基础 Web 服务器 第三步：配置反向代理与 HTTPS 第四步：使用 Certbot 自动配置 SSL 第五步：配置多个本地应用的反向代理 (可选) 第六步：配置负载均衡 (可选) 附录：性能与安全优化 常见问题  第一步：安装 Nginx1234567891011# Nginx Ubuntu 反向代理指南sudo apt update# Nginx Ubuntu 反向代理指南sudo apt install -y nginx# Nginx Ubuntu 反向代理指南sudo ufw allow &#x27;Nginx Full&#x27;# Nginx Ubuntu 反向代理指南sudo systemctl status nginx 安装完成后，通过浏览器访问 http://&lt;你的服务器IP&gt;，应能看到 Nginx 的欢迎页面。 第二步：设置基础 Web 服务器即使我们主要用 Nginx 做反向代理，创建一个基础的服务器块（Server Block）也是一个好习惯。 123456# ...</div></div></div></a><a class="pagination-related" href="/posts/cf6de084/" title="Linux atop 监控工具使用指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Linux atop 监控工具使用指南</div></div><div class="info-2"><div class="info-item-1">Linux atop 监控工具使用指南目录 概述 第一步：安装 atop 第二步：安装 netatop 网络监控模块 (可选) 第三步：配置 atop 服务 第四步：使用 atop 第五步：分析历史日志 附录：监控字段说明 常见问题  概述atop 是一个高级的、可交互的 Linux 系统性能监控工具。与 top、htop 等工具相比，atop 最强大的特性是它能够记录历史性能数据，并允许你像播放视频一样“回放”系统在过去某个时间点的状态，极大地便利了问题排查和性能分析。 主要特性 全面监控: 监控 CPU、内存、交换空间、磁盘 I&#x2F;O、网络以及各个进程的资源使用情况。 历史记录: 默认以10分钟为间隔，将系统快照记录到日志文件中，并保留28天。 进程级详情: 记录每个进程的资源使用、状态、退出码等详细信息。 高亮显示: 对过载的系统资源使用不同颜色高亮显示，一目了然。  第一步：安装 atopUbuntu&#x2F;Debian12345678# Linux atop 监控工具使用指南sudo apt update# Linux atop 监控工具使用指南sudo a...</div></div></div></a><a class="pagination-related" href="/posts/d1520bc/" title="OpenSSL mTLS Windows 指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">OpenSSL mTLS Windows 指南</div></div><div class="info-2"><div class="info-item-1">OpenSSL mTLS Windows 指南目录 概述 第一步：在 Windows 上安装 OpenSSL 第二步：生成根证书 (CA) 第三步：生成服务器证书 第四步：生成客户端证书 第五步：验证与打包 附录A：Windows 批处理自动化脚本 附录B：在 IIS 中配置双向认证 附录C：在 Nginx for Windows 中配置双向认证 附录D：生成 DH 参数 (可选) 附录E：常用 OpenSSL 命令  概述双向认证（Mutual TLS, mTLS）是一种高安全性的认证模式，它要求客户端和服务器双方都出示并验证对方的数字证书，从而确保通信双方的身份都是可信的。本指南将详细介绍如何在 Windows 系统上使用 OpenSSL 创建一套完整的、用于双向认证的证书。 Windows 环境注意事项 Windows 系统默认不包含 OpenSSL，需要单独安装 路径分隔符使用反斜杠 \ 批处理脚本使用 .bat 格式 文件权限管理与 Linux 不同  第一步：在 Windows 上安装 OpenSSL方法1：使用 Chocolatey (推荐)123456# Open...</div></div></div></a><a class="pagination-related" href="/posts/d7f169a4/" title="Web 服务器监控指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Web 服务器监控指南</div></div><div class="info-2"><div class="info-item-1">Web 服务器监控指南目录 概述 第一部分：连接与健康检查 第二部分：性能与负载测试 第三部分：安全扫描与测试 第四部分：实时系统监控 第五部分：日志分析  概述本指南提供了一系列常用的命令行工具，用于测试、诊断和监控任何 Web 服务器（如 Nginx, Apache 等）的健康状况、性能和安全性。 第一部分：连接与健康检查这些工具用于快速验证服务器是否在线、端口是否开放以及服务是否正常响应。 curl一个强大的 URL 传输工具，用于发送各种网络请求。 12345678# Web 服务器监控指南curl -I http://your_domain.com# Web 服务器监控指南curl -I -L http://your_domain.com# Web 服务器监控指南curl -v https://your_domain.com  telnet &#x2F; nc (Netcat)用于测试特定端口是否可以建立 TCP 连接。 123456# Web 服务器监控指南telnet your_domain.com 80# Web 服务器监控指南nc -zv your_domain...</div></div></div></a><a class="pagination-related" href="/posts/e0946359/" title="Ubuntu CPP 开发环境配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Ubuntu CPP 开发环境配置指南</div></div><div class="info-2"><div class="info-item-1">Ubuntu CPP 开发环境配置指南目录 概述 第一步：系统更新和基础工具安装 第二步：安装编译器工具链 第三步：安装构建工具 第四步：安装调试工具 第五步：安装常用开发库 第六步：配置 IDE 和编辑器 第七步：验证开发环境 第八步：配置环境变量 附录：常用命令速查 常见问题  概述本文档提供了在 Ubuntu 22.04 LTS 系统上搭建完整 C++ 开发环境的详细步骤。无论您是 C++ 初学者还是有经验的开发者，都可以按照本指南快速配置一个功能完整的开发环境。 主要组件 编译器: GCC&#x2F;G++ (支持 C++11&#x2F;14&#x2F;17&#x2F;20) 构建系统: CMake, Make 调试器: GDB 包管理: apt, vcpkg IDE: Visual Studio Code (可选) 版本控制: Git  第一步：系统更新和基础工具安装1. 更新系统包12345678# Ubuntu CPP 开发环境配置指南sudo apt update# Ubuntu CPP 开发环境配置指南sudo apt upgrade -y# Ubuntu CP...</div></div></div></a><a class="pagination-related" href="/posts/f4106d49/" title="OpenSSL mTLS 指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">OpenSSL mTLS 指南</div></div><div class="info-2"><div class="info-item-1">OpenSSL mTLS 指南目录 概述 第一步：生成根证书 (CA) 第二步：生成服务器证书 第三步：生成客户端证书 第四步：验证与打包 附录A：完整自动化脚本 附录B：在 Nginx 中配置双向认证 附录C：生成 DH 参数 (可选) 附录D：常用 OpenSSL 命令  概述双向认证（Mutual TLS, mTLS）是一种高安全性的认证模式，它要求客户端和服务器双方都出示并验证对方的数字证书，从而确保通信双方的身份都是可信的。本指南将详细介绍如何使用 OpenSSL 创建一套完整的、用于双向认证的证书。 证书体系我们将创建以下三类证书：  根证书 (CA): 证书颁发机构，用于签发服务器和客户端证书。它是信任链的顶点。 服务器证书: 用于向客户端证明服务器的身份。 客户端证书: 用于向服务器证明客户端的身份。  第一步：生成根证书 (CA)CA 是整个信任体系的基础，其私钥必须被严格保管。 1. 创建 CA 私钥12345# OpenSSL mTLS 指南openssl genrsa -out ca.key 4096# OpenSSL mTLS 指南chmod 400 c...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Apache-Ubuntu-%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">Apache Ubuntu 反向代理指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%80%E6%AD%A5%EF%BC%9A%E5%AE%89%E8%A3%85-Apache"><span class="toc-number">1.2.</span> <span class="toc-text">第一步：安装 Apache</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%BA%8C%E6%AD%A5%EF%BC%9A%E8%AE%BE%E7%BD%AE%E8%99%9A%E6%8B%9F%E4%B8%BB%E6%9C%BA-Virtual-Host"><span class="toc-number">1.3.</span> <span class="toc-text">第二步：设置虚拟主机 (Virtual Host)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E4%B8%89%E6%AD%A5%EF%BC%9A%E9%85%8D%E7%BD%AE%E5%8F%8D%E5%90%91%E4%BB%A3%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">第三步：配置反向代理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AC%AC%E5%9B%9B%E6%AD%A5%EF%BC%9A%E4%BD%BF%E7%94%A8-Certbot-%E9%85%8D%E7%BD%AE-HTTPS"><span class="toc-number">1.5.</span> <span class="toc-text">第四步：使用 Certbot 配置 HTTPS</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A%E6%80%A7%E8%83%BD%E4%B8%8E%E5%AE%89%E5%85%A8%E4%BC%98%E5%8C%96"><span class="toc-number">1.6.</span> <span class="toc-text">附录：性能与安全优化</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%90%AF%E7%94%A8-Gzip-Deflate-%E5%8E%8B%E7%BC%A9"><span class="toc-number">1.6.1.</span> <span class="toc-text">启用 Gzip&#x2F;Deflate 压缩</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B7%BB%E5%8A%A0%E5%AE%89%E5%85%A8%E5%A4%B4"><span class="toc-number">1.6.2.</span> <span class="toc-text">添加安全头</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%90%E8%97%8F%E6%9C%8D%E5%8A%A1%E5%99%A8%E4%BF%A1%E6%81%AF"><span class="toc-number">1.6.3.</span> <span class="toc-text">隐藏服务器信息</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="toc-number">1.7.</span> <span class="toc-text">常见问题</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

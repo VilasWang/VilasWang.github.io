@@ -1,0 +1,527 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Qt 下载器需求规范 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Qt 下载器需求规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: qt, downloader, product-requirements, desktop-app, c++  📑 目录 1. 产品概述 2. 用户角色 3. 功能需求 4. 非功能需求 5. 界面设计 6. 数据模型 7. 技术规范 8. 交付要求   1. 🎯 产品概述1.1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Qt 下载器需求规范">
+<meta property="og:url" content="https://vilaswang.github.io/posts/6ee89f12/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="Qt 下载器需求规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: qt, downloader, product-requirements, desktop-app, c++  📑 目录 1. 产品概述 2. 用户角色 3. 功能需求 4. 非功能需求 5. 界面设计 6. 数据模型 7. 技术规范 8. 交付要求   1. 🎯 产品概述1.1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-09T06:09:54.000Z">
+<meta property="article:modified_time" content="2025-12-17T15:36:29.261Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="技术文档">
+<meta property="article:tag" content="指南">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Qt 下载器需求规范",
+  "url": "https://vilaswang.github.io/posts/6ee89f12/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-09T06:09:54.000Z",
+  "dateModified": "2025-12-17T15:36:29.261Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/6ee89f12/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Qt 下载器需求规范',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">Qt 下载器需求规范</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Qt 下载器需求规范</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-09T06:09:54.000Z" title="发表于 2025-12-09 14:09:54">2025-12-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T15:36:29.261Z" title="更新于 2025-12-17 23:36:29">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E8%BD%AF%E4%BB%B6%E6%9E%B6%E6%9E%84/">软件架构</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Qt-下载器需求规范"><a href="#Qt-下载器需求规范" class="headerlink" title="Qt 下载器需求规范"></a>Qt 下载器需求规范</h1><blockquote>
+<p><strong>文档创建时间</strong>: 2025-11-14<br><strong>最后更新</strong>: 2025-11-14<br><strong>版本</strong>: v1.0<br><strong>标签</strong>: <code>qt</code>, <code>downloader</code>, <code>product-requirements</code>, <code>desktop-app</code>, <code>c++</code></p>
+</blockquote>
+<h2 id="📑-目录"><a href="#📑-目录" class="headerlink" title="📑 目录"></a>📑 目录</h2><ul>
+<li><a href="#1-%E4%BA%A7%E5%93%81%E6%A6%82%E8%BF%B0">1. 产品概述</a></li>
+<li><a href="#2-%E7%94%A8%E6%88%B7%E8%A7%92%E8%89%B2">2. 用户角色</a></li>
+<li><a href="#3-%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82">3. 功能需求</a></li>
+<li><a href="#4-%E9%9D%9E%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82">4. 非功能需求</a></li>
+<li><a href="#5-%E7%95%8C%E9%9D%A2%E8%AE%BE%E8%AE%A1">5. 界面设计</a></li>
+<li><a href="#6-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B">6. 数据模型</a></li>
+<li><a href="#7-%E6%8A%80%E6%9C%AF%E8%A7%84%E8%8C%83">7. 技术规范</a></li>
+<li><a href="#8-%E4%BA%A4%E4%BB%98%E8%A6%81%E6%B1%82">8. 交付要求</a></li>
+</ul>
+<hr>
+<h2 id="1-🎯-产品概述"><a href="#1-🎯-产品概述" class="headerlink" title="1. 🎯 产品概述"></a>1. 🎯 产品概述</h2><h3 id="1-1-产品定位"><a href="#1-1-产品定位" class="headerlink" title="1.1 产品定位"></a>1.1 产品定位</h3><p>基于 Qt 框架开发的桌面下载管理器，支持多线程并发下载，提供直观的任务管理界面和实时进度监控。</p>
+<h3 id="1-2-核心价值"><a href="#1-2-核心价值" class="headerlink" title="1.2 核心价值"></a>1.2 核心价值</h3><ul>
+<li>✅ <strong>批量下载</strong> - 支持多任务并发下载</li>
+<li>✅ <strong>进度监控</strong> - 实时显示下载状态和进度</li>
+<li>✅ <strong>断点续传</strong> - 支持下载中断后继续</li>
+<li>✅ <strong>跨平台</strong> - 支持 Windows、macOS、Linux</li>
+</ul>
+<h3 id="1-3-产品架构图"><a href="#1-3-产品架构图" class="headerlink" title="1.3 产品架构图"></a>1.3 产品架构图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">graph TD</span><br><span class="line">    A[用户界面] --&gt; B[任务管理器]</span><br><span class="line">    B --&gt; C[下载引擎]</span><br><span class="line">    C --&gt; D[网络请求层]</span><br><span class="line"></span><br><span class="line">    B --&gt; E[数据持久化]</span><br><span class="line">    B --&gt; F[配置管理]</span><br><span class="line"></span><br><span class="line">    C --&gt; G[线程池]</span><br><span class="line">    G --&gt; H[任务队列]</span><br><span class="line"></span><br><span class="line">    D --&gt; I[HTTP/HTTPS]</span><br><span class="line">    D --&gt; J[重定向处理]</span><br><span class="line">    D --&gt; K[认证处理]</span><br><span class="line"></span><br><span class="line">    style A fill:#e1f5fe</span><br><span class="line">    style B fill:#f3e5f5</span><br><span class="line">    style C fill:#e8f5e8</span><br><span class="line">    style D fill:#fff3e0</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="2-👥-用户角色"><a href="#2-👥-用户角色" class="headerlink" title="2. 👥 用户角色"></a>2. 👥 用户角色</h2><h3 id="2-1-目标用户"><a href="#2-1-目标用户" class="headerlink" title="2.1 目标用户"></a>2.1 目标用户</h3><p><strong>终端用户</strong> - 需要批量下载文件的个人用户</p>
+<ul>
+<li>技术背景：普通计算机用户</li>
+<li>使用场景：下载软件、文档、媒体文件</li>
+<li>操作习惯：图形界面操作</li>
+</ul>
+<h3 id="2-2-用户场景"><a href="#2-2-用户场景" class="headerlink" title="2.2 用户场景"></a>2.2 用户场景</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">    A[用户输入URL] --&gt; B[添加下载任务]</span><br><span class="line">    B --&gt; C[开始下载]</span><br><span class="line">    C --&gt; D[监控进度]</span><br><span class="line">    D --&gt; E&#123;完成下载?&#125;</span><br><span class="line">    E --&gt;|是| F[通知用户]</span><br><span class="line">    E --&gt;|否| D</span><br><span class="line">    F --&gt; G[任务完成]</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="3-📋-功能需求"><a href="#3-📋-功能需求" class="headerlink" title="3. 📋 功能需求"></a>3. 📋 功能需求</h2><h3 id="3-1-🎛️-任务管理"><a href="#3-1-🎛️-任务管理" class="headerlink" title="3.1 🎛️ 任务管理"></a>3.1 🎛️ 任务管理</h3><h4 id="3-1-1-添加任务"><a href="#3-1-1-添加任务" class="headerlink" title="3.1.1 添加任务"></a>3.1.1 添加任务</h4><ul>
+<li><strong>URL 输入</strong>: 支持单个或多个 URL（每行一个）</li>
+<li><strong>URL 格式</strong>: 支持 HTTP&#x2F;HTTPS 协议</li>
+<li><strong>认证支持</strong>: URL 中可包含用户名密码 (<code>user:pass@host</code>)</li>
+<li><strong>批量导入</strong>: 支持从剪贴板粘贴多个 URL</li>
+</ul>
+<h4 id="3-1-2-任务列表显示"><a href="#3-1-2-任务列表显示" class="headerlink" title="3.1.2 任务列表显示"></a>3.1.2 任务列表显示</h4><p><strong>表格列必须包含</strong>:</p>
+<ul>
+<li><strong>文件名</strong>: 从 URL 提取或 Content-Disposition 解析</li>
+<li><strong>文件大小</strong>: 字节数，获取后显示 (-1 表示未知)</li>
+<li><strong>已下载大小</strong>: 字节数，实时刷新</li>
+<li><strong>进度百分比</strong>: 0-100%，实时计算</li>
+<li><strong>下载速度</strong>: B&#x2F;s，实时刷新</li>
+<li><strong>状态</strong>: 等待 &#x2F; 下载中 &#x2F; 已完成 &#x2F; 错误</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">gantt</span><br><span class="line">    title 下载任务状态流转</span><br><span class="line">    dateFormat X</span><br><span class="line">    axisFormat %s</span><br><span class="line"></span><br><span class="line">    section 下载流程</span><br><span class="line">    等待中     :0, 10</span><br><span class="line">    下载中     :10, 100</span><br><span class="line">    已完成     :100, 110</span><br><span class="line">    错误处理   :a1, after a2, 20</span><br></pre></td></tr></table></figure>
+
+<h4 id="3-1-3-任务操作"><a href="#3-1-3-任务操作" class="headerlink" title="3.1.3 任务操作"></a>3.1.3 任务操作</h4><ul>
+<li><strong>开始</strong>: 启动选中的下载任务</li>
+<li><strong>暂停</strong>: 暂停正在下载的任务</li>
+<li><strong>取消</strong>: 取消下载并删除未完成的文件</li>
+<li><strong>删除</strong>: 从列表中删除已完成或失败的记录</li>
+</ul>
+<h3 id="3-2-⚙️-下载引擎"><a href="#3-2-⚙️-下载引擎" class="headerlink" title="3.2 ⚙️ 下载引擎"></a>3.2 ⚙️ 下载引擎</h3><h4 id="3-2-1-多线程下载"><a href="#3-2-1-多线程下载" class="headerlink" title="3.2.1 多线程下载"></a>3.2.1 多线程下载</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 单任务多线程配置</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> DEFAULT_THREAD_COUNT = <span class="number">4</span>;  <span class="comment">// 默认4线程</span></span><br><span class="line"><span class="type">const</span> <span class="type">int</span> MAX_THREAD_COUNT = <span class="number">16</span>;     <span class="comment">// 最大16线程</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>分段下载</strong>: 将文件分为多个片段并发下载</li>
+<li><strong>线程管理</strong>: 每个任务可配置独立线程数</li>
+<li><strong>负载均衡</strong>: 动态调整各线程下载速度</li>
+</ul>
+<h4 id="3-2-2-网络支持"><a href="#3-2-2-网络支持" class="headerlink" title="3.2.2 网络支持"></a>3.2.2 网络支持</h4><ul>
+<li><strong>协议支持</strong>: HTTP&#x2F;HTTPS</li>
+<li><strong>重定向</strong>: 自动处理 3xx 重定向</li>
+<li><strong>认证</strong>: 支持 Basic Authentication</li>
+<li><strong>代理支持</strong>: 系统代理设置</li>
+</ul>
+<h4 id="3-2-3-完整性校验"><a href="#3-2-3-完整性校验" class="headerlink" title="3.2.3 完整性校验"></a>3.2.3 完整性校验</h4><ul>
+<li><strong>大小校验</strong>: 下载完成后校验 Content-Length</li>
+<li><strong>MD5校验</strong>: 服务器返回 MD5 头时进行校验</li>
+<li><strong>断点续传</strong>: 支持从中断位置继续下载</li>
+</ul>
+<h3 id="3-3-💾-设置与持久化"><a href="#3-3-💾-设置与持久化" class="headerlink" title="3.3 💾 设置与持久化"></a>3.3 💾 设置与持久化</h3><h4 id="3-3-1-配置管理"><a href="#3-3-1-配置管理" class="headerlink" title="3.3.1 配置管理"></a>3.3.1 配置管理</h4><ul>
+<li><strong>下载目录</strong>: 默认系统”下载”文件夹，可自定义</li>
+<li><strong>并发限制</strong>: 全局最大同时下载数</li>
+<li><strong>线程数</strong>: 每任务默认线程数</li>
+<li><strong>重试次数</strong>: 失败重试次数</li>
+</ul>
+<h4 id="3-3-2-任务持久化"><a href="#3-3-2-任务持久化" class="headerlink" title="3.3.2 任务持久化"></a>3.3.2 任务持久化</h4><ul>
+<li><strong>自动保存</strong>: 任务状态自动保存</li>
+<li><strong>启动恢复</strong>: 程序启动时恢复未完成任务</li>
+<li><strong>设置保存</strong>: 用户配置持久化存储</li>
+</ul>
+<h3 id="3-4-🚨-异常处理与反馈"><a href="#3-4-🚨-异常处理与反馈" class="headerlink" title="3.4 🚨 异常处理与反馈"></a>3.4 🚨 异常处理与反馈</h3><h4 id="3-4-1-网络异常"><a href="#3-4-1-网络异常" class="headerlink" title="3.4.1 网络异常"></a>3.4.1 网络异常</h4><ul>
+<li><strong>自动重试</strong>: 网络中断时自动重试3次</li>
+<li><strong>指数退避</strong>: 重试间隔逐渐增加</li>
+<li><strong>错误分类</strong>: 区分临时错误和永久错误</li>
+</ul>
+<h4 id="3-4-2-用户反馈"><a href="#3-4-2-用户反馈" class="headerlink" title="3.4.2 用户反馈"></a>3.4.2 用户反馈</h4><ul>
+<li><strong>状态更新</strong>: 实时更新任务状态</li>
+<li><strong>错误提示</strong>: 显示详细错误信息</li>
+<li><strong>完成通知</strong>: 下载完成时系统托盘通知</li>
+<li><strong>进度提示</strong>: 进度条和百分比显示</li>
+</ul>
+<hr>
+<h2 id="4-🚀-非功能需求"><a href="#4-🚀-非功能需求" class="headerlink" title="4. 🚀 非功能需求"></a>4. 🚀 非功能需求</h2><h3 id="4-1-🖥️-平台兼容性"><a href="#4-1-🖥️-平台兼容性" class="headerlink" title="4.1 🖥️ 平台兼容性"></a>4.1 🖥️ 平台兼容性</h3><table>
+<thead>
+<tr>
+<th>平台</th>
+<th>最低版本</th>
+<th>架构</th>
+<th>Qt 版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Windows</strong></td>
+<td>Windows 10+</td>
+<td>x64</td>
+<td>Qt 5.3-5.12</td>
+</tr>
+<tr>
+<td><strong>macOS</strong></td>
+<td>10.15+</td>
+<td>x64</td>
+<td>Qt 5.3-5.12</td>
+</tr>
+<tr>
+<td><strong>Linux</strong></td>
+<td>Ubuntu 22.04+</td>
+<td>x64</td>
+<td>Qt 5.3-5.12</td>
+</tr>
+</tbody></table>
+<h3 id="4-2-⚡-性能要求"><a href="#4-2-⚡-性能要求" class="headerlink" title="4.2 ⚡ 性能要求"></a>4.2 ⚡ 性能要求</h3><ul>
+<li><strong>内存使用</strong>: 同时10个任务并发时，峰值内存 ≤ 200MB</li>
+<li><strong>UI响应</strong>: 任何操作在 200ms 内给出视觉反馈</li>
+<li><strong>下载速度</strong>: 充分利用可用带宽</li>
+<li><strong>启动时间</strong>: 冷启动 &lt; 3秒</li>
+</ul>
+<h3 id="4-3-🔒-安全性要求"><a href="#4-3-🔒-安全性要求" class="headerlink" title="4.3 🔒 安全性要求"></a>4.3 🔒 安全性要求</h3><ul>
+<li><strong>URL验证</strong>: 验证输入URL格式</li>
+<li><strong>文件路径</strong>: 防止路径遍历攻击</li>
+<li><strong>下载限制</strong>: 支持文件大小和类型限制</li>
+<li><strong>用户数据</strong>: 本地数据加密存储</li>
+</ul>
+<hr>
+<h2 id="5-🎨-界面设计"><a href="#5-🎨-界面设计" class="headerlink" title="5. 🎨 界面设计"></a>5. 🎨 界面设计</h2><h3 id="5-1-主界面布局"><a href="#5-1-主界面布局" class="headerlink" title="5.1 主界面布局"></a>5.1 主界面布局</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────────────────────────────────────────────┐</span><br><span class="line">│ URL 输入框                                              │</span><br><span class="line">│ ┌─────────────────────────────────────────────────────┐ │</span><br><span class="line">│ │ https://example.com/file1.zip                       │ │</span><br><span class="line">│ │ https://example.com/file2.pdf                       │ │</span><br><span class="line">│ └─────────────────────────────────────────────────────┘ │</span><br><span class="line">│ [添加] [开始全部] [暂停全部] [删除选中]                 │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│ 任务列表 (QTableView)                                  │</span><br><span class="line">│ 文件名      │ 大小     │ 已下载  │ 进度  │ 速度  │ 状态 │</span><br><span class="line">│ file1.zip   │ 100MB    │ 50MB    │ 50%   │ 1MB/s │下载中│</span><br><span class="line">│ file2.pdf   │ 20MB     │ 20MB    │ 100%  │ 0     │完成 │</span><br><span class="line">├─────────────────────────────────────────────────────────┤</span><br><span class="line">│ 全局速度: 1.5MB/s  剩余时间: 2分钟  任务数: 2/10       │</span><br><span class="line">│ [设置] [关于] [退出]                                    │</span><br><span class="line">└─────────────────────────────────────────────────────────┘</span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-界面状态图"><a href="#5-2-界面状态图" class="headerlink" title="5.2 界面状态图"></a>5.2 界面状态图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">stateDiagram-v2</span><br><span class="line">    [*] --&gt; 初始化界面</span><br><span class="line">    初始化界面 --&gt; 空闲状态</span><br><span class="line">    空闲状态 --&gt; 下载中: 添加任务并开始</span><br><span class="line">    下载中 --&gt; 暂停中: 用户暂停</span><br><span class="line">    暂停中 --&gt; 下载中: 用户继续</span><br><span class="line">    下载中 --&gt; 完成: 下载完成</span><br><span class="line">    下载中 --&gt; 错误: 下载失败</span><br><span class="line">    错误 --&gt; 下载中: 重试下载</span><br><span class="line">    完成 --&gt; 空闲状态: 清除任务</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="6-📊-数据模型"><a href="#6-📊-数据模型" class="headerlink" title="6. 📊 数据模型"></a>6. 📊 数据模型</h2><h3 id="6-1-核心数据结构"><a href="#6-1-核心数据结构" class="headerlink" title="6.1 核心数据结构"></a>6.1 核心数据结构</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 下载任务数据模型</span></span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">DownloadTask</span> &#123;</span><br><span class="line">    QString id;                    <span class="comment">// 唯一标识</span></span><br><span class="line">    QUrl url;                     <span class="comment">// 下载URL</span></span><br><span class="line">    QString fileName;             <span class="comment">// 本地文件名</span></span><br><span class="line">    QString savePath;             <span class="comment">// 保存路径</span></span><br><span class="line">    qint64 totalBytes;           <span class="comment">// 总大小 (-1=未知)</span></span><br><span class="line">    qint64 downloadedBytes;      <span class="comment">// 已下载大小</span></span><br><span class="line">    <span class="type">int</span> progress;                 <span class="comment">// 进度百分比 (0-100)</span></span><br><span class="line">    qint64 speed;                <span class="comment">// 当前速度 (B/s)</span></span><br><span class="line">    qint64 averageSpeed;         <span class="comment">// 平均速度 (B/s)</span></span><br><span class="line">    QDateTime startTime;         <span class="comment">// 开始时间</span></span><br><span class="line">    QDateTime finishTime;        <span class="comment">// 完成时间</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">State</span> &#123;</span><br><span class="line">        Waiting,     <span class="comment">// 等待开始</span></span><br><span class="line">        Running,     <span class="comment">// 下载中</span></span><br><span class="line">        Paused,      <span class="comment">// 已暂停</span></span><br><span class="line">        Completed,   <span class="comment">// 已完成</span></span><br><span class="line">        Error,       <span class="comment">// 错误</span></span><br><span class="line">        Cancelled    <span class="comment">// 已取消</span></span><br><span class="line">    &#125; state;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">enum</span> <span class="title class_">Priority</span> &#123;</span><br><span class="line">        Low = <span class="number">1</span>,</span><br><span class="line">        Normal = <span class="number">2</span>,</span><br><span class="line">        High = <span class="number">3</span></span><br><span class="line">    &#125; priority;</span><br><span class="line"></span><br><span class="line">    QString errorMessage;        <span class="comment">// 错误信息</span></span><br><span class="line">    <span class="type">int</span> retryCount;             <span class="comment">// 重试次数</span></span><br><span class="line">    <span class="type">int</span> maxRetries;             <span class="comment">// 最大重试次数</span></span><br><span class="line">    QStringList downloadThreads;  <span class="comment">// 下载线程列表</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-配置数据结构"><a href="#6-2-配置数据结构" class="headerlink" title="6.2 配置数据结构"></a>6.2 配置数据结构</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">DownloadSettings</span> &#123;</span><br><span class="line">    QString defaultDownloadPath;    <span class="comment">// 默认下载路径</span></span><br><span class="line">    <span class="type">int</span> maxConcurrentTasks;         <span class="comment">// 最大并发任务数</span></span><br><span class="line">    <span class="type">int</span> defaultThreadCount;         <span class="comment">// 默认线程数</span></span><br><span class="line">    <span class="type">int</span> maxRetryCount;             <span class="comment">// 最大重试次数</span></span><br><span class="line">    <span class="type">bool</span> autoRetry;                <span class="comment">// 自动重试</span></span><br><span class="line">    <span class="type">bool</span> startOnStartup;           <span class="comment">// 开机启动</span></span><br><span class="line">    <span class="type">bool</span> showNotifications;        <span class="comment">// 显示通知</span></span><br><span class="line">    <span class="type">bool</span> verifyIntegrity;          <span class="comment">// 验证文件完整性</span></span><br><span class="line">    qint64 maxFileSize;            <span class="comment">// 最大文件大小限制</span></span><br><span class="line">    QStringList blockedExtensions;  <span class="comment">// 禁止的文件扩展名</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="7-🔧-技术规范"><a href="#7-🔧-技术规范" class="headerlink" title="7. 🔧 技术规范"></a>7. 🔧 技术规范</h2><h3 id="7-1-技术栈"><a href="#7-1-技术栈" class="headerlink" title="7.1 技术栈"></a>7.1 技术栈</h3><ul>
+<li><strong>UI框架</strong>: Qt Widgets (非QML)</li>
+<li><strong>网络库</strong>: QNetworkRequest</li>
+<li><strong>并发</strong>: QThread + QThreadPool</li>
+<li><strong>持久化</strong>: QSettings + SQLite</li>
+<li><strong>日志</strong>: QtMessageHandler</li>
+</ul>
+<h3 id="7-2-代码结构"><a href="#7-2-代码结构" class="headerlink" title="7.2 代码结构"></a>7.2 代码结构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">FastDownloader/</span><br><span class="line">├── main.cpp                 # 程序入口</span><br><span class="line">├── MainWindow.h/.cpp         # 主窗口</span><br><span class="line">├── MainWindow.ui             # UI文件</span><br><span class="line">├── DownloadTask.h/.cpp       # 下载任务数据模型</span><br><span class="line">├── DownloadManager.h/.cpp    # 下载管理器</span><br><span class="line">├── Downloader.h/.cpp         # 下载引擎</span><br><span class="line">├── SettingsDialog.h/.cpp     # 设置对话框</span><br><span class="line">├── SettingsDialog.ui         # 设置UI</span><br><span class="line">└── resources/                # 资源文件</span><br><span class="line">    ├── icons/</span><br><span class="line">    └── translations/</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-3-关键技术点"><a href="#7-3-关键技术点" class="headerlink" title="7.3 关键技术点"></a>7.3 关键技术点</h3><h4 id="7-3-1-多线程下载"><a href="#7-3-1-多线程下载" class="headerlink" title="7.3.1 多线程下载"></a>7.3.1 多线程下载</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">DownloadThread</span> : <span class="keyword">public</span> QThread &#123;</span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span> <span class="keyword">override</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">pause</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">stop</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">signals:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">progressChanged</span><span class="params">(qint64 bytesReceived, qint64 bytesTotal)</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">speedChanged</span><span class="params">(qint64 speed)</span></span>;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">finished</span><span class="params">(<span class="type">bool</span> success, <span class="type">const</span> QString&amp; error)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    QNetworkReply* m_reply;</span><br><span class="line">    QUrl m_url;</span><br><span class="line">    QString m_filePath;</span><br><span class="line">    qint64 m_startPos;</span><br><span class="line">    qint64 m_endPos;</span><br><span class="line">    <span class="type">bool</span> m_paused;</span><br><span class="line">    <span class="type">bool</span> m_stopped;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h4 id="7-3-2-断点续传"><a href="#7-3-2-断点续传" class="headerlink" title="7.3.2 断点续传"></a>7.3.2 断点续传</h4><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取文件已下载大小</span></span><br><span class="line"><span class="function">qint64 <span class="title">getDownloadedFileSize</span><span class="params">(<span class="type">const</span> QString&amp; filePath)</span> </span>&#123;</span><br><span class="line">    <span class="function">QFile <span class="title">file</span><span class="params">(filePath)</span></span>;</span><br><span class="line">    <span class="keyword">if</span> (file.<span class="built_in">exists</span>()) &#123;</span><br><span class="line">        <span class="keyword">return</span> file.<span class="built_in">size</span>();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置Range请求头</span></span><br><span class="line"><span class="function">QNetworkRequest <span class="title">createRangeRequest</span><span class="params">(<span class="type">const</span> QUrl&amp; url, qint64 startPos)</span> </span>&#123;</span><br><span class="line">    <span class="function">QNetworkRequest <span class="title">request</span><span class="params">(url)</span></span>;</span><br><span class="line">    QString range = <span class="built_in">QString</span>(<span class="string">&quot;bytes=%1-&quot;</span>).<span class="built_in">arg</span>(startPos);</span><br><span class="line">    request.<span class="built_in">setRawHeader</span>(<span class="string">&quot;Range&quot;</span>, range.<span class="built_in">toLatin1</span>());</span><br><span class="line">    <span class="keyword">return</span> request;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="7-4-性能优化"><a href="#7-4-性能优化" class="headerlink" title="7.4 性能优化"></a>7.4 性能优化</h3><ul>
+<li><strong>内存管理</strong>: 及时释放下载完成的数据</li>
+<li><strong>网络优化</strong>: 连接池和Keep-Alive</li>
+<li><strong>UI更新</strong>: 使用定时器减少UI刷新频率</li>
+<li><strong>磁盘IO</strong>: 缓冲写入，减少磁盘IO次数</li>
+</ul>
+<hr>
+<h2 id="8-📦-交付要求"><a href="#8-📦-交付要求" class="headerlink" title="8. 📦 交付要求"></a>8. 📦 交付要求</h2><h3 id="8-1-交付物清单"><a href="#8-1-交付物清单" class="headerlink" title="8.1 交付物清单"></a>8.1 交付物清单</h3><ul>
+<li><input checked="" disabled="" type="checkbox"> <strong>源代码</strong>: 完整的C++源码实现</li>
+<li><input checked="" disabled="" type="checkbox"> <strong>资源文件</strong>: 图标、UI文件等</li>
+<li><input checked="" disabled="" type="checkbox"> <strong>构建脚本</strong>: CMakeLists.txt或.pro文件</li>
+<li><input disabled="" type="checkbox"> <strong>测试用例</strong>: 单元测试和集成测试</li>
+<li><input disabled="" type="checkbox"> <strong>部署文档</strong>: 编译和部署说明</li>
+</ul>
+<h3 id="8-2-代码规范"><a href="#8-2-代码规范" class="headerlink" title="8.2 代码规范"></a>8.2 代码规范</h3><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 命名规范</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">DownloadManager</span> : <span class="keyword">public</span> QObject &#123;  <span class="comment">// 类名：PascalCase</span></span><br><span class="line">    Q_OBJECT</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">explicit</span> <span class="title">DownloadManager</span><span class="params">(QObject *parent = <span class="literal">nullptr</span>)</span></span>;  <span class="comment">// 函数名：camelCase</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span> slots:</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">onDownloadProgress</span><span class="params">(qint64 bytesReceived, qint64 bytesTotal)</span></span>;  <span class="comment">// 槽函数命名</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="type">int</span> m_maxConcurrentTasks;  <span class="comment">// 成员变量：m_前缀，camelCase</span></span><br><span class="line">    QString m_defaultPath;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h3 id="8-3-质量要求"><a href="#8-3-质量要求" class="headerlink" title="8.3 质量要求"></a>8.3 质量要求</h3><ul>
+<li><strong>代码覆盖率</strong>: ≥80%</li>
+<li><strong>内存泄漏</strong>: 无内存泄漏</li>
+<li><strong>文档完整</strong>: 关键函数有注释</li>
+<li><strong>异常处理</strong>: 完善的错误处理机制</li>
+</ul>
+<hr>
+<h2 id="📊-项目里程碑"><a href="#📊-项目里程碑" class="headerlink" title="📊 项目里程碑"></a>📊 项目里程碑</h2><h3 id="Phase-1-基础框架-2周"><a href="#Phase-1-基础框架-2周" class="headerlink" title="Phase 1: 基础框架 (2周)"></a>Phase 1: 基础框架 (2周)</h3><ul>
+<li><input checked="" disabled="" type="checkbox"> 主界面设计</li>
+<li><input checked="" disabled="" type="checkbox"> 数据模型定义</li>
+<li><input checked="" disabled="" type="checkbox"> 基础下载功能</li>
+</ul>
+<h3 id="Phase-2-核心功能-3周"><a href="#Phase-2-核心功能-3周" class="headerlink" title="Phase 2: 核心功能 (3周)"></a>Phase 2: 核心功能 (3周)</h3><ul>
+<li><input disabled="" type="checkbox"> 多线程下载实现</li>
+<li><input disabled="" type="checkbox"> 断点续传功能</li>
+<li><input disabled="" type="checkbox"> 任务管理界面</li>
+</ul>
+<h3 id="Phase-3-高级功能-2周"><a href="#Phase-3-高级功能-2周" class="headerlink" title="Phase 3: 高级功能 (2周)"></a>Phase 3: 高级功能 (2周)</h3><ul>
+<li><input disabled="" type="checkbox"> 配置管理</li>
+<li><input disabled="" type="checkbox"> 异常处理</li>
+<li><input disabled="" type="checkbox"> 性能优化</li>
+</ul>
+<h3 id="Phase-4-测试发布-1周"><a href="#Phase-4-测试发布-1周" class="headerlink" title="Phase 4: 测试发布 (1周)"></a>Phase 4: 测试发布 (1周)</h3><ul>
+<li><input disabled="" type="checkbox"> 功能测试</li>
+<li><input disabled="" type="checkbox"> 性能测试</li>
+<li><input disabled="" type="checkbox"> 代码审查</li>
+</ul>
+<hr>
+<h2 id="📈-成功指标"><a href="#📈-成功指标" class="headerlink" title="📈 成功指标"></a>📈 成功指标</h2><h3 id="8-1-功能指标"><a href="#8-1-功能指标" class="headerlink" title="8.1 功能指标"></a>8.1 功能指标</h3><ul>
+<li>✅ 支持同时下载10个文件</li>
+<li>✅ 下载速度达到带宽的90%以上</li>
+<li>✅ 程序启动时间&lt;3秒</li>
+<li>✅ 内存使用&lt;200MB（10个并发任务）</li>
+</ul>
+<h3 id="8-2-用户体验指标"><a href="#8-2-用户体验指标" class="headerlink" title="8.2 用户体验指标"></a>8.2 用户体验指标</h3><ul>
+<li>✅ 界面响应时间&lt;200ms</li>
+<li>✅ 支持断点续传</li>
+<li>✅ 错误恢复成功率&gt;95%</li>
+<li>✅ 用户操作流程简化</li>
+</ul>
+<hr>
+<h2 id="📚-参考资料"><a href="#📚-参考资料" class="headerlink" title="📚 参考资料"></a>📚 参考资料</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://doc.qt.io/">Qt 官方文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/qnetworkrequest.html">QNetworkRequest 类文档</a></li>
+<li><a target="_blank" rel="noopener" href="https://doc.qt.io/qt-5/thread-support.html">Qt 多线程编程指南</a></li>
+<li><a target="_blank" rel="noopener" href="https://tools.ietf.org/html/rfc7231">HTTP 协议规范</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>💡 开发建议</strong>:</p>
+<ul>
+<li>采用模块化设计，便于功能扩展</li>
+<li>重视用户体验，界面简洁直观</li>
+<li>完善错误处理，提高程序稳定性</li>
+<li>充分测试各种网络环境和异常情况</li>
+</ul>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/6ee89f12/">https://vilaswang.github.io/posts/6ee89f12/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/">技术文档</a><a class="post-meta__tags" href="/tags/%E6%8C%87%E5%8D%97/">指南</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/ecdf807f/" title="IO 事件分类概念"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">IO 事件分类概念</div></div><div class="info-2"><div class="info-item-1">IO 事件分类概念 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: io, events, networking, system-programming, poll, epoll  📑 目录 1. 概述 2. I&#x2F;O 事件类型 2.1 网络I&#x2F;O事件 2.2 文件I&#x2F;O事件 2.3 设备I&#x2F;O事件 2.4 定时器事件 2.5 信号事件   3. 网络编程中的I&#x2F;O事件 4. 事件处理最佳实践   1. 📖 概述在计算机系统中，I&#x2F;O（输入&#x2F;输出）事件是系统通知程序某个 I&#x2F;O 操作状态变化的机制。正确理解和分类这些事件对于高效的网络编程至关重要。  2. 🔧 I&#x2F;O 事件类型2.1 🌐 网络I&#x2F;O事件网络编程中最常见的 I&#x2F;O 事件类型： 123456789101112131415161718graph TD    A[网络I/O事件] --&gt; B[可读事件]    A --&gt; C[可写事件]    A --&gt; D[错...</div></div></div></a><a class="pagination-related" href="/posts/eed6fb04/" title="文件管理 API 规范"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">文件管理 API 规范</div></div><div class="info-2"><div class="info-item-1">文件管理 API 规范 文档创建时间: 2025-11-14最后更新: 2025-11-14版本: v1.0标签: api, rest, file-management, authentication, swagger  📑 目录 1. 基础信息 2. 认证与授权 3. 文件管理 4. 文件支持 5. 错误处理 6. 安全机制 7. 速率限制 8. OpenAPI 规范   1. 📋 基础信息   项目 说明    Base URL /api/v1   协议 HTTPS   数据格式 JSON   认证方式 JWT Bearer Token   API 版本 v1.0   🔐 认证请求格式1234GET /api/v1/files/list HTTP/1.1Host: your-domain.comAuthorization: Bearer &lt;jwt_token&gt;Content-Type: application/json   2. 🔐 认证与授权2.1 👤 用户注册1234567891011121314sequenceDiagram    particip...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/58c0a1f/" title="Drogon Windows 构建指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">Drogon Windows 构建指南</div></div><div class="info-2"><div class="info-item-1">Drogon Windows 构建指南 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: drogon, cpp, windows, source-build, cmake, conan  📑 目录 1. 概述 2. 环境准备 3. 源码下载 4. 依赖安装 5. 编译安装 6. 环境配置 7. 创建新项目 8. 常见问题   1. 📖 概述Drogon 是一个现代化的 C++ Web 框架。本指南介绍如何在 Windows 系统上从源码编译安装 Drogon。 🎯 安装目标 ✅ 从源码编译 Drogon 框架 ✅ 配置开发环境 ✅ 创建第一个 Drogon 项目 ✅ 验证安装成功   2. 🔧 环境准备2.1 必需工具 Visual Studio 2019+ - C++ 编译器 Git - 源码管理 CMake 3.15+ - 构建系统 Conan - C++ 包管理器  2.2 安装 Conan12345# Drogon Windows 构建指南pip install conan# Drogon Windows 构建指南choco insta...</div></div></div></a><a class="pagination-related" href="/posts/ecdf807f/" title="IO 事件分类概念"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">IO 事件分类概念</div></div><div class="info-2"><div class="info-item-1">IO 事件分类概念 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: io, events, networking, system-programming, poll, epoll  📑 目录 1. 概述 2. I&#x2F;O 事件类型 2.1 网络I&#x2F;O事件 2.2 文件I&#x2F;O事件 2.3 设备I&#x2F;O事件 2.4 定时器事件 2.5 信号事件   3. 网络编程中的I&#x2F;O事件 4. 事件处理最佳实践   1. 📖 概述在计算机系统中，I&#x2F;O（输入&#x2F;输出）事件是系统通知程序某个 I&#x2F;O 操作状态变化的机制。正确理解和分类这些事件对于高效的网络编程至关重要。  2. 🔧 I&#x2F;O 事件类型2.1 🌐 网络I&#x2F;O事件网络编程中最常见的 I&#x2F;O 事件类型： 123456789101112131415161718graph TD    A[网络I/O事件] --&gt; B[可读事件]    A --&gt; C[可写事件]    A --&gt; D[错...</div></div></div></a><a class="pagination-related" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-18</div><div class="info-item-2">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</div></div><div class="info-2"><div class="info-item-1">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解 文档创建时间: 2025-12-18最后更新: 2025-12-18标签: github, mcp, gemini-cli, claude-code, http, stdio, ai-tools  📑 目录 1. MCP传输方式对比 2. Gemini CLI 的 MCP 配置 3. Claude Code 的 MCP 配置 4. 实现差异详解 5. 最佳实践建议 6. 故障排除 7. 性能优化 8. 总结   1. 📖 MCP传输方式对比MCP传输方式对比HTTP vs stdio 传输方式   特性 HTTP传输 stdio传输    实现复杂度 相对简单 较简单   调试便利性 容易调试（可用curl等工具） 调试较困难   跨平台性 优秀 需考虑换行符问题   安全考虑 需要处理认证 通过stdin&#x2F;stdout通信   性能 有网络开销 直接进程通信   扩展性 易于集群部署 单进程限制   一、Gemini CLI 的 MCP 配置1.1 HTTP方式配置HTTP...</div></div></div></a><a class="pagination-related" href="/posts/95bf2167/" title="C++ Web 代理设计架构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">C++ Web 代理设计架构</div></div><div class="info-2"><div class="info-item-1">C++ Web 代理设计架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: agents, cpp, web-development, specialization, ai-assistants, claude-code  📑 目录 1. 概述 2. 设计原则 3. Agent 架构 4. 核心团队 Agents 4.1 Project Architect Agent 4.2 API Designer Agent 4.3 Core Logic Developer Agent 4.4 Web Service Integrator Agent 4.5 Build &amp; Dependency Expert Agent 4.6 QA Specialist Agent 4.7 Deployment Operator Agent   5. 协作流程 6. 使用指南 7. 扩展和维护   1. 📖 概述本指南详细说明如何为 C++ Web 项目创建专门化的 AI Agent 团队，每个 Agent 都具有特定的职责和专业能力，通过协同工作完成从设计到部署...</div></div></div></a><a class="pagination-related" href="/posts/cb45c274/" title="mTLS 证书生成指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-09</div><div class="info-item-2">mTLS 证书生成指南</div></div><div class="info-2"><div class="info-item-1">mTLS 证书生成指南生成 CA 证书12345678# mTLS 证书生成指南openssl genrsa -aes256 -out ca-key.pem 4096# mTLS 证书生成指南openssl genrsa -out ca-key.pem 4096# mTLS 证书生成指南openssl req -new -x509 -days 3650 -key ca-key.pem -out ca-crt.pem -sha256  CA 证书生成注意事项：  Common Name: 输入 CA 名称，如 “My-CA” Organization: 输入组织名称 Country: 输入国家代码，如 “CN” 有效期建议设置为 10 年 (3650 天)  生成服务器证书1. 生成服务器私钥1openssl genrsa -out server-key.pem 2048  2. 生成服务器证书签名请求1openssl req -new -sha256 -key server-key.pem -out server-csr.pem  在提示输入信息时：  Country Name:...</div></div></div></a><a class="pagination-related" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-18</div><div class="info-item-2">Gemini CLI 在国内网络环境下的完整配置指南</div></div><div class="info-2"><div class="info-item-1">Gemini CLI 在国内网络环境下的完整配置指南 文档创建时间: 2025-12-18最后更新: 2025-12-18标签: gemini-cli, proxy, vpn, network, ai-tools, 跨域访问  📑 目录 1. 概述 2. 系统要求 3. 环境准备 4. Gemini CLI 安装配置 5. 代理配置 6. 认证流程 7. 常见问题与解决方案 8. 最佳实践 9. 验证测试 10. 总结   1. 📖 概述本文档提供了一套完整的 Gemini CLI 在国内网络环境下的配置解决方案，通过代理服务和 VPN 组合，实现稳定的 Google 服务访问。 2. ⚙️ 系统要求系统要求基础环境   组件 最低版本 推荐版本 验证方法    Node.js v18.x v20.x+ node --version   npm v9.x v10.x+ npm --version   操作系统 Windows 10+ Windows 11&#x2F;macOS&#x2F;Linux 系统信息   网络环境代理服务要求   要求项 规格 说明    协议支持 ✅...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Qt-%E4%B8%8B%E8%BD%BD%E5%99%A8%E9%9C%80%E6%B1%82%E8%A7%84%E8%8C%83"><span class="toc-number">1.</span> <span class="toc-text">Qt 下载器需求规范</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%91-%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">📑 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%F0%9F%8E%AF-%E4%BA%A7%E5%93%81%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.</span> <span class="toc-text">1. 🎯 产品概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E4%BA%A7%E5%93%81%E5%AE%9A%E4%BD%8D"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.1 产品定位</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A0%B8%E5%BF%83%E4%BB%B7%E5%80%BC"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2 核心价值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E4%BA%A7%E5%93%81%E6%9E%B6%E6%9E%84%E5%9B%BE"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.3 产品架构图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%F0%9F%91%A5-%E7%94%A8%E6%88%B7%E8%A7%92%E8%89%B2"><span class="toc-number">1.3.</span> <span class="toc-text">2. 👥 用户角色</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E7%9B%AE%E6%A0%87%E7%94%A8%E6%88%B7"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1 目标用户</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E7%94%A8%E6%88%B7%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.2 用户场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%F0%9F%93%8B-%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82"><span class="toc-number">1.4.</span> <span class="toc-text">3. 📋 功能需求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%F0%9F%8E%9B%EF%B8%8F-%E4%BB%BB%E5%8A%A1%E7%AE%A1%E7%90%86"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 🎛️ 任务管理</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1-%E6%B7%BB%E5%8A%A0%E4%BB%BB%E5%8A%A1"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">3.1.1 添加任务</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2-%E4%BB%BB%E5%8A%A1%E5%88%97%E8%A1%A8%E6%98%BE%E7%A4%BA"><span class="toc-number">1.4.1.2.</span> <span class="toc-text">3.1.2 任务列表显示</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-3-%E4%BB%BB%E5%8A%A1%E6%93%8D%E4%BD%9C"><span class="toc-number">1.4.1.3.</span> <span class="toc-text">3.1.3 任务操作</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E2%9A%99%EF%B8%8F-%E4%B8%8B%E8%BD%BD%E5%BC%95%E6%93%8E"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 ⚙️ 下载引擎</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.4.2.1.</span> <span class="toc-text">3.2.1 多线程下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-%E7%BD%91%E7%BB%9C%E6%94%AF%E6%8C%81"><span class="toc-number">1.4.2.2.</span> <span class="toc-text">3.2.2 网络支持</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-%E5%AE%8C%E6%95%B4%E6%80%A7%E6%A0%A1%E9%AA%8C"><span class="toc-number">1.4.2.3.</span> <span class="toc-text">3.2.3 完整性校验</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%F0%9F%92%BE-%E8%AE%BE%E7%BD%AE%E4%B8%8E%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.3 💾 设置与持久化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-%E9%85%8D%E7%BD%AE%E7%AE%A1%E7%90%86"><span class="toc-number">1.4.3.1.</span> <span class="toc-text">3.3.1 配置管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-%E4%BB%BB%E5%8A%A1%E6%8C%81%E4%B9%85%E5%8C%96"><span class="toc-number">1.4.3.2.</span> <span class="toc-text">3.3.2 任务持久化</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%F0%9F%9A%A8-%E5%BC%82%E5%B8%B8%E5%A4%84%E7%90%86%E4%B8%8E%E5%8F%8D%E9%A6%88"><span class="toc-number">1.4.4.</span> <span class="toc-text">3.4 🚨 异常处理与反馈</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-1-%E7%BD%91%E7%BB%9C%E5%BC%82%E5%B8%B8"><span class="toc-number">1.4.4.1.</span> <span class="toc-text">3.4.1 网络异常</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-4-2-%E7%94%A8%E6%88%B7%E5%8F%8D%E9%A6%88"><span class="toc-number">1.4.4.2.</span> <span class="toc-text">3.4.2 用户反馈</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%F0%9F%9A%80-%E9%9D%9E%E5%8A%9F%E8%83%BD%E9%9C%80%E6%B1%82"><span class="toc-number">1.5.</span> <span class="toc-text">4. 🚀 非功能需求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%F0%9F%96%A5%EF%B8%8F-%E5%B9%B3%E5%8F%B0%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="toc-number">1.5.1.</span> <span class="toc-text">4.1 🖥️ 平台兼容性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E2%9A%A1-%E6%80%A7%E8%83%BD%E8%A6%81%E6%B1%82"><span class="toc-number">1.5.2.</span> <span class="toc-text">4.2 ⚡ 性能要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%F0%9F%94%92-%E5%AE%89%E5%85%A8%E6%80%A7%E8%A6%81%E6%B1%82"><span class="toc-number">1.5.3.</span> <span class="toc-text">4.3 🔒 安全性要求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%F0%9F%8E%A8-%E7%95%8C%E9%9D%A2%E8%AE%BE%E8%AE%A1"><span class="toc-number">1.6.</span> <span class="toc-text">5. 🎨 界面设计</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E4%B8%BB%E7%95%8C%E9%9D%A2%E5%B8%83%E5%B1%80"><span class="toc-number">1.6.1.</span> <span class="toc-text">5.1 主界面布局</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E7%95%8C%E9%9D%A2%E7%8A%B6%E6%80%81%E5%9B%BE"><span class="toc-number">1.6.2.</span> <span class="toc-text">5.2 界面状态图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%F0%9F%93%8A-%E6%95%B0%E6%8D%AE%E6%A8%A1%E5%9E%8B"><span class="toc-number">1.7.</span> <span class="toc-text">6. 📊 数据模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E6%A0%B8%E5%BF%83%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.7.1.</span> <span class="toc-text">6.1 核心数据结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E9%85%8D%E7%BD%AE%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84"><span class="toc-number">1.7.2.</span> <span class="toc-text">6.2 配置数据结构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-%F0%9F%94%A7-%E6%8A%80%E6%9C%AF%E8%A7%84%E8%8C%83"><span class="toc-number">1.8.</span> <span class="toc-text">7. 🔧 技术规范</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E6%8A%80%E6%9C%AF%E6%A0%88"><span class="toc-number">1.8.1.</span> <span class="toc-text">7.1 技术栈</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E4%BB%A3%E7%A0%81%E7%BB%93%E6%9E%84"><span class="toc-number">1.8.2.</span> <span class="toc-text">7.2 代码结构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-3-%E5%85%B3%E9%94%AE%E6%8A%80%E6%9C%AF%E7%82%B9"><span class="toc-number">1.8.3.</span> <span class="toc-text">7.3 关键技术点</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#7-3-1-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E4%B8%8B%E8%BD%BD"><span class="toc-number">1.8.3.1.</span> <span class="toc-text">7.3.1 多线程下载</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#7-3-2-%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0"><span class="toc-number">1.8.3.2.</span> <span class="toc-text">7.3.2 断点续传</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-4-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96"><span class="toc-number">1.8.4.</span> <span class="toc-text">7.4 性能优化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%F0%9F%93%A6-%E4%BA%A4%E4%BB%98%E8%A6%81%E6%B1%82"><span class="toc-number">1.9.</span> <span class="toc-text">8. 📦 交付要求</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E4%BA%A4%E4%BB%98%E7%89%A9%E6%B8%85%E5%8D%95"><span class="toc-number">1.9.1.</span> <span class="toc-text">8.1 交付物清单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E4%BB%A3%E7%A0%81%E8%A7%84%E8%8C%83"><span class="toc-number">1.9.2.</span> <span class="toc-text">8.2 代码规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-3-%E8%B4%A8%E9%87%8F%E8%A6%81%E6%B1%82"><span class="toc-number">1.9.3.</span> <span class="toc-text">8.3 质量要求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8A-%E9%A1%B9%E7%9B%AE%E9%87%8C%E7%A8%8B%E7%A2%91"><span class="toc-number">1.10.</span> <span class="toc-text">📊 项目里程碑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Phase-1-%E5%9F%BA%E7%A1%80%E6%A1%86%E6%9E%B6-2%E5%91%A8"><span class="toc-number">1.10.1.</span> <span class="toc-text">Phase 1: 基础框架 (2周)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Phase-2-%E6%A0%B8%E5%BF%83%E5%8A%9F%E8%83%BD-3%E5%91%A8"><span class="toc-number">1.10.2.</span> <span class="toc-text">Phase 2: 核心功能 (3周)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Phase-3-%E9%AB%98%E7%BA%A7%E5%8A%9F%E8%83%BD-2%E5%91%A8"><span class="toc-number">1.10.3.</span> <span class="toc-text">Phase 3: 高级功能 (2周)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Phase-4-%E6%B5%8B%E8%AF%95%E5%8F%91%E5%B8%83-1%E5%91%A8"><span class="toc-number">1.10.4.</span> <span class="toc-text">Phase 4: 测试发布 (1周)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%88-%E6%88%90%E5%8A%9F%E6%8C%87%E6%A0%87"><span class="toc-number">1.11.</span> <span class="toc-text">📈 成功指标</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#8-1-%E5%8A%9F%E8%83%BD%E6%8C%87%E6%A0%87"><span class="toc-number">1.11.1.</span> <span class="toc-text">8.1 功能指标</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#8-2-%E7%94%A8%E6%88%B7%E4%BD%93%E9%AA%8C%E6%8C%87%E6%A0%87"><span class="toc-number">1.11.2.</span> <span class="toc-text">8.2 用户体验指标</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%9A-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">1.12.</span> <span class="toc-text">📚 参考资料</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

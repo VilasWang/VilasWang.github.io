@@ -1,0 +1,748 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Antigravity 登录认证完整解决方案（非TUN方法） | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="系统架构：Windows 10&#x2F;11 + Clash Proxy + Proxifier + Microsoft Edge 协议支持：SOCKS5 代理 + OAuth 2.0 认证 适用场景：国内网络环境 + 第三方服务认证 文档版本：v2.0.0 最后更新：2025-12-17   📋 目录 概述 环境准备 配置步骤 故障排除 核心验证测试   📖 概述1.1 解决方案背景An">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Antigravity 登录认证完整解决方案（非TUN方法）">
+<meta property="og:url" content="https://vilaswang.github.io/posts/56a10ecb/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="系统架构：Windows 10&#x2F;11 + Clash Proxy + Proxifier + Microsoft Edge 协议支持：SOCKS5 代理 + OAuth 2.0 认证 适用场景：国内网络环境 + 第三方服务认证 文档版本：v2.0.0 最后更新：2025-12-17   📋 目录 概述 环境准备 配置步骤 故障排除 核心验证测试   📖 概述1.1 解决方案背景An">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-16T22:30:00.000Z">
+<meta property="article:modified_time" content="2025-12-18T01:03:30.706Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="Antigravity">
+<meta property="article:tag" content="Clash">
+<meta property="article:tag" content="OAuth认证">
+<meta property="article:tag" content="Proxifier">
+<meta property="article:tag" content="代理配置">
+<meta property="article:tag" content="企业环境">
+<meta property="article:tag" content="网络配置">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Antigravity 登录认证完整解决方案（非TUN方法）",
+  "url": "https://vilaswang.github.io/posts/56a10ecb/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-16T22:30:00.000Z",
+  "dateModified": "2025-12-18T01:03:30.706Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/56a10ecb/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Antigravity 登录认证完整解决方案（非TUN方法）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">Antigravity 登录认证完整解决方案（非TUN方法）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Antigravity 登录认证完整解决方案（非TUN方法）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-18T01:03:30.706Z" title="更新于 2025-12-18 09:03:30">2025-12-18</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/">开发工具</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7/IDE%E7%BC%96%E8%BE%91%E5%99%A8/">IDE编辑器</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><blockquote>
+<p><strong>系统架构</strong>：Windows 10&#x2F;11 + Clash Proxy + Proxifier + Microsoft Edge</p>
+<p><strong>协议支持</strong>：SOCKS5 代理 + OAuth 2.0 认证</p>
+<p><strong>适用场景</strong>：国内网络环境 + 第三方服务认证</p>
+<p><strong>文档版本</strong>：v2.0.0</p>
+<p><strong>最后更新</strong>：2025-12-17</p>
+</blockquote>
+<hr>
+<h2 id="📋-目录"><a href="#📋-目录" class="headerlink" title="📋 目录"></a>📋 目录</h2><ul>
+<li><a href="#-%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87">环境准备</a></li>
+<li><a href="#-%E9%85%8D%E7%BD%AE%E6%AD%A5%E9%AA%A4">配置步骤</a></li>
+<li><a href="#-%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4">故障排除</a></li>
+<li><a href="#-%E6%A0%B8%E5%BF%83%E9%AA%8C%E8%AF%81%E6%B5%8B%E8%AF%95">核心验证测试</a></li>
+</ul>
+<hr>
+<h2 id="📖-概述"><a href="#📖-概述" class="headerlink" title="📖 概述"></a>📖 概述</h2><h3 id="1-1-解决方案背景"><a href="#1-1-解决方案背景" class="headerlink" title="1.1 解决方案背景"></a>1.1 解决方案背景</h3><p>Antigravity 是一款基于云原生的开发平台，采用 OAuth 2.0 标准进行用户认证。由于国内网络环境的网络限制，直接访问 Google 认证服务存在技术壁垒，需要通过专业的代理架构实现认证链路的打通。</p>
+<h3 id="1-2-核心要求"><a href="#1-2-核心要求" class="headerlink" title="1.2 核心要求"></a>1.2 核心要求</h3><ul>
+<li><strong>Google 账号归属地必须为美国</strong> - Antigravity 认证的硬性要求</li>
+<li><strong>代理节点必须为美国地区</strong> - 确保与账号归属地匹配</li>
+<li><strong>企业网络环境兼容</strong> - 适应企业防火墙和网络安全策略</li>
+</ul>
+<h3 id="1-3-技术架构"><a href="#1-3-技术架构" class="headerlink" title="1.3 技术架构"></a>1.3 技术架构</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐</span><br><span class="line">│  Antigravity.exe │───▶│  Proxifier      │───▶│  Clash Proxy    │</span><br><span class="line">│  (OAuth Client) │    │  (Process Rule) │    │ (SOCKS5:7890)   │</span><br><span class="line">└─────────────────┘    └─────────────────┘    └─────────────────┘</span><br><span class="line">                                                    │</span><br><span class="line">                                               ┌─────────────┐</span><br><span class="line">                                               │  US Proxy    │</span><br><span class="line">                                               │  (Google API)│</span><br><span class="line">                                               └─────────────┘</span><br><span class="line">                                                    │</span><br><span class="line">                                               ┌─────────────┐</span><br><span class="line">                                               │ Google OAuth  │</span><br><span class="line">                                               │  (US Region)   │</span><br><span class="line">                                               └─────────────┘</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="🔧-环境准备"><a href="#🔧-环境准备" class="headerlink" title="🔧 环境准备"></a>🔧 环境准备</h2><h3 id="2-1-Google-账号要求"><a href="#2-1-Google-账号要求" class="headerlink" title="2.1 Google 账号要求"></a>2.1 Google 账号要求</h3><table>
+<thead>
+<tr>
+<th>要求项</th>
+<th>状态</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>账号归属地</strong></td>
+<td>⚠️ <strong>必须为美国</strong></td>
+<td>Antigravity 认证的硬性要求</td>
+</tr>
+<tr>
+<td><strong>账号状态</strong></td>
+<td>✅ 正常</td>
+<td>无封禁、限制或安全警告</td>
+</tr>
+<tr>
+<td><strong>双重认证</strong></td>
+<td>✅ 推荐</td>
+<td>建议开启 2FA 提高安全性</td>
+</tr>
+<tr>
+<td><strong>浏览器登录</strong></td>
+<td>✅ 已完成</td>
+<td>Edge 浏览器已登录目标账号</td>
+</tr>
+</tbody></table>
+<p><strong>⚠️ 重要提醒</strong>：</p>
+<ul>
+<li><strong>非美国账号会被直接拒绝认证</strong></li>
+<li><strong>归属地不匹配会导致认证失败</strong></li>
+<li><strong>频繁切换地区会被标记为异常</strong></li>
+</ul>
+<h3 id="2-2-代理服务要求"><a href="#2-2-代理服务要求" class="headerlink" title="2.2 代理服务要求"></a>2.2 代理服务要求</h3><table>
+<thead>
+<tr>
+<th>要求项</th>
+<th>规格</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>地理位置</strong></td>
+<td>⚠️ <strong>必须为美国本土</strong></td>
+<td>确保与账号归属地匹配</td>
+</tr>
+<tr>
+<td><strong>IP 类型</strong></td>
+<td>✅ 住宅级 IP</td>
+<td>避免数据中心 IP 被识别</td>
+</tr>
+<tr>
+<td><strong>服务类型</strong></td>
+<td>✅ 专业付费服务</td>
+<td>免费节点通常不可靠</td>
+</tr>
+<tr>
+<td><strong>协议支持</strong></td>
+<td>✅ SOCKS5</td>
+<td>与 Clash 兼容</td>
+</tr>
+</tbody></table>
+<p><strong>推荐节点选择</strong>：</p>
+<ol>
+<li><strong>首选节点</strong>：洛杉矶、纽约、西雅图、芝加哥</li>
+<li><strong>备选节点</strong>：旧金山、达拉斯、迈阿密</li>
+<li><strong>避免使用</strong>：香港、日本、新加坡等亚洲节点</li>
+</ol>
+<h3 id="2-3-软件环境要求"><a href="#2-3-软件环境要求" class="headerlink" title="2.3 软件环境要求"></a>2.3 软件环境要求</h3><table>
+<thead>
+<tr>
+<th>软件</th>
+<th>版本要求</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Clash</strong></td>
+<td>v1.18.0+</td>
+<td>SOCKS5 代理服务</td>
+</tr>
+<tr>
+<td><strong>Proxifier</strong></td>
+<td>v4.0+</td>
+<td>进程级代理管理</td>
+</tr>
+<tr>
+<td><strong>Edge 浏览器</strong></td>
+<td>v118.0+</td>
+<td>OAuth 认证浏览器</td>
+</tr>
+<tr>
+<td><strong>Antigravity</strong></td>
+<td>Latest</td>
+<td>目标应用程序</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="⚙️-配置步骤"><a href="#⚙️-配置步骤" class="headerlink" title="⚙️ 配置步骤"></a>⚙️ 配置步骤</h2><h3 id="3-1-Clash-代理配置"><a href="#3-1-Clash-代理配置" class="headerlink" title="3.1 Clash 代理配置"></a>3.1 Clash 代理配置</h3><h4 id="3-1-1-节点选择"><a href="#3-1-1-节点选择" class="headerlink" title="3.1.1 节点选择"></a>3.1.1 节点选择</h4><p>确保 Clash 客户端连接到美国地区节点，避免使用香港、日本等亚洲节点。</p>
+<h4 id="3-1-2-规则配置"><a href="#3-1-2-规则配置" class="headerlink" title="3.1.2 规则配置"></a>3.1.2 规则配置</h4><p>更新 Clash 配置文件，添加 Antigravity 相关规则：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Google Auth &amp; Antigravity 必须走代理</span></span><br><span class="line"><span class="attr">rules:</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&#x27;DOMAIN-SUFFIX,googleapis.com,🔰 节点选择&#x27;</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&#x27;DOMAIN-SUFFIX,sandbox.googleapis.com,🔰 节点选择&#x27;</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&#x27;DOMAIN,oauth2.googleapis.com,🔰 节点选择&#x27;</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&#x27;DOMAIN,accounts.google.com,🔰 节点选择&#x27;</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&#x27;DOMAIN,daily-cloudcode-pa.sandbox.googleapis.com,🔰 节点选择&#x27;</span></span><br><span class="line">  <span class="bullet">-</span> <span class="string">&#x27;PROCESS-NAME,Antigravity.exe,🔰 节点选择&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-Proxifier-配置"><a href="#3-2-Proxifier-配置" class="headerlink" title="3.2 Proxifier 配置"></a>3.2 Proxifier 配置</h3><h4 id="3-2-1-添加代理服务器"><a href="#3-2-1-添加代理服务器" class="headerlink" title="3.2.1 添加代理服务器"></a>3.2.1 添加代理服务器</h4><ol>
+<li>打开 Proxifier → <code>Profile → Proxy Servers… → Add</code></li>
+<li>配置参数：<ul>
+<li><strong>Address</strong>: 127.0.0.1</li>
+<li><strong>Port</strong>: 7890</li>
+<li><strong>Protocol</strong>: SOCKS5</li>
+<li><strong>Authentication</strong>: NO</li>
+</ul>
+</li>
+<li>点击 <strong>Check</strong> 验证连接，确认显示 “Socks5 server is available”</li>
+</ol>
+<h4 id="3-2-2-创建代理规则"><a href="#3-2-2-创建代理规则" class="headerlink" title="3.2.2 创建代理规则"></a>3.2.2 创建代理规则</h4><p><strong>规则1：Edge 浏览器直连（最高优先级）</strong></p>
+<ul>
+<li><strong>Rule name</strong>: Edge Direct</li>
+<li><strong>Applications</strong>: msedge.exe</li>
+<li><strong>Action</strong>: Direct</li>
+<li><strong>Priority</strong>: Highest</li>
+</ul>
+<p><strong>规则2：Clash 进程直连（避免代理循环）</strong></p>
+<ul>
+<li><strong>Rule name</strong>: Clash Processes Direct</li>
+<li><strong>Applications</strong>: clash_*.exe</li>
+<li><strong>Action</strong>: Direct</li>
+<li><strong>Priority</strong>: High</li>
+</ul>
+<p><strong>规则3：Antigravity 应用走代理</strong></p>
+<ul>
+<li><strong>Rule name</strong>: Antigravity via Clash</li>
+<li><strong>Applications</strong>: Antigravity.exe, language_server_windows_x64.exe</li>
+<li><strong>Action</strong>: 127.0.0.1:7890</li>
+<li><strong>Priority</strong>: Normal</li>
+</ul>
+<h4 id="3-2-3-规则优先级确认"><a href="#3-2-3-规则优先级确认" class="headerlink" title="3.2.3 规则优先级确认"></a>3.2.3 规则优先级确认</h4><p>确保规则按以下顺序排列：</p>
+<ol>
+<li><strong>Edge Direct</strong> (最高优先级)</li>
+<li><strong>Clash Processes Direct</strong> (高优先级)</li>
+<li><strong>Antigravity via Clash</strong> (普通优先级)</li>
+</ol>
+<h3 id="3-3-系统环境配置"><a href="#3-3-系统环境配置" class="headerlink" title="3.3 系统环境配置"></a>3.3 系统环境配置</h3><h4 id="3-3-1-清理环境变量"><a href="#3-3-1-清理环境变量" class="headerlink" title="3.3.1 清理环境变量"></a>3.3.1 清理环境变量</h4><p>必须清空以下系统环境变量：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Windows 命令行</span></span><br><span class="line"><span class="built_in">set</span> HTTP_PROXY=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="built_in">set</span> HTTPS_PROXY=<span class="string">&quot;&quot;</span></span><br><span class="line"><span class="built_in">set</span> NO_PROXY=<span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>或者在系统属性中永久删除这些变量。</p>
+<h4 id="3-3-2-防火墙配置"><a href="#3-3-2-防火墙配置" class="headerlink" title="3.3.2 防火墙配置"></a>3.3.2 防火墙配置</h4><p>确保防火墙允许以下连接：</p>
+<ul>
+<li>Clash.exe (TCP:7890 入站)</li>
+<li>Proxifier.exe (TCP 动态端口 出站)</li>
+<li>msedge.exe (TCP&#x2F;UDP:80&#x2F;443 出站)</li>
+<li>Antigravity.exe (TCP&#x2F;UDP 动态端口 出站)</li>
+</ul>
+<hr>
+<h2 id="🔧-故障排除"><a href="#🔧-故障排除" class="headerlink" title="🔧 故障排除"></a>🔧 故障排除</h2><h3 id="4-1-认证流程问题"><a href="#4-1-认证流程问题" class="headerlink" title="4.1 认证流程问题"></a>4.1 认证流程问题</h3><p><strong>问题：Edge 浏览器无法打开 Google 登录页面</strong></p>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>可能原因</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Edge 无响应</td>
+<td>Proxifier 规则冲突</td>
+<td>检查规则顺序，Edge Direct 置顶</td>
+</tr>
+<tr>
+<td>页面加载失败</td>
+<td>环境变量污染</td>
+<td>清空 HTTP_PROXY&#x2F;HTTPS_PROXY</td>
+</tr>
+<tr>
+<td>连接超时</td>
+<td>网络防火墙限制</td>
+<td>检查防火墙配置</td>
+</tr>
+</tbody></table>
+<p><strong>问题：Google 登录成功但无法跳转回 Antigravity</strong></p>
+<table>
+<thead>
+<tr>
+<th>检查点</th>
+<th>验证方法</th>
+<th>解决方案</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OAuth 流程</td>
+<td>Clash Connections 日志</td>
+<td>检查 Clash 规则配置</td>
+</tr>
+<tr>
+<td>应用代理</td>
+<td>Proxifier 实时日志</td>
+<td>重新配置应用规则</td>
+</tr>
+<tr>
+<td>代理循环</td>
+<td>Proxifier 连接日志</td>
+<td>添加 Clash 直连规则</td>
+</tr>
+</tbody></table>
+<h3 id="4-2-网络连接问题"><a href="#4-2-网络连接问题" class="headerlink" title="4.2 网络连接问题"></a>4.2 网络连接问题</h3><p><strong>问题：代理节点连接不稳定</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 基础连接测试</span></span><br><span class="line">curl --proxy socks5://127.0.0.1:7890 https://www.google.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># IP 地理位置检测</span></span><br><span class="line">curl --proxy socks5://127.0.0.1:7890 <span class="string">&quot;https://httpbin.org/ip&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 连接稳定性测试</span></span><br><span class="line">ping -n 10 8.8.8.8</span><br></pre></td></tr></table></figure>
+
+<p><strong>节点质量标准</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>优秀</th>
+<th>可接受</th>
+<th>需更换</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>延迟</strong></td>
+<td>&lt; 100ms</td>
+<td>100-200ms</td>
+<td>&gt; 200ms</td>
+</tr>
+<tr>
+<td><strong>稳定性</strong></td>
+<td>99.9%+</td>
+<td>99%+</td>
+<td>&lt; 99%</td>
+</tr>
+<tr>
+<td><strong>成功率</strong></td>
+<td>100%</td>
+<td>99%+</td>
+<td>&lt; 99%</td>
+</tr>
+</tbody></table>
+<h3 id="4-3-账号相关问题"><a href="#4-3-账号相关问题" class="headerlink" title="4.3 账号相关问题"></a>4.3 账号相关问题</h3><p><strong>Google 账号安全检查清单</strong>：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 登录地点是否为美国地区</li>
+<li><input disabled="" type="checkbox"> 登录设备是否为已知设备</li>
+<li><input disabled="" type="checkbox"> 是否启用了两步验证</li>
+<li><input disabled="" type="checkbox"> 应用权限是否正确授权</li>
+</ul>
+<p>如果账号归属地检测失败，根本原因通常是：</p>
+<ul>
+<li><strong>账号创建地</strong>：非美国地区创建（困难解决）</li>
+<li><strong>常用登录地</strong>：长期非美国登录（中等解决）</li>
+<li><strong>登录行为</strong>：频繁切换地区（简单解决）</li>
+</ul>
+<hr>
+<h2 id="🧪-核心验证测试"><a href="#🧪-核心验证测试" class="headerlink" title="🧪 核心验证测试"></a>🧪 核心验证测试</h2><h3 id="5-1-基础环境验证"><a href="#5-1-基础环境验证" class="headerlink" title="5.1 基础环境验证"></a>5.1 基础环境验证</h3><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>检查命令</th>
+<th>预期结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Clash</strong></td>
+<td>&#96;tasklist</td>
+<td>findstr Clash&#96;</td>
+</tr>
+<tr>
+<td><strong>端口监听</strong></td>
+<td>&#96;netstat -an</td>
+<td>findstr :7890&#96;</td>
+</tr>
+<tr>
+<td><strong>代理连接</strong></td>
+<td><code>curl -x socks5://127.0.0.1:7890 https://www.google.com</code></td>
+<td>HTTP 200</td>
+</tr>
+<tr>
+<td><strong>Proxifier</strong></td>
+<td>任务管理器检查</td>
+<td>进程运行</td>
+</tr>
+<tr>
+<td><strong>环境变量</strong></td>
+<td><code>echo %HTTP_PROXY%</code></td>
+<td>空值</td>
+</tr>
+</tbody></table>
+<h3 id="5-2-OAuth-认证测试"><a href="#5-2-OAuth-认证测试" class="headerlink" title="5.2 OAuth 认证测试"></a>5.2 OAuth 认证测试</h3><p><strong>完整认证流程测试步骤</strong>：</p>
+<ol>
+<li><p><strong>启动 Antigravity 客户端</strong></p>
+<ul>
+<li>确认程序正常启动</li>
+<li>检查 Proxifier 日志显示代理连接</li>
+</ul>
+</li>
+<li><p><strong>触发 Google 登录</strong></p>
+<ul>
+<li>点击 OAuth 登录按钮</li>
+<li>确认 Edge 浏览器自动打开</li>
+</ul>
+</li>
+<li><p><strong>浏览器验证</strong></p>
+<ul>
+<li>Edge 应直连打开 Google 登录页</li>
+<li>地址栏 URL: <code>accounts.google.com</code></li>
+<li>页面加载正常，无代理错误</li>
+</ul>
+</li>
+<li><p><strong>账号认证</strong></p>
+<ul>
+<li>输入美国归属地 Google 账号凭据</li>
+<li>完成两步验证（如已启用）</li>
+<li>授权 Antigravity 应用访问权限</li>
+</ul>
+</li>
+<li><p><strong>回跳验证</strong></p>
+<ul>
+<li>自动跳转回 Antigravity 应用</li>
+<li>应用显示登录成功状态</li>
+<li>Clash 日志显示 OAuth API 代理请求</li>
+</ul>
+</li>
+</ol>
+<h3 id="5-3-关键验证点"><a href="#5-3-关键验证点" class="headerlink" title="5.3 关键验证点"></a>5.3 关键验证点</h3><table>
+<thead>
+<tr>
+<th>检查节点</th>
+<th>验证方法</th>
+<th>成功状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Clash 状态</strong></td>
+<td>控制面板</td>
+<td>绿色连接</td>
+</tr>
+<tr>
+<td><strong>端口监听</strong></td>
+<td><code>netstat -an</code></td>
+<td><code>:7890</code> 处于 LISTEN</td>
+</tr>
+<tr>
+<td><strong>代理规则</strong></td>
+<td>Proxifier 规则列表</td>
+<td>Edge 规则置顶</td>
+</tr>
+<tr>
+<td><strong>浏览器访问</strong></td>
+<td>直接访问 Google</td>
+<td>正常加载</td>
+</tr>
+<tr>
+<td><strong>IP 检测</strong></td>
+<td>在线 IP 检测</td>
+<td>美国地址</td>
+</tr>
+<tr>
+<td><strong>OAuth 请求</strong></td>
+<td>Clash Connections</td>
+<td>显示 <code>googleapis.com</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="📋-核心检查清单"><a href="#📋-核心检查清单" class="headerlink" title="📋 核心检查清单"></a>📋 核心检查清单</h2><h3 id="6-1-部署前检查"><a href="#6-1-部署前检查" class="headerlink" title="6.1 部署前检查"></a>6.1 部署前检查</h3><p><strong>Google 账号验证</strong>：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 账号归属地为美国地区</li>
+<li><input disabled="" type="checkbox"> 账号状态正常，无安全警告</li>
+<li><input disabled="" type="checkbox"> 已启用两步验证</li>
+<li><input disabled="" type="checkbox"> 浏览器已登录目标账号</li>
+</ul>
+<p><strong>代理服务验证</strong>：</p>
+<ul>
+<li><input disabled="" type="checkbox"> 代理节点位于美国地区</li>
+<li><input disabled="" type="checkbox"> 节点支持 Google 全套服务</li>
+<li><input disabled="" type="checkbox"> 节点连接稳定性 &gt; 99%</li>
+<li><input disabled="" type="checkbox"> IP 地址未被 Google 标记</li>
+</ul>
+<p><strong>软件环境验证</strong>：</p>
+<ul>
+<li><input disabled="" type="checkbox"> Clash v1.18.0+ 正常运行</li>
+<li><input disabled="" type="checkbox"> Proxifier v4.0+ 已安装</li>
+<li><input disabled="" type="checkbox"> Microsoft Edge v118.0+ 已安装</li>
+<li><input disabled="" type="checkbox"> 系统环境变量已清空</li>
+</ul>
+<h3 id="6-2-功能验证"><a href="#6-2-功能验证" class="headerlink" title="6.2 功能验证"></a>6.2 功能验证</h3><p><strong>基础功能测试</strong>：</p>
+<ul>
+<li><input disabled="" type="checkbox"> Clash 控制面板显示连接正常</li>
+<li><input disabled="" type="checkbox"> 端口 7890 处于监听状态</li>
+<li><input disabled="" type="checkbox"> Google 服务访问正常</li>
+<li><input disabled="" type="checkbox"> IP 地址显示为美国地区</li>
+</ul>
+<p><strong>OAuth 流程测试</strong>：</p>
+<ul>
+<li><input disabled="" type="checkbox"> Antigravity 启动正常</li>
+<li><input disabled="" type="checkbox"> 点击登录按钮触发 Edge 打开</li>
+<li><input disabled="" type="checkbox"> Edge 直连访问 Google 登录页</li>
+<li><input disabled="" type="checkbox"> Google 账号登录成功</li>
+<li><input disabled="" type="checkbox"> 自动跳转回 Antigravity 应用</li>
+<li><input disabled="" type="checkbox"> 应用显示登录成功状态</li>
+</ul>
+<hr>
+<h2 id="📝-总结"><a href="#📝-总结" class="headerlink" title="📝 总结"></a>📝 总结</h2><h3 id="7-1-关键成功因素"><a href="#7-1-关键成功因素" class="headerlink" title="7.1 关键成功因素"></a>7.1 关键成功因素</h3><p><strong>成功的两大前提</strong>：</p>
+<ul>
+<li><strong>Google 账号归属地必须为美国</strong>：这是 Antigravity 认证的硬性要求</li>
+<li><strong>代理节点必须为美国地区且支持 Google 全套服务</strong>：确保认证流量的地理合规性</li>
+</ul>
+<p><strong>技术实施要点</strong>：</p>
+<ul>
+<li>Proxifier 规则优先级配置是关键，Edge 浏览器必须直连</li>
+<li>Clash 规则需要精确匹配 Google OAuth 相关域名</li>
+<li>系统环境变量必须清空，避免代理冲突</li>
+<li>Clash 相关进程必须直连，避免代理循环</li>
+</ul>
+<h3 id="7-2-快速故障排除指南"><a href="#7-2-快速故障排除指南" class="headerlink" title="7.2 快速故障排除指南"></a>7.2 快速故障排除指南</h3><p><strong>认证失败的常见原因</strong>：</p>
+<ol>
+<li><strong>Google 账号归属地不是美国</strong> → 更换美国账号或重新注册</li>
+<li><strong>代理节点不在美国地区</strong> → 切换到美国节点</li>
+<li><strong>Edge 浏览器被代理</strong> → 检查 Proxifier 规则优先级</li>
+<li><strong>系统环境变量冲突</strong> → 清空 HTTP_PROXY&#x2F;HTTPS_PROXY</li>
+<li><strong>代理循环</strong> → 添加 clash_*.exe 直连规则</li>
+</ol>
+<p><strong>验证成功的标志</strong>：</p>
+<ul>
+<li>✅ Edge OAuth 页面成功打开（直连）</li>
+<li>✅ 登录后成功回跳到 Antigravity</li>
+<li>✅ Clash Connections 能看到 oauth2.googleapis.com 走代理</li>
+</ul>
+<p>通过遵循本文档的核心配置步骤和验证方法，可以建立一个稳定、可靠的 Antigravity 认证环境。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/56a10ecb/">https://vilaswang.github.io/posts/56a10ecb/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Antigravity/">Antigravity</a><a class="post-meta__tags" href="/tags/%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE/">代理配置</a><a class="post-meta__tags" href="/tags/OAuth%E8%AE%A4%E8%AF%81/">OAuth认证</a><a class="post-meta__tags" href="/tags/Clash/">Clash</a><a class="post-meta__tags" href="/tags/Proxifier/">Proxifier</a><a class="post-meta__tags" href="/tags/%E7%BD%91%E7%BB%9C%E9%85%8D%E7%BD%AE/">网络配置</a><a class="post-meta__tags" href="/tags/%E4%BC%81%E4%B8%9A%E7%8E%AF%E5%A2%83/">企业环境</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</div></div><div class="info-2"><div class="info-item-1">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解 文档创建时间: 2025-12-18最后更新: 2025-12-18标签: github, mcp, gemini-cli, claude-code, http, stdio, ai-tools  📑 目录 1. MCP传输方式对比 2. Gemini CLI 的 MCP 配置 3. Claude Code 的 MCP 配置 4. 实现差异详解 5. 最佳实践建议 6. 故障排除 7. 性能优化 8. 总结   1. 📖 MCP传输方式对比MCP传输方式对比HTTP vs stdio 传输方式   特性 HTTP传输 stdio传输    实现复杂度 相对简单 较简单   调试便利性 容易调试（可用curl等工具） 调试较困难   跨平台性 优秀 需考虑换行符问题   安全考虑 需要处理认证 通过stdin&#x2F;stdout通信   性能 有网络开销 直接进程通信   扩展性 易于集群部署 单进程限制   一、Gemini CLI 的 MCP 配置1.1 HTTP方式配置HTTP...</div></div></div></a><a class="pagination-related" href="/posts/ab2eaca1/" title="认证系统架构"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">认证系统架构</div></div><div class="info-2"><div class="info-item-1">认证系统架构 文档创建时间: 2025-11-14最后更新: 2025-11-14标签: authentication, authorization, jwt, oauth, security, api  📑 目录 1. 认证方式概述 2. 本地认证流程 2.1 注册流程 2.2 登录流程 2.3 Token 验证流程   3. Google OAuth 认证流程 3.1 配置 3.2 认证流程 3.3 会话管理   4. 安全特性 4.1 速率限制 4.2 CORS 配置 4.3 错误处理   5. 中间件链 6. 环境配置   1. 认证方式概述系统支持两种主要的认证方式：  🔑 本地用户名密码认证（JWT Token） 🌐 Google OAuth 2.0 认证  12345678graph LR    A[用户] --&gt; B[认证选择]    B --&gt; C[本地认证]    B --&gt; D[OAuth认证]    C --&gt; E[JWT Token]    D --&gt; F[Google授权]    E --&gt; G[访问API] ...</div></div></div></a></nav><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8B-%E7%9B%AE%E5%BD%95"><span class="toc-number">1.</span> <span class="toc-text">📋 目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%96-%E6%A6%82%E8%BF%B0"><span class="toc-number">2.</span> <span class="toc-text">📖 概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%E8%83%8C%E6%99%AF"><span class="toc-number">2.1.</span> <span class="toc-text">1.1 解决方案背景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%A0%B8%E5%BF%83%E8%A6%81%E6%B1%82"><span class="toc-number">2.2.</span> <span class="toc-text">1.2 核心要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84"><span class="toc-number">2.3.</span> <span class="toc-text">1.3 技术架构</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%A7-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">3.</span> <span class="toc-text">🔧 环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-Google-%E8%B4%A6%E5%8F%B7%E8%A6%81%E6%B1%82"><span class="toc-number">3.1.</span> <span class="toc-text">2.1 Google 账号要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E8%A6%81%E6%B1%82"><span class="toc-number">3.2.</span> <span class="toc-text">2.2 代理服务要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E8%BD%AF%E4%BB%B6%E7%8E%AF%E5%A2%83%E8%A6%81%E6%B1%82"><span class="toc-number">3.3.</span> <span class="toc-text">2.3 软件环境要求</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E2%9A%99%EF%B8%8F-%E9%85%8D%E7%BD%AE%E6%AD%A5%E9%AA%A4"><span class="toc-number">4.</span> <span class="toc-text">⚙️ 配置步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-Clash-%E4%BB%A3%E7%90%86%E9%85%8D%E7%BD%AE"><span class="toc-number">4.1.</span> <span class="toc-text">3.1 Clash 代理配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1-%E8%8A%82%E7%82%B9%E9%80%89%E6%8B%A9"><span class="toc-number">4.1.1.</span> <span class="toc-text">3.1.1 节点选择</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2-%E8%A7%84%E5%88%99%E9%85%8D%E7%BD%AE"><span class="toc-number">4.1.2.</span> <span class="toc-text">3.1.2 规则配置</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-Proxifier-%E9%85%8D%E7%BD%AE"><span class="toc-number">4.2.</span> <span class="toc-text">3.2 Proxifier 配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-%E6%B7%BB%E5%8A%A0%E4%BB%A3%E7%90%86%E6%9C%8D%E5%8A%A1%E5%99%A8"><span class="toc-number">4.2.1.</span> <span class="toc-text">3.2.1 添加代理服务器</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-%E5%88%9B%E5%BB%BA%E4%BB%A3%E7%90%86%E8%A7%84%E5%88%99"><span class="toc-number">4.2.2.</span> <span class="toc-text">3.2.2 创建代理规则</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-%E8%A7%84%E5%88%99%E4%BC%98%E5%85%88%E7%BA%A7%E7%A1%AE%E8%AE%A4"><span class="toc-number">4.2.3.</span> <span class="toc-text">3.2.3 规则优先级确认</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E7%B3%BB%E7%BB%9F%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE"><span class="toc-number">4.3.</span> <span class="toc-text">3.3 系统环境配置</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-%E6%B8%85%E7%90%86%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="toc-number">4.3.1.</span> <span class="toc-text">3.3.1 清理环境变量</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-%E9%98%B2%E7%81%AB%E5%A2%99%E9%85%8D%E7%BD%AE"><span class="toc-number">4.3.2.</span> <span class="toc-text">3.3.2 防火墙配置</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%94%A7-%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4"><span class="toc-number">5.</span> <span class="toc-text">🔧 故障排除</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-%E8%AE%A4%E8%AF%81%E6%B5%81%E7%A8%8B%E9%97%AE%E9%A2%98"><span class="toc-number">5.1.</span> <span class="toc-text">4.1 认证流程问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-%E7%BD%91%E7%BB%9C%E8%BF%9E%E6%8E%A5%E9%97%AE%E9%A2%98"><span class="toc-number">5.2.</span> <span class="toc-text">4.2 网络连接问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-3-%E8%B4%A6%E5%8F%B7%E7%9B%B8%E5%85%B3%E9%97%AE%E9%A2%98"><span class="toc-number">5.3.</span> <span class="toc-text">4.3 账号相关问题</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%A7%AA-%E6%A0%B8%E5%BF%83%E9%AA%8C%E8%AF%81%E6%B5%8B%E8%AF%95"><span class="toc-number">6.</span> <span class="toc-text">🧪 核心验证测试</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%9F%BA%E7%A1%80%E7%8E%AF%E5%A2%83%E9%AA%8C%E8%AF%81"><span class="toc-number">6.1.</span> <span class="toc-text">5.1 基础环境验证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-OAuth-%E8%AE%A4%E8%AF%81%E6%B5%8B%E8%AF%95"><span class="toc-number">6.2.</span> <span class="toc-text">5.2 OAuth 认证测试</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E5%85%B3%E9%94%AE%E9%AA%8C%E8%AF%81%E7%82%B9"><span class="toc-number">6.3.</span> <span class="toc-text">5.3 关键验证点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%8B-%E6%A0%B8%E5%BF%83%E6%A3%80%E6%9F%A5%E6%B8%85%E5%8D%95"><span class="toc-number">7.</span> <span class="toc-text">📋 核心检查清单</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E9%83%A8%E7%BD%B2%E5%89%8D%E6%A3%80%E6%9F%A5"><span class="toc-number">7.1.</span> <span class="toc-text">6.1 部署前检查</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%8A%9F%E8%83%BD%E9%AA%8C%E8%AF%81"><span class="toc-number">7.2.</span> <span class="toc-text">6.2 功能验证</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%F0%9F%93%9D-%E6%80%BB%E7%BB%93"><span class="toc-number">8.</span> <span class="toc-text">📝 总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#7-1-%E5%85%B3%E9%94%AE%E6%88%90%E5%8A%9F%E5%9B%A0%E7%B4%A0"><span class="toc-number">8.1.</span> <span class="toc-text">7.1 关键成功因素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#7-2-%E5%BF%AB%E9%80%9F%E6%95%85%E9%9A%9C%E6%8E%92%E9%99%A4%E6%8C%87%E5%8D%97"><span class="toc-number">8.2.</span> <span class="toc-text">7.2 快速故障排除指南</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>

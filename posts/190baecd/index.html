@@ -1,0 +1,392 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Boost Windows 编译指南 | CodeVerse | 技术宇宙</title><meta name="author" content="vilas"><meta name="copyright" content="vilas"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Boost Windows 编译指南">
+<meta property="og:url" content="https://vilaswang.github.io/posts/190baecd/index.html">
+<meta property="og:site_name" content="CodeVerse | 技术宇宙">
+<meta property="og:description" content="专业技术完全指南，涵盖理论基础、实践操作、问题排查、性能优化等全方位内容，助力技能快速提升。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://vilaswang.github.io/img/butterfly-icon.png">
+<meta property="article:published_time" content="2025-12-04T14:02:28.000Z">
+<meta property="article:modified_time" content="2025-12-17T15:36:29.306Z">
+<meta property="article:author" content="vilas">
+<meta property="article:tag" content="Boost">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Windows">
+<meta property="article:tag" content="b2">
+<meta property="article:tag" content="开发环境">
+<meta property="article:tag" content="静态编译">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://vilaswang.github.io/img/butterfly-icon.png"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Boost Windows 编译指南",
+  "url": "https://vilaswang.github.io/posts/190baecd/",
+  "image": "https://vilaswang.github.io/img/butterfly-icon.png",
+  "datePublished": "2025-12-04T14:02:28.000Z",
+  "dateModified": "2025-12-17T15:36:29.306Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "vilas",
+      "url": "https://VilasWang.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://vilaswang.github.io/posts/190baecd/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css?v=5.5.3"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@7.1.0/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        if (!ttl) return
+        const expiry = Date.now() + ttl * 86400000
+        localStorage.setItem(key, JSON.stringify({ value, expiry }))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return undefined
+        const { value, expiry } = JSON.parse(itemStr)
+        if (Date.now() > expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return value
+      }
+    }
+
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        Object.entries(attr).forEach(([key, val]) => script.setAttribute(key, val))
+        script.onload = script.onreadystatechange = () => {
+          if (!script.readyState || /loaded|complete/.test(script.readyState)) resolve()
+        }
+        script.onerror = reject
+        document.head.appendChild(script)
+      }),
+      getCSS: (url, id) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onload = link.onreadystatechange = () => {
+          if (!link.readyState || /loaded|complete/.test(link.readyState)) resolve()
+        }
+        link.onerror = reject
+        document.head.appendChild(link)
+      }),
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!true && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', 'undefined')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.json","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: true
+  },
+  runtime: '',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid@4.12.0/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: true,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Boost Windows 编译指南',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><style> .top-announcement { background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color: #333; text-align: center; padding: 10px 0; font-size: 14px; font-weight: bold; width: 100%; border-bottom: 1px solid #eee; } </style><meta name="generator" content="Hexo 8.1.1"><link rel="alternate" href="/atom.xml" title="CodeVerse | 技术宇宙" type="application/atom+xml">
+</head><body><div class="bg-animation" id="web_bg" style="background: [object Object];"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">CodeVerse | 技术宇宙</span></a><a class="nav-page-title" href="/"><span class="site-name">Boost Windows 编译指南</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-user-circle"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Boost Windows 编译指南</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2025-12-04T14:02:28.000Z" title="发表于 2025-12-04 22:02:28">2025-12-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2025-12-17T15:36:29.306Z" title="更新于 2025-12-17 23:36:29">2025-12-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/">C++核心开发</a><i class="fas fa-angle-right post-meta-separator"></i><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C-%E6%A0%B8%E5%BF%83%E5%BC%80%E5%8F%91/C-%E5%9F%BA%E7%A1%80%E4%B8%8E%E8%BF%9B%E9%98%B6/">C++基础与进阶</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">浏览量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Boost-Windows-编译指南"><a href="#Boost-Windows-编译指南" class="headerlink" title="Boost Windows 编译指南"></a>Boost Windows 编译指南</h1><h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E6%A6%82%E8%BF%B0">概述</a></li>
+<li><a href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87">环境准备</a></li>
+<li><a href="#%E8%8E%B7%E5%8F%96%E4%B8%8E%E5%87%86%E5%A4%87%E6%BA%90%E7%A0%81">获取与准备源码</a></li>
+<li><a href="#%E6%A0%B8%E5%BF%83%E7%BC%96%E8%AF%91%E6%AD%A5%E9%AA%A4">核心编译步骤</a></li>
+<li><a href="#%E9%AA%8C%E8%AF%81%E7%BC%96%E8%AF%91%E7%BB%93%E6%9E%9C">验证编译结果</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90">项目集成</a></li>
+<li><a href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E7%AD%94">常见问题与解答</a></li>
+<li><a href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B">自动化脚本示例</a></li>
+</ul>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>本指南详细介绍如何在 Windows 平台上，使用 Visual Studio 和 <code>b2.exe</code> 构建工具，完整地静态编译 Boost C++ 库。</p>
+<h3 id="静态编译的优势"><a href="#静态编译的优势" class="headerlink" title="静态编译的优势"></a>静态编译的优势</h3><ul>
+<li><strong>易于分发</strong>: 应用程序不依赖外部的 Boost DLL 文件，所有代码都在可执行文件内部。</li>
+<li><strong>版本控制</strong>: 避免最终用户的机器上出现 DLL 版本冲突。</li>
+<li><strong>性能</strong>: 可能有轻微的启动性能优势，因为减少了动态加载。</li>
+</ul>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><h3 id="1-软件要求"><a href="#1-软件要求" class="headerlink" title="1. 软件要求"></a>1. 软件要求</h3><ul>
+<li><strong>操作系统</strong>: Windows 10&#x2F;11 (x64)</li>
+<li><strong>IDE</strong>: Visual Studio 2019 (MSVC v14.2) 或 2022 (MSVC v14.3)</li>
+<li><strong>组件</strong>: 确保 VS 安装程序已勾选 “使用 C++ 的桌面开发”，并包含最新的 Windows SDK。</li>
+<li><strong>(可选) Python</strong>: 如果需要编译 <code>Boost.Python</code>，请安装 Python 3.8+。</li>
+</ul>
+<h3 id="2-开发者命令提示符"><a href="#2-开发者命令提示符" class="headerlink" title="2. 开发者命令提示符"></a>2. 开发者命令提示符</h3><p>编译 Boost <strong>必须</strong>在 Visual Studio 提供的开发者命令提示符环境中进行，因为它预设了所有必要的环境变量（编译器路径、SDK 路径等）。</p>
+<p><strong>启动方式</strong>:</p>
+<ul>
+<li>从“开始”菜单找到 <code>Visual Studio 2022</code> -&gt; <code>x64 Native Tools Command Prompt for VS 2022</code>。</li>
+<li>或者，在普通的 <code>cmd</code> 中手动执行 <code>vcvars</code> 脚本（路径可能因你的安装而异）：<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">call</span> &quot;C:\Program Files\Microsoft Visual Studio\<span class="number">2022</span>\Community\VC\Auxiliary\Build\vcvars64.bat&quot;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="获取与准备源码"><a href="#获取与准备源码" class="headerlink" title="获取与准备源码"></a>获取与准备源码</h2><blockquote>
+<p><strong>提示</strong>: 本文以 <strong>1.85.0</strong> 版本为例。建议访问 <a target="_blank" rel="noopener" href="https://www.boost.org/users/history/">Boost 官网</a> 获取最新版本号。</p>
+</blockquote>
+<h3 id="1-下载并解压"><a href="#1-下载并解压" class="headerlink" title="1. 下载并解压"></a>1. 下载并解压</h3><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"># Boost Windows 编译指南</span><br><span class="line"><span class="built_in">md</span> C:\dev\libs</span><br><span class="line"><span class="built_in">cd</span> C:\dev\libs</span><br><span class="line"></span><br><span class="line"># Boost Windows 编译指南</span><br><span class="line">powershell -Command &quot;Invoke-WebRequest -Uri &#x27;https://boostorg.jfrog.io/artifactory/main/release/<span class="number">1</span>.<span class="number">85</span>.<span class="number">0</span>/source/boost_1_85_0.<span class="number">7</span>z&#x27; -OutFile &#x27;boost_1_85_0.<span class="number">7</span>z&#x27;&quot;</span><br><span class="line"></span><br><span class="line"># Boost Windows 编译指南</span><br><span class="line"><span class="number">7</span>z x boost_1_85_0.<span class="number">7</span>z</span><br><span class="line"><span class="built_in">cd</span> boost_1_85_0</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-生成构建工具"><a href="#2-生成构建工具" class="headerlink" title="2. 生成构建工具"></a>2. 生成构建工具</h3><p>运行 <code>bootstrap.bat</code> 脚本来生成 <code>b2.exe</code> 构建工具。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># Boost Windows 编译指南</span><br><span class="line">bootstrap.bat</span><br></pre></td></tr></table></figure>
+<p>执行完毕后，当前目录会生成 <code>b2.exe</code> 和 <code>bjam.exe</code>。</p>
+<h2 id="核心编译步骤"><a href="#核心编译步骤" class="headerlink" title="核心编译步骤"></a>核心编译步骤</h2><h3 id="1-理解核心编译参数"><a href="#1-理解核心编译参数" class="headerlink" title="1. 理解核心编译参数"></a>1. 理解核心编译参数</h3><ul>
+<li><strong><code>toolset=msvc-14.3</code></strong>: 指定使用 VS 2022 的编译器。</li>
+<li><strong><code>address-model=64</code></strong>: 编译 64 位版本。</li>
+<li><strong><code>link=static</code></strong>: <strong>[核心]</strong> 生成静态链接库 (<code>.lib</code>)。</li>
+<li><strong><code>runtime-link=static</code></strong>: <strong>[核心]</strong> 静态链接 C&#x2F;C++ 运行时库。这对应 VS 项目属性中的 <code>/MT</code> (Release) 或 <code>/MTd</code> (Debug)。</li>
+<li><strong><code>variant=release</code></strong>: 编译发布版本。也可以是 <code>debug</code> 或 <code>debug,release</code>。</li>
+<li><strong><code>threading=multi</code></strong>: 编译多线程版本（现代应用标配）。</li>
+<li><strong><code>--stagedir=&lt;path&gt;</code></strong>: 指定编译产物（<code>.lib</code> 文件）的输出目录。</li>
+<li><strong><code>-j&lt;N&gt;</code></strong>: 并行编译任务数，例如 <code>-j%NUMBER_OF_PROCESSORS%</code>。</li>
+</ul>
+<h3 id="2-执行编译命令"><a href="#2-执行编译命令" class="headerlink" title="2. 执行编译命令"></a>2. 执行编译命令</h3><p>以下是一个推荐的、用于生成 64 位静态 Release 库的完整命令：</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"># Boost Windows 编译指南</span><br><span class="line"># Boost Windows 编译指南</span><br><span class="line">b2.exe -j<span class="variable">%NUMBER_OF_PROCESSORS%</span> ^</span><br><span class="line">    toolset=msvc-<span class="number">14</span>.<span class="number">3</span> ^</span><br><span class="line">    address-model=<span class="number">64</span> ^</span><br><span class="line">    link=static ^</span><br><span class="line">    runtime-link=static ^</span><br><span class="line">    variant=release ^</span><br><span class="line">    threading=multi ^</span><br><span class="line">    --stagedir=&quot;bin\win-x64-static-release&quot; ^</span><br><span class="line">    --without-python</span><br></pre></td></tr></table></figure>
+<p>编译过程会持续一段时间。编译完成后，所有生成的 <code>.lib</code> 文件都会在 <code>bin\win-x64-static-release\lib</code> 目录中。</p>
+<h2 id="验证编译结果"><a href="#验证编译结果" class="headerlink" title="验证编译结果"></a>验证编译结果</h2><h3 id="1-检查库文件"><a href="#1-检查库文件" class="headerlink" title="1. 检查库文件"></a>1. 检查库文件</h3><p>使用 <code>dumpbin.exe</code> 工具（VS 自带）可以查看 <code>.lib</code> 文件的信息。</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Boost Windows 编译指南</span><br><span class="line">dumpbin /headers &quot;bin\win-x64-static-release\lib\libboost_system-vc143-mt-s-x64-<span class="number">1</span>_85.lib&quot; | <span class="built_in">findstr</span> machine</span><br><span class="line"># Boost Windows 编译指南</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-编译测试程序"><a href="#2-编译测试程序" class="headerlink" title="2. 编译测试程序"></a>2. 编译测试程序</h3><p><code>test_boost.cpp</code>:</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BOOST_ALL_NO_LIB <span class="comment">// 禁用 Boost 的自动链接功能</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/version.hpp&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;boost/system/error_code.hpp&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Using Boost Version: &quot;</span> &lt;&lt; BOOST_LIB_VERSION &lt;&lt; std::endl;</span><br><span class="line">    boost::system::error_code ec;</span><br><span class="line">    <span class="keyword">if</span> (!ec) &#123;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Boost.System is working correctly!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>编译命令</strong>:</p>
+<figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cl.exe /EHsc /MT /I&lt;Your-Boost-Source-<span class="built_in">Path</span>&gt; test_boost.cpp /link /LIBPATH:&quot;&lt;Your-Boost-Source-<span class="built_in">Path</span>&gt;\bin\win-x64-static-release\lib&quot;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>/MT</code>: <strong>必须</strong>与 <code>runtime-link=static</code> 对应。如果是 <code>variant=debug</code>，则用 <code>/MTd</code>。</li>
+<li><code>/I</code>: 指定 Boost 头文件根目录。</li>
+<li><code>/link /LIBPATH</code>: 指定 <code>.lib</code> 文件所在的目录。</li>
+<li><code>BOOST_ALL_NO_LIB</code>: 推荐在项目中定义此宏，手动管理链接的库，避免自动链接带来的问题。</li>
+</ul>
+<h2 id="项目集成"><a href="#项目集成" class="headerlink" title="项目集成"></a>项目集成</h2><h3 id="Visual-Studio-项目属性"><a href="#Visual-Studio-项目属性" class="headerlink" title="Visual Studio 项目属性"></a>Visual Studio 项目属性</h3><p>对于一个现有的 VS 项目，你需要配置以下两个核心属性：</p>
+<ol>
+<li><strong>C&#x2F;C++ -&gt; 常规 -&gt; 附加包含目录</strong>:<ul>
+<li>添加 Boost 的根目录，例如 <code>C:\dev\libs\boost_1_85_0</code>。</li>
+</ul>
+</li>
+<li><strong>链接器 -&gt; 常规 -&gt; 附加库目录</strong>:<ul>
+<li>添加你编译好的 <code>.lib</code> 文件所在目录，例如 <code>C:\dev\libs\boost_1_85_0\bin\win-x64-static-release\lib</code>。</li>
+</ul>
+</li>
+</ol>
+<p><strong>重要</strong>: 确保项目的 <strong>C&#x2F;C++ -&gt; 代码生成 -&gt; 运行时库</strong> 设置与你编译 Boost 时使用的 <code>runtime-link</code> 选项一致！</p>
+<ul>
+<li><code>runtime-link=static</code>, <code>variant=release</code> -&gt; <strong>多线程 (&#x2F;MT)</strong></li>
+<li><code>runtime-link=static</code>, <code>variant=debug</code> -&gt; <strong>多线程调试 (&#x2F;MTd)</strong></li>
+<li><code>runtime-link=shared</code>, <code>variant=release</code> -&gt; <strong>多线程 DLL (&#x2F;MD)</strong></li>
+<li><code>runtime-link=shared</code>, <code>variant=debug</code> -&gt; <strong>多线程调试 DLL (&#x2F;MDd)</strong></li>
+</ul>
+<h3 id="CMakeLists-txt-示例"><a href="#CMakeLists-txt-示例" class="headerlink" title="CMakeLists.txt 示例"></a>CMakeLists.txt 示例</h3><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">3.15</span>)</span><br><span class="line"><span class="keyword">project</span>(MyBoostApp)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_STANDARD <span class="number">17</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Boost Windows 编译指南</span></span><br><span class="line"><span class="keyword">set</span>(BOOST_ROOT <span class="string">&quot;C:/dev/libs/boost_1_85_0&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Boost Windows 编译指南</span></span><br><span class="line"><span class="keyword">set</span>(Boost_USE_STATIC_LIBS <span class="keyword">ON</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Boost Windows 编译指南</span></span><br><span class="line"><span class="keyword">find_package</span>(Boost <span class="number">1.85</span>.<span class="number">0</span> REQUIRED COMPONENTS system filesystem thread)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(Boost_FOUND)</span><br><span class="line">    <span class="keyword">add_executable</span>(my_app main.cpp)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 4. 链接库</span></span><br><span class="line">    <span class="keyword">target_link_libraries</span>(my_app PRIVATE Boost::system Boost::filesystem Boost::thread)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 5. 添加 include 目录</span></span><br><span class="line">    <span class="keyword">target_include_directories</span>(my_app PRIVATE <span class="variable">$&#123;Boost_INCLUDE_DIRS&#125;</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br></pre></td></tr></table></figure>
+
+<h2 id="常见问题与解答"><a href="#常见问题与解答" class="headerlink" title="常见问题与解答"></a>常见问题与解答</h2><p><strong>Q1: 编译失败，提示找不到编译器 <code>cl.exe</code> 或 <code>link.exe</code>?</strong><br><strong>A</strong>: 你没有在正确的“开发者命令提示符”环境中运行 <code>b2.exe</code>。请返回 <a href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87">环境准备</a> 章节，确保命令行环境设置正确。</p>
+<p><strong>Q2: 链接时出现 <code>LNK2038: mismatch detected for &#39;RuntimeLibrary&#39;</code>?</strong><br><strong>A</strong>: 这是最常见的问题。你的项目使用的“运行时库”设置与你编译的 Boost 库不匹配。请仔细检查并统一 VS 项目的 <code>/MT</code>, <code>/MD</code> 等设置。</p>
+<p><strong>Q3: 如何理解 Boost 库文件的命名?</strong><br><strong>A</strong>: <code>libboost_system-vc143-mt-s-x64-1_85.lib</code></p>
+<ul>
+<li><code>libboost_system</code>: 库名</li>
+<li><code>vc143</code>: 编译器版本 (VS 2022)</li>
+<li><code>mt</code>: 多线程</li>
+<li><code>s</code>: 静态链接 C&#x2F;C++ 运行时</li>
+<li><code>x64</code>: 64位</li>
+<li><code>1_85</code>: Boost 版本</li>
+</ul>
+<h2 id="自动化脚本示例"><a href="#自动化脚本示例" class="headerlink" title="自动化脚本示例"></a>自动化脚本示例</h2><p><code>build_boost.bat</code>:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">@echo off</span><br><span class="line">setlocal</span><br><span class="line"></span><br><span class="line">REM --- 配置 ---</span><br><span class="line">set BOOST_SRC_PATH=C:\dev\libs\boost_1_85_0</span><br><span class="line">set VS_VARS_BAT=&quot;C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat&quot;</span><br><span class="line">set TOOLSET=msvc-14.3</span><br><span class="line">set ADDRESS_MODEL=64</span><br><span class="line">set STAGE_DIR=%BOOST_SRC_PATH%\bin\win-x64-static-release</span><br><span class="line"></span><br><span class="line">REM --- 执行 ---</span><br><span class="line">echo Setting up VS environment...</span><br><span class="line">call %VS_VARS_BAT%</span><br><span class="line"></span><br><span class="line">echo Changing to Boost source directory...</span><br><span class="line">cd /d %BOOST_SRC_PATH%</span><br><span class="line"></span><br><span class="line">echo Starting Boost build...</span><br><span class="line">b2.exe -j%NUMBER_OF_PROCESSORS% ^</span><br><span class="line">    toolset=%TOOLSET% ^</span><br><span class="line">    address-model=%ADDRESS_MODEL% ^</span><br><span class="line">    link=static ^</span><br><span class="line">    runtime-link=static ^</span><br><span class="line">    variant=release ^</span><br><span class="line">    --stagedir=&quot;%STAGE_DIR%&quot; ^</span><br><span class="line">    --without-python</span><br><span class="line"></span><br><span class="line">if %ERRORLEVEL% EQU 0 (</span><br><span class="line">    echo.</span><br><span class="line">    echo Boost build successful! Libraries are in: %STAGE_DIR%\lib</span><br><span class="line">) else (</span><br><span class="line">    echo.</span><br><span class="line">    echo Boost build failed!</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">endlocal</span><br></pre></td></tr></table></figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://VilasWang.github.io">vilas</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://vilaswang.github.io/posts/190baecd/">https://vilaswang.github.io/posts/190baecd/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://VilasWang.github.io" target="_blank">CodeVerse | 技术宇宙</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/C/">C++</a><a class="post-meta__tags" href="/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">开发环境</a><a class="post-meta__tags" href="/tags/Windows/">Windows</a><a class="post-meta__tags" href="/tags/Boost/">Boost</a><a class="post-meta__tags" href="/tags/b2/">b2</a><a class="post-meta__tags" href="/tags/%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91/">静态编译</a></div><div class="post-share"><div class="social-share" data-image="/img/butterfly-icon.png" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/posts/6d91761d/" title="Qt 国际化指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">Qt 国际化指南</div></div><div class="info-2"><div class="info-item-1">Qt 国际化指南目录 概述：Qt 的 i18n 工作流程 第一步：在代码中标记待翻译文本 第二步：配置项目 (.pro) 文件 第三步：使用工具生成和翻译 第四步：在应用程序中加载翻译 第五步：实现动态语言切换 处理数字、日期和货币的本地化  概述：Qt 的 i18n 工作流程国际化 (i18n) 是指让你的应用程序能够适应不同语言和地区的过程。Qt 提供了一套强大而直接的工具链来完成这项工作，其核心流程如下：  包裹 (Wrap): 在你的 C++ 源代码中，将所有需要被翻译的用户界面字符串用 tr() 函数包裹起来。 更新 (Update): 使用 Qt 的命令行工具 lupdate 扫描你的项目文件，它会找到所有被 tr() 包裹的字符串，并生成或更新 .ts (Translation Source) 格式的翻译源文件。 翻译 (Translate): 使用 Qt 提供的图形化工具 Qt Linguist 打开 .ts 文件，然后由翻译人员逐条填写目标语言的译文。 发布 (Release): 使用 Qt 的命令行工具 lrelease 将翻译完成的 .ts 文件编译成紧凑的...</div></div></div></a><a class="pagination-related" href="/posts/e0946359/" title="Ubuntu CPP 开发环境配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">Ubuntu CPP 开发环境配置指南</div></div><div class="info-2"><div class="info-item-1">Ubuntu CPP 开发环境配置指南目录 概述 第一步：系统更新和基础工具安装 第二步：安装编译器工具链 第三步：安装构建工具 第四步：安装调试工具 第五步：安装常用开发库 第六步：配置 IDE 和编辑器 第七步：验证开发环境 第八步：配置环境变量 附录：常用命令速查 常见问题  概述本文档提供了在 Ubuntu 22.04 LTS 系统上搭建完整 C++ 开发环境的详细步骤。无论您是 C++ 初学者还是有经验的开发者，都可以按照本指南快速配置一个功能完整的开发环境。 主要组件 编译器: GCC&#x2F;G++ (支持 C++11&#x2F;14&#x2F;17&#x2F;20) 构建系统: CMake, Make 调试器: GDB 包管理: apt, vcpkg IDE: Visual Studio Code (可选) 版本控制: Git  第一步：系统更新和基础工具安装1. 更新系统包12345678# Ubuntu CPP 开发环境配置指南sudo apt update# Ubuntu CPP 开发环境配置指南sudo apt upgrade -y# Ubuntu CP...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/posts/20b20a6b/" title="Boost Linux 编译指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Boost Linux 编译指南</div></div><div class="info-2"><div class="info-item-1">Boost Linux 编译指南目录 方式一：使用包管理器安装 方式二：从源码编译 (推荐) 编译后配置 测试验证 编译选项详解 项目集成 (Makefile &amp; CMake) 常见问题  方式一：使用包管理器安装这是最简单的方式，但版本可能不是最新的。 12345678910# Boost Linux 编译指南# Boost Linux 编译指南sudo apt-cache search libboost# Boost Linux 编译指南# Boost Linux 编译指南sudo apt install libboost-all-dev# Boost Linux 编译指南dpkg -s libboost-dev | grep Version  方式二：从源码编译 (推荐)这种方式可以让你完全控制 Boost 的版本、编译选项和安装路径。 1. 安装依赖123# Boost Linux 编译指南sudo apt updatesudo apt install -y build-essential g++ python3-dev autotools-dev libicu-...</div></div></div></a><a class="pagination-related" href="/posts/31cbd6c5/" title="Qt libcurl 集成指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Qt libcurl 集成指南</div></div><div class="info-2"><div class="info-item-1">Qt libcurl 集成指南目录 概述 方法一：使用vcpkg (强烈推荐) 方法二：手动从源码编译 (高级) 在Qt项目中使用libcurl 常见问题  概述本指南详细介绍如何在现代 Windows 开发环境 (Visual Studio 2022) 中，为 Qt 项目集成 libcurl 库。首选方法是使用 vcpkg 包管理器，因为它极大地简化了流程。 为什么使用 libcurl? 功能强大: 支持 HTTP&#x2F;2, HTTPS, FTP(S), a多种认证机制等。 稳定可靠: 经过长期和广泛使用的考验。 补充 Qt Network: 在处理复杂的 HTTP 头部、代理或特定认证时，比 QNetworkAccessManager 更灵活。  方法一：使用vcpkg (强烈推荐)vcpkg 是微软官方的 C++ 库管理器，它可以自动处理库的下载、编译和集成。 1. 安装 vcpkg如果尚未安装 vcpkg，请在命令行中执行以下步骤： 123456789# Qt libcurl 集成指南git clone https://github.com/microsoft/vc...</div></div></div></a><a class="pagination-related" href="/posts/e0946359/" title="Ubuntu CPP 开发环境配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Ubuntu CPP 开发环境配置指南</div></div><div class="info-2"><div class="info-item-1">Ubuntu CPP 开发环境配置指南目录 概述 第一步：系统更新和基础工具安装 第二步：安装编译器工具链 第三步：安装构建工具 第四步：安装调试工具 第五步：安装常用开发库 第六步：配置 IDE 和编辑器 第七步：验证开发环境 第八步：配置环境变量 附录：常用命令速查 常见问题  概述本文档提供了在 Ubuntu 22.04 LTS 系统上搭建完整 C++ 开发环境的详细步骤。无论您是 C++ 初学者还是有经验的开发者，都可以按照本指南快速配置一个功能完整的开发环境。 主要组件 编译器: GCC&#x2F;G++ (支持 C++11&#x2F;14&#x2F;17&#x2F;20) 构建系统: CMake, Make 调试器: GDB 包管理: apt, vcpkg IDE: Visual Studio Code (可选) 版本控制: Git  第一步：系统更新和基础工具安装1. 更新系统包12345678# Ubuntu CPP 开发环境配置指南sudo apt update# Ubuntu CPP 开发环境配置指南sudo apt upgrade -y# Ubuntu CP...</div></div></div></a><a class="pagination-related" href="/posts/18f0987e/" title="Boost b2 参数参考"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Boost b2 参数参考</div></div><div class="info-2"><div class="info-item-1">Boost b2 参数参考目录 概述 核心参数 库选择参数 构建属性参数 路径与输出参数 平台与架构参数 实用编译示例 脚本与最佳实践  概述b2（其前身为 bjam）是 Boost C++ 库的官方构建引擎。它是一个功能强大的命令行工具，允许开发者通过丰富的参数精确控制编译过程。 基本语法12# Boost b2 参数参考./b2 [options] [properties] [target]  获取帮助12345# Boost b2 参数参考./b2 --help# Boost b2 参数参考./b2 --show-libraries  核心参数这些参数控制构建的基本行为。  stage: 只编译库文件（例如 .a, .so, .lib, .dll），并将它们放置在 stagedir 指定的目录（默认为 stage/lib）。这是最常用的目标。 install: 除了编译库文件，还会将 Boost 的头文件复制到 prefix 指定的目录。 -j&lt;N&gt;: 设置并行编译的任务数，&lt;N&gt; 通常设为 CPU 的核心数以最大化编译速度。例如 -j8 或 -j$...</div></div></div></a><a class="pagination-related" href="/posts/f0a1549f/" title="Redis Hiredis Linux 安装指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Redis Hiredis Linux 安装指南</div></div><div class="info-2"><div class="info-item-1">Redis Hiredis Linux 安装指南目录 概述 第一步：安装和配置 Redis 服务 第二步：安装 hiredis 客户端库 第三步：搭建 C++ 项目 (CMake) 第四步：编写 RedisClient 封装类 第五步：编写主程序并测试 常见问题 最佳实践  概述本指南将介绍如何在 Linux (Ubuntu&#x2F;Debian) 环境下，为 C++ 项目配置 Redis 开发环境。我们将使用 hiredis 这个官方推荐的、轻量级的 C 语言客户端库。 第一步：安装和配置 Redis 服务1. 安装 Redis 服务器123# Redis Hiredis Linux 安装指南sudo apt updatesudo apt install -y redis-server  2. 配置 Redis为了安全和远程访问，建议修改配置文件。 12# Redis Hiredis Linux 安装指南sudo nano /etc/redis/redis.conf 找到并修改以下几行： 12345678# Redis Hiredis Linux 安装指南bind 0.0.0...</div></div></div></a><a class="pagination-related" href="/posts/b47a5d97/" title="Drogon 编译指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-12-04</div><div class="info-item-2">Drogon 编译指南</div></div><div class="info-2"><div class="info-item-1">Drogon 编译指南目录 概述 系统要求 环境准备 下载源码 依赖管理 编译安装 配置环境变量 验证安装 项目配置 常见问题 最佳实践  概述Drogon 是一个基于 C++17&#x2F;20 的高性能 HTTP 应用框架，类似于 Python 的 Django 和 Flask。本指南详细介绍如何在 Windows 系统下从源码编译安装 Drogon 框架。 框架特性 高性能: 基于 non-blocking I&#x2F;O 和事件驱动 异步支持: 完整的异步编程模型 ORM支持: 内置对象关系映射 插件系统: 灵活的插件扩展机制 RESTful API: 天然支持 RESTful 风格 WebSocket: 内置 WebSocket 支持 跨平台: 支持 Windows、Linux、macOS  编译方式 源码编译: 完全控制编译选项和依赖 包管理器: 使用 vcpkg 或 Conan 管理依赖 预编译包: 使用官方预编译的二进制包  系统要求1. 硬件要求 CPU: x64 架构，推荐 4 核心以上 内存: 最少 8GB，推荐 16GB+ 磁盘空间: 最少 10GB，推...</div></div></div></a></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div id="giscus-wrap"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" data-lazy-src="/img/butterfly-icon.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">vilas</div><div class="author-info-description">CodeVerse | 技术宇宙 - 专注于 C++、Qt、系统架构与性能优化的技术知识库。</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">60</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">155</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">30</div></a></div><a id="card-info-btn" href="/about/"><i class="fa fa-paper-plane"></i><span>关于</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/VilasWang" target="_blank" title="fab fa-github"><i class="Github"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">🚀 欢迎来到 CodeVerse！这里专注于深度技术解析与实战经验分享。</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Boost-Windows-%E7%BC%96%E8%AF%91%E6%8C%87%E5%8D%97"><span class="toc-number">1.</span> <span class="toc-text">Boost Windows 编译指南</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E8%BF%B0"><span class="toc-number">1.2.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91%E7%9A%84%E4%BC%98%E5%8A%BF"><span class="toc-number">1.2.1.</span> <span class="toc-text">静态编译的优势</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.3.</span> <span class="toc-text">环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E8%BD%AF%E4%BB%B6%E8%A6%81%E6%B1%82"><span class="toc-number">1.3.1.</span> <span class="toc-text">1. 软件要求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E5%BC%80%E5%8F%91%E8%80%85%E5%91%BD%E4%BB%A4%E6%8F%90%E7%A4%BA%E7%AC%A6"><span class="toc-number">1.3.2.</span> <span class="toc-text">2. 开发者命令提示符</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E4%B8%8E%E5%87%86%E5%A4%87%E6%BA%90%E7%A0%81"><span class="toc-number">1.4.</span> <span class="toc-text">获取与准备源码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E4%B8%8B%E8%BD%BD%E5%B9%B6%E8%A7%A3%E5%8E%8B"><span class="toc-number">1.4.1.</span> <span class="toc-text">1. 下载并解压</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%94%9F%E6%88%90%E6%9E%84%E5%BB%BA%E5%B7%A5%E5%85%B7"><span class="toc-number">1.4.2.</span> <span class="toc-text">2. 生成构建工具</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E7%BC%96%E8%AF%91%E6%AD%A5%E9%AA%A4"><span class="toc-number">1.5.</span> <span class="toc-text">核心编译步骤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%90%86%E8%A7%A3%E6%A0%B8%E5%BF%83%E7%BC%96%E8%AF%91%E5%8F%82%E6%95%B0"><span class="toc-number">1.5.1.</span> <span class="toc-text">1. 理解核心编译参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E6%89%A7%E8%A1%8C%E7%BC%96%E8%AF%91%E5%91%BD%E4%BB%A4"><span class="toc-number">1.5.2.</span> <span class="toc-text">2. 执行编译命令</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%AA%8C%E8%AF%81%E7%BC%96%E8%AF%91%E7%BB%93%E6%9E%9C"><span class="toc-number">1.6.</span> <span class="toc-text">验证编译结果</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E6%A3%80%E6%9F%A5%E5%BA%93%E6%96%87%E4%BB%B6"><span class="toc-number">1.6.1.</span> <span class="toc-text">1. 检查库文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-%E7%BC%96%E8%AF%91%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="toc-number">1.6.2.</span> <span class="toc-text">2. 编译测试程序</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A1%B9%E7%9B%AE%E9%9B%86%E6%88%90"><span class="toc-number">1.7.</span> <span class="toc-text">项目集成</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Visual-Studio-%E9%A1%B9%E7%9B%AE%E5%B1%9E%E6%80%A7"><span class="toc-number">1.7.1.</span> <span class="toc-text">Visual Studio 项目属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CMakeLists-txt-%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.7.2.</span> <span class="toc-text">CMakeLists.txt 示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E8%A7%A3%E7%AD%94"><span class="toc-number">1.8.</span> <span class="toc-text">常见问题与解答</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E5%8C%96%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B"><span class="toc-number">1.9.</span> <span class="toc-text">自动化脚本示例</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/mcp-github-config/" title="Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解">Gemini CLI 和 Claude Code 中配置 GitHub MCP 服务器详解</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/gemini-cli-proxy/" title="Gemini CLI 在国内网络环境下的完整配置指南">Gemini CLI 在国内网络环境下的完整配置指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/windows-github-mcp/" title="Windows 环境下配置 GitHub MCP 服务器完整指南">Windows 环境下配置 GitHub MCP 服务器完整指南</a><time datetime="2025-12-18T01:09:23.000Z" title="发表于 2025-12-18 09:09:23">2025-12-18</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/56a10ecb/" title="Antigravity 登录认证完整解决方案（非TUN方法）">Antigravity 登录认证完整解决方案（非TUN方法）</a><time datetime="2025-12-16T22:30:00.000Z" title="发表于 2025-12-17 06:30:00">2025-12-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/posts/55a960b4/" title="VSCode Qt MSVC 配置指南">VSCode Qt MSVC 配置指南</a><time datetime="2025-12-09T06:09:56.000Z" title="发表于 2025-12-09 14:09:56">2025-12-09</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 By vilas</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.1</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.5.3</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="前往评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js?v=5.5.3"></script><script src="/js/main.js?v=5.5.3"></script><script src="https://cdn.jsdelivr.net/npm/vanilla-lazyload@19.1.3/dist/lazyload.iife.min.js"></script><div class="js-pjax"><script>(() => {
+  const isShuoshuo = GLOBAL_CONFIG_SITE.pageType === 'shuoshuo'
+  const option = null
+
+  const getGiscusTheme = theme => theme === 'dark' ? 'dark' : 'light'
+
+  const createScriptElement = config => {
+    const ele = document.createElement('script')
+    Object.entries(config).forEach(([key, value]) => {
+      ele.setAttribute(key, value)
+    })
+    return ele
+  }
+
+  const loadGiscus = (el = document, key) => {
+    const mappingConfig = isShuoshuo
+      ? { 'data-mapping': 'specific', 'data-term': key }
+      : { 'data-mapping': (option && option['data-mapping']) || 'pathname' }
+
+    const giscusConfig = {
+      src: 'https://giscus.app/client.js',
+      'data-repo': 'VilasWang/VilasWang.github.io',
+      'data-repo-id': 'R_kgDOQkzqvg',
+      'data-category-id': 'DIC_kwDOQkzqvs4Cz99h',
+      'data-theme': getGiscusTheme(document.documentElement.getAttribute('data-theme')),
+      'data-reactions-enabled': '1',
+      crossorigin: 'anonymous',
+      async: true,
+      ...option,
+      ...mappingConfig
+    }
+
+    const scriptElement = createScriptElement(giscusConfig)
+
+    el.querySelector('#giscus-wrap').appendChild(scriptElement)
+
+    if (isShuoshuo) {
+      window.shuoshuoComment.destroyGiscus = () => {
+        if (el.children.length) {
+          el.innerHTML = ''
+          el.classList.add('no-comment')
+        }
+      }
+    }
+  }
+
+  const changeGiscusTheme = theme => {
+    const iframe = document.querySelector('#giscus-wrap iframe')
+    if (iframe) {
+      const message = {
+        giscus: {
+          setConfig: {
+            theme: getGiscusTheme(theme)
+          }
+        }
+      }
+      iframe.contentWindow.postMessage(message, 'https://giscus.app')
+    }
+  }
+
+  btf.addGlobalFn('themeChange', changeGiscusTheme, 'giscus')
+
+  if (isShuoshuo) {
+    'Giscus' === 'Giscus'
+      ? window.shuoshuoComment = { loadComment: loadGiscus }
+      : window.loadOtherComment = loadGiscus
+    return
+  }
+
+  if ('Giscus' === 'Giscus' || !true) {
+    if (true) btf.loadComment(document.getElementById('giscus-wrap'), loadGiscus)
+    else loadGiscus()
+  } else {
+    window.loadOtherComment = loadGiscus
+  }
+})()</script></div><script> document.addEventListener('DOMContentLoaded', function() { var announcement = document.createElement('div'); announcement.className = 'top-announcement'; announcement.innerHTML = '🚀 欢迎来到 CodeVerse 技术宇宙！'; document.body.insertBefore(announcement, document.body.firstChild); }); </script><script id="canvas_nest" defer="defer" color="102,204,255" opacity="0.6" zIndex="-1" count="99" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1.1.6/dist/canvas-nest.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.min.js" defer="defer"></script><script>document.addEventListener('DOMContentLoaded', () => {
+  const pjaxSelectors = ["meta[property=\"og:image\"]","meta[property=\"og:title\"]","meta[property=\"og:url\"]","meta[property=\"og:description\"]","link[rel=\"canonical\"]","head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+  window.pjax = new Pjax({
+    elements: 'a:not([target="_blank"])',
+    selectors: pjaxSelectors,
+    cacheBust: false,
+    analytics: false,
+    scrollRestoration: false
+  })
+
+  const triggerPjaxFn = (val) => {
+    if (!val) return
+    Object.values(val).forEach(fn => {
+      try {
+        fn()
+      } catch (err) {
+        console.debug('Pjax callback failed:', err)
+      }
+    })
+  }
+
+  document.addEventListener('pjax:send', () => {
+    // removeEventListener
+    btf.removeGlobalFnEvent('pjaxSendOnce')
+    btf.removeGlobalFnEvent('themeChange')
+
+    // reset readmode
+    const $bodyClassList = document.body.classList
+    if ($bodyClassList.contains('read-mode')) $bodyClassList.remove('read-mode')
+
+    triggerPjaxFn(window.globalFn.pjaxSend)
+  })
+
+  document.addEventListener('pjax:complete', () => {
+    btf.removeGlobalFnEvent('pjaxCompleteOnce')
+    document.querySelectorAll('script[data-pjax]').forEach(item => {
+      const newScript = document.createElement('script')
+      const content = item.text || item.textContent || item.innerHTML || ""
+      Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+      newScript.appendChild(document.createTextNode(content))
+      item.parentNode.replaceChild(newScript, item)
+    })
+
+    triggerPjaxFn(window.globalFn.pjaxComplete)
+  })
+
+  document.addEventListener('pjax:error', e => {
+    if (e.request.status === 404) {
+      false
+        ? pjax.loadUrl('/404.html')
+        : window.location.href = e.request.responseURL
+    }
+  })
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js?v=5.5.3"></script></div></div></body></html>
